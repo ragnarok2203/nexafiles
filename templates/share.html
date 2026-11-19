@@ -1,0 +1,85 @@
+{% extends "base.html" %}
+
+{% block title %}Shared Document — NexaFiles Cloud Vault{% endblock %}
+
+{% block content %}
+<div class="auth-wrapper">
+    <div class="auth-card" style="max-width: 500px;">
+        <div class="card-header">
+            <div class="brand-badge mb-3 mx-auto" style="width: 52px; height: 52px; font-size: 1.6rem;">
+                <i class="bi bi-shield-lock-fill"></i>
+            </div>
+            <h4 class="fw-bold mb-1 brand-text">Nexa<span class="brand-highlight">Files</span> Shared Vault</h4>
+            <p class="text-white-50 small mb-0">Secure Ephemeral Cloud Document Transfer</p>
+        </div>
+
+        <div class="card-body p-4">
+            {% if error %}
+            <div class="text-center py-3">
+                <i class="bi bi-exclamation-triangle-fill display-4 text-warning mb-3 d-block"></i>
+                <h5 class="fw-bold text-dark">Link Unavailable</h5>
+                <p class="text-muted small mb-4">{{ error }}</p>
+                <a href="{{ url_for('login') }}" class="btn btn-brand-primary btn-sm rounded-pill px-4">
+                    Go to NexaFiles Portal
+                </a>
+            </div>
+            {% else %}
+            <!-- File Card Overview -->
+            <div class="p-3 rounded-4 bg-light border mb-4">
+                <div class="d-flex align-items-center gap-3">
+                    <div class="brand-badge" style="width: 44px; height: 44px;">
+                        <i class="bi bi-file-earmark-arrow-down-fill fs-5"></i>
+                    </div>
+                    <div class="overflow-hidden">
+                        <h6 class="fw-bold text-dark mb-0 text-truncate" title="{{ link_data.original_filename }}">
+                            {{ link_data.original_filename }}
+                        </h6>
+                        <div class="small text-muted mt-1">
+                            <span class="badge bg-primary bg-opacity-10 text-primary border border-primary border-opacity-25 rounded-pill me-1">
+                                {{ link_data.category }}
+                            </span>
+                            <span>{{ format_bytes(link_data.file_size) }}</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Security Parameters -->
+            <div class="mb-4">
+                <div class="small text-muted mb-2 d-flex justify-content-between">
+                    <span><i class="bi bi-clock-history me-1"></i> Valid Until:</span>
+                    <strong class="text-dark">{{ link_data.expires_at or 'Permanent' }}</strong>
+                </div>
+                {% if link_data.max_downloads > 0 %}
+                <div class="small text-muted d-flex justify-content-between">
+                    <span><i class="bi bi-download me-1"></i> Downloads Left:</span>
+                    <strong class="text-dark">{{ link_data.max_downloads - link_data.download_count }} of {{ link_data.max_downloads }}</strong>
+                </div>
+                {% endif %}
+            </div>
+
+            <form action="{{ url_for('download_shared_file', token=link_data.share_token) }}" method="POST">
+                {% if link_data.password_hash %}
+                <div class="mb-3">
+                    <label for="sharePassword" class="form-label small fw-semibold text-muted">DOCUMENT ACCESS PASSPHRASE</label>
+                    <div class="input-group">
+                        <span class="input-group-text bg-light border-end-0"><i class="bi bi-key-fill text-muted"></i></span>
+                        <input type="password" class="form-control border-start-0" id="sharePassword" name="password" placeholder="Enter password provided by sender" required autofocus>
+                    </div>
+                    <div class="form-text small">This document requires cryptographic passphrase verification.</div>
+                </div>
+                {% endif %}
+
+                <button type="submit" class="btn btn-brand-primary w-100 py-2 rounded-pill fw-semibold shadow-sm">
+                    <i class="bi bi-cloud-arrow-down-fill me-1"></i> Download Document via Pre-Signed URL
+                </button>
+            </form>
+            {% endif %}
+        </div>
+
+        <div class="card-footer bg-light p-3 text-center border-0 small text-muted">
+            Protected by NexaFiles HMAC-SHA256 zero-trust tokens &bull; <a href="{{ url_for('login') }}" class="text-primary text-decoration-none fw-semibold">Sign In</a>
+        </div>
+    </div>
+</div>
+{% endblock %}

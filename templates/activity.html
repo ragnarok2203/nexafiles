@@ -1,0 +1,113 @@
+{% extends "base.html" %}
+
+{% block title %}Security Audit Trail — NexaFiles{% endblock %}
+
+{% block content %}
+<div class="container-fluid py-3">
+
+    <!-- Header -->
+    <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3 mb-4">
+        <div>
+            <div class="d-flex align-items-center gap-2 mb-1">
+                <h3 class="fw-bold mb-0 text-dark">Security Audit Trail</h3>
+                <span class="badge bg-primary bg-opacity-10 text-primary border border-primary border-opacity-25 rounded-pill px-3 py-1 small">
+                    Zero-Trust Telemetry
+                </span>
+            </div>
+            <p class="text-muted small mb-0">Immutable system logs recording document access, uploads, signed downloads, and encryption events.</p>
+        </div>
+        <div class="d-flex align-items-center gap-2">
+            <a href="{{ url_for('export_activity_csv') }}" class="btn btn-outline-success btn-sm px-3 rounded-pill fw-semibold">
+                <i class="bi bi-file-earmark-spreadsheet me-1"></i> Export Audit CSV
+            </a>
+            <a href="{{ url_for('dashboard') }}" class="btn btn-outline-secondary btn-sm px-3 rounded-pill fw-medium">
+                <i class="bi bi-grid-fill me-1"></i> Dashboard
+            </a>
+        </div>
+    </div>
+
+    <!-- Filter Pills -->
+    <div class="card border-0 shadow-sm rounded-4 p-3 bg-white mb-4">
+        <div class="d-flex flex-wrap align-items-center gap-2">
+            <span class="text-muted small fw-bold me-2">FILTER BY ACTION:</span>
+            <a href="{{ url_for('activity_page') }}" class="btn btn-sm rounded-pill {% if not selected_action %}btn-primary{% else %}btn-outline-secondary{% endif %} px-3">
+                All Events
+            </a>
+            <a href="{{ url_for('activity_page', action='UPLOAD') }}" class="btn btn-sm rounded-pill {% if selected_action == 'UPLOAD' %}btn-primary{% else %}btn-outline-secondary{% endif %} px-3">
+                Uploads
+            </a>
+            <a href="{{ url_for('activity_page', action='DOWNLOAD') }}" class="btn btn-sm rounded-pill {% if selected_action == 'DOWNLOAD' %}btn-primary{% else %}btn-outline-secondary{% endif %} px-3">
+                Downloads
+            </a>
+            <a href="{{ url_for('activity_page', action='PREVIEW') }}" class="btn btn-sm rounded-pill {% if selected_action == 'PREVIEW' %}btn-primary{% else %}btn-outline-secondary{% endif %} px-3">
+                Previews
+            </a>
+            <a href="{{ url_for('activity_page', action='CREATE_SHARE') }}" class="btn btn-sm rounded-pill {% if selected_action == 'CREATE_SHARE' %}btn-primary{% else %}btn-outline-secondary{% endif %} px-3">
+                Share Links
+            </a>
+            <a href="{{ url_for('activity_page', action='VERSION_UPLOAD') }}" class="btn btn-sm rounded-pill {% if selected_action == 'VERSION_UPLOAD' %}btn-primary{% else %}btn-outline-secondary{% endif %} px-3">
+                Revisions
+            </a>
+            <a href="{{ url_for('activity_page', action='DELETE') }}" class="btn btn-sm rounded-pill {% if selected_action == 'DELETE' %}btn-primary{% else %}btn-outline-secondary{% endif %} px-3">
+                Deletions
+            </a>
+        </div>
+    </div>
+
+    <!-- Activity Log Table -->
+    <div class="table-modern-card mb-4">
+        <div class="card-header d-flex justify-content-between align-items-center">
+            <h5 class="fw-bold mb-0 text-dark">
+                Activity History
+                <span class="badge bg-secondary bg-opacity-10 text-secondary ms-2 rounded-pill fs-6">{{ logs|length }} recorded</span>
+            </h5>
+            <span class="text-muted small">Real-time chronologically sorted logs</span>
+        </div>
+        <div class="card-body p-0">
+            {% if logs %}
+            <div class="table-responsive">
+                <table class="table table-modern align-middle">
+                    <thead>
+                        <tr>
+                            <th class="ps-4" style="width: 18%;">Action</th>
+                            <th>Event Details</th>
+                            <th style="width: 15%;">IP Address</th>
+                            <th class="pe-4 text-end" style="width: 22%;">Timestamp</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for log in logs %}
+                        <tr>
+                            <td class="ps-4">
+                                <span class="badge 
+                                    {% if 'UPLOAD' in log.action %}bg-success bg-opacity-10 text-success border border-success border-opacity-25
+                                    {% elif 'DOWNLOAD' in log.action %}bg-primary bg-opacity-10 text-primary border border-primary border-opacity-25
+                                    {% elif 'PREVIEW' in log.action %}bg-info bg-opacity-10 text-info border border-info border-opacity-25
+                                    {% elif 'DELETE' in log.action %}bg-danger bg-opacity-10 text-danger border border-danger border-opacity-25
+                                    {% elif 'SHARE' in log.action %}bg-warning bg-opacity-10 text-warning border border-warning border-opacity-25
+                                    {% elif 'VERSION' in log.action %}bg-purple bg-opacity-10 text-primary border
+                                    {% else %}bg-secondary bg-opacity-10 text-secondary border{% endif %}
+                                    rounded-pill px-3 py-1 font-monospace small">
+                                    {{ log.action }}
+                                </span>
+                            </td>
+                            <td class="small fw-medium text-dark">{{ log.details }}</td>
+                            <td class="small font-monospace text-muted">{{ log.ip_address or '127.0.0.1' }}</td>
+                            <td class="pe-4 text-end small text-muted font-monospace">{{ log.timestamp }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            {% else %}
+            <div class="text-center py-5">
+                <i class="bi bi-clock-history display-4 text-muted mb-3 d-block opacity-50"></i>
+                <h6 class="fw-bold text-dark">No activity recorded for this filter</h6>
+                <p class="text-muted small mb-0">System events will automatically populate as documents are accessed or uploaded.</p>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+
+</div>
+{% endblock %}
