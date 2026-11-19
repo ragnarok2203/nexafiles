@@ -1,0 +1,31 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Pytest / Coverage
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Environment and sensitive keys
+.env
+venv/
+env/
+ENV/
+
+# Database and local uploads
+*.db
+*.sqlite3
+data/*.db
+data/storage/users/*
+!data/storage/users/.gitkeep
+
+# Operating System and IDEs
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+# Installers and executables
+*.exe

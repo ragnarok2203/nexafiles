@@ -1,0 +1,85 @@
+{% extends "base.html" %}
+
+{% block title %}Sign In — NexaFiles{% endblock %}
+
+{% block content %}
+<div class="auth-wrapper">
+    <div class="auth-card">
+        <div class="card-header">
+            <div class="brand-badge mb-3 mx-auto" style="width: 52px; height: 52px; font-size: 1.6rem;">
+                <i class="bi bi-clouds-fill"></i>
+            </div>
+            <h4 class="fw-bold mb-1 brand-text">Nexa<span class="brand-highlight">Files</span></h4>
+            <p class="text-white-50 small mb-0">Intelligent Cloud Organization & Retrieval Platform</p>
+        </div>
+        <div class="card-body p-4">
+            <form action="{{ url_for('login') }}" method="POST">
+                <div class="mb-3">
+                    <label for="identifier" class="form-label small fw-semibold text-muted">USERNAME OR EMAIL</label>
+                    <div class="input-group">
+                        <span class="input-group-text bg-light border-end-0"><i
+                                class="bi bi-person text-muted"></i></span>
+                        <input type="text" class="form-control border-start-0" id="identifier" name="username_or_email"
+                            value="{{ identifier or '' }}" placeholder="Enter username or email" required autofocus>
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    <div class="d-flex justify-content-between align-items-center mb-1">
+                        <label for="password" class="form-label small fw-semibold text-muted mb-0">PASSWORD</label>
+                    </div>
+                    <div class="input-group">
+                        <span class="input-group-text bg-light border-end-0"><i
+                                class="bi bi-shield-lock text-muted"></i></span>
+                        <input type="password" class="form-control border-start-0 border-end-0" id="password"
+                            name="password" placeholder="Enter your password" required>
+                        <button class="btn btn-light border border-start-0 text-muted" type="button"
+                            onclick="togglePasswordVisibility('password', this)" title="Show/Hide Password">
+                            <i class="bi bi-eye"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <button type="submit" class="btn btn-brand-primary w-100 py-2 rounded-pill fw-semibold mt-2">
+                    <i class="bi bi-box-arrow-in-right me-1"></i> Sign In to Vault
+                </button>
+            </form>
+
+            <!-- Demo Quick Login Helper -->
+            <div class="mt-4 pt-3 border-top text-center">
+                <div class="text-muted small mb-2 fw-medium">Rapid Evaluator Access</div>
+                <button type="button"
+                    class="btn btn-outline-secondary btn-sm rounded-pill px-3 py-2 w-100 fw-semibold d-flex align-items-center justify-content-center gap-2"
+                    onclick="fillDemoCredentials()">
+                    <i class="bi bi-lightning-charge-fill text-warning"></i>
+                    <span>Use Demo Account (harleen / password123)</span>
+                </button>
+            </div>
+        </div>
+        <div class="card-footer bg-light p-3 text-center border-0 small text-muted">
+            Don't have an account yet? <a href="{{ url_for('register') }}"
+                class="text-primary fw-semibold text-decoration-none">Create Account</a>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    function fillDemoCredentials() {
+        document.getElementById('identifier').value = 'harleen';
+        document.getElementById('password').value = 'password123';
+    }
+    function togglePasswordVisibility(fieldId, btn) {
+        const input = document.getElementById(fieldId);
+        const icon = btn.querySelector('i');
+        if (input.type === 'password') {
+            input.type = 'text';
+            icon.className = 'bi bi-eye-slash';
+        } else {
+            input.type = 'password';
+            icon.className = 'bi bi-eye';
+        }
+    }
+</script>
+{% endblock %}

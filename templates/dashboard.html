@@ -1,0 +1,347 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard — NexaFiles{% endblock %}
+
+{% block content %}
+<div class="container-fluid py-3">
+
+    <!-- Top Dashboard Header -->
+    <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3 mb-4">
+        <div>
+            <div class="d-flex align-items-center gap-2 mb-1">
+                <h3 class="fw-bold mb-0 text-dark">Cloud Storage Dashboard</h3>
+                <span
+                    class="badge bg-primary bg-opacity-10 text-primary border border-primary border-opacity-25 rounded-pill px-3 py-1 small">
+                    Enterprise v2.0
+                </span>
+            </div>
+            <p class="text-muted small mb-0">Decoupled cloud architecture &bull; Centralized metrics, category
+                distributions, and real-time ingestion.</p>
+        </div>
+        <div class="d-flex align-items-center gap-2">
+            <a href="{{ url_for('search_page') }}" class="btn btn-outline-secondary btn-sm px-3 rounded-pill fw-medium">
+                <i class="bi bi-search me-1"></i> Search Files
+            </a>
+            <button type="button" class="btn btn-brand-primary btn-sm px-4 rounded-pill shadow-sm fw-semibold"
+                data-bs-toggle="modal" data-bs-target="#uploadModal">
+                <i class="bi bi-cloud-arrow-up-fill me-1"></i> Upload File
+            </button>
+        </div>
+    </div>
+
+    <!-- Storage Quota Status Bar -->
+    <div class="card border-0 shadow-sm rounded-4 p-3 bg-white mb-4">
+        <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-2 mb-2">
+            <div class="d-flex align-items-center gap-2">
+                <i class="bi bi-pie-chart-fill text-primary fs-5"></i>
+                <span class="fw-bold text-dark small">Cloud Storage Utilization:</span>
+                <span class="text-muted small"><strong>{{ metrics.formatted_size }}</strong> allocated across {{
+                    metrics.total_files }} documents</span>
+            </div>
+            <div class="small text-muted">
+                Engine: <span class="badge bg-light text-dark border fw-semibold">{% if storage_status.storage_mode ==
+                    's3' %}AWS S3 Standard (SSE-S3){% else %}Local Cloud Emulation Vault{% endif %}</span>
+            </div>
+        </div>
+        <div class="progress rounded-pill" style="height: 6px;">
+            <div class="progress-bar bg-primary" role="progressbar"
+                style="width: {% if metrics.total_files > 0 %}18%{% else %}2%{% endif %};" aria-valuenow="18"
+                aria-valuemin="0" aria-valuemax="100"></div>
+        </div>
+    </div>
+
+    <!-- Metric Summary Cards -->
+    <div class="row g-3 mb-4">
+        <div class="col-sm-6 col-xl-3">
+            <div class="metric-card h-100" style="--card-accent: #4f46e5;">
+                <div class="d-flex align-items-center gap-3">
+                    <div class="metric-icon-box bg-primary bg-opacity-10 text-primary">
+                        <i class="bi bi-files"></i>
+                    </div>
+                    <div>
+                        <div class="metric-label">Total Documents</div>
+                        <h3 class="metric-value">{{ metrics.total_files }}</h3>
+                        <div class="metric-subtext">Active in cloud vault</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-sm-6 col-xl-3">
+            <div class="metric-card h-100" style="--card-accent: #10b981;">
+                <div class="d-flex align-items-center gap-3">
+                    <div class="metric-icon-box bg-success bg-opacity-10 text-success">
+                        <i class="bi bi-hdd-stack-fill"></i>
+                    </div>
+                    <div>
+                        <div class="metric-label">Storage Used</div>
+                        <h3 class="metric-value">{{ metrics.formatted_size }}</h3>
+                        <div class="metric-subtext">Max 50 MB / payload</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-sm-6 col-xl-3">
+            <div class="metric-card h-100" style="--card-accent: #f59e0b;">
+                <div class="d-flex align-items-center gap-3">
+                    <div class="metric-icon-box bg-warning bg-opacity-10 text-warning">
+                        <i class="bi bi-star-fill"></i>
+                    </div>
+                    <div>
+                        <div class="metric-label">Starred Files</div>
+                        <h3 class="metric-value">{{ metrics.total_starred }}</h3>
+                        <div class="metric-subtext">Marked as important</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-sm-6 col-xl-3">
+            <div class="metric-card h-100" style="--card-accent: #06b6d4;">
+                <div class="d-flex align-items-center gap-3">
+                    <div class="metric-icon-box bg-info bg-opacity-10 text-info">
+                        <i class="bi bi-shield-lock-fill"></i>
+                    </div>
+                    <div>
+                        <div class="metric-label">Cloud Security</div>
+                        <h5 class="fw-bold mb-0 text-dark mt-1">
+                            {% if storage_status.storage_mode == 's3' %}AWS SSE-S3{% else %}Emulated Vault{% endif %}
+                        </h5>
+                        <div class="metric-subtext">SHA-256 + Signed URLs</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Category Distribution Grid -->
+    <div class="mb-4">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+            <div>
+                <h5 class="fw-bold mb-0 text-dark">Document Categories</h5>
+                <p class="text-muted small mb-0">Multi-dimensional classification for academic & professional resources
+                </p>
+            </div>
+            <a href="{{ url_for('search_page') }}" class="text-primary small text-decoration-none fw-semibold">
+                Explore all categories <i class="bi bi-arrow-right"></i>
+            </a>
+        </div>
+        <div class="row g-3">
+            {% for cat in categories %}
+            {% set cat_data = metrics.categories.get(cat, {'count': 0, 'bytes': 0}) %}
+            <div class="col-6 col-md-4 col-xl-3">
+                <a href="{{ url_for('search_page', category=cat) }}" class="text-decoration-none">
+                    <div class="category-card h-100">
+                        <div class="d-flex justify-content-between align-items-center mb-2">
+                            <span
+                                class="category-badge-pill bg-{{ category_colors.get(cat, 'primary') }} bg-opacity-10 text-{{ category_colors.get(cat, 'primary') }} border border-{{ category_colors.get(cat, 'primary') }} border-opacity-25">
+                                {{ cat }}
+                            </span>
+                            <span class="fw-bold text-dark fs-5">{{ cat_data.count }}</span>
+                        </div>
+                        <div class="text-muted small d-flex justify-content-between align-items-center mt-3">
+                            <span>Storage used</span>
+                            <span class="fw-semibold text-dark">{{ format_bytes(cat_data.bytes) }}</span>
+                        </div>
+                        <div class="category-progress">
+                            <div class="bg-{{ category_colors.get(cat, 'primary') }}"
+                                style="height: 100%; width: {% if cat_data.count > 0 %}40%{% else %}0%{% endif %};">
+                            </div>
+                        </div>
+                    </div>
+                </a>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <!-- Recent Uploads Table -->
+    <div class="table-modern-card mb-4">
+        <div class="card-header d-flex justify-content-between align-items-center">
+            <div>
+                <h5 class="fw-bold mb-0 text-dark">Recent Cloud Uploads</h5>
+                <span class="text-muted small">Latest documents ingested into your secure repository</span>
+            </div>
+            <a href="{{ url_for('search_page') }}" class="btn btn-outline-primary btn-sm rounded-pill px-3 fw-medium">
+                View All Files <i class="bi bi-arrow-right ms-1"></i>
+            </a>
+        </div>
+        <div class="card-body p-0">
+            {% if metrics.recent_files %}
+            <div class="table-responsive">
+                <table class="table table-modern align-middle">
+                    <thead>
+                        <tr>
+                            <th class="ps-4">Document Title</th>
+                            <th>Category</th>
+                            <th>File Size</th>
+                            <th>Uploaded On</th>
+                            <th class="text-end pe-4">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for file in metrics.recent_files %}
+                        {% set ext = file.file_type|lower %}
+                        <tr id="row-file-{{ file.id }}">
+                            <td class="ps-4">
+                                <div class="d-flex align-items-center gap-3">
+                                    <button class="star-btn" onclick="toggleFileStar({{ file.id }}, this)"
+                                        title="Toggle Star">
+                                        {% if file.is_starred %}
+                                        <i class="bi bi-star-fill text-warning fs-5"></i>
+                                        {% else %}
+                                        <i class="bi bi-star text-muted fs-5"></i>
+                                        {% endif %}
+                                    </button>
+                                    <span class="file-capsule 
+                                        {% if ext == 'pdf' %}file-capsule-pdf
+                                        {% elif ext in ['doc', 'docx'] %}file-capsule-doc
+                                        {% elif ext in ['ppt', 'pptx'] %}file-capsule-ppt
+                                        {% elif ext in ['xls', 'xlsx', 'csv'] %}file-capsule-xls
+                                        {% elif ext in ['py', 'js', 'html', 'css', 'json'] %}file-capsule-code
+                                        {% elif ext in ['zip', 'tar', 'gz'] %}file-capsule-archive
+                                        {% elif ext in ['png', 'jpg', 'jpeg'] %}file-capsule-media
+                                        {% else %}file-capsule-default{% endif %}">
+                                        {% if ext == 'pdf' %}<i class="bi bi-file-earmark-pdf-fill"></i>
+                                        {% elif ext in ['doc', 'docx'] %}<i class="bi bi-file-earmark-word-fill"></i>
+                                        {% elif ext in ['ppt', 'pptx'] %}<i class="bi bi-file-earmark-slides-fill"></i>
+                                        {% elif ext in ['xls', 'xlsx', 'csv'] %}<i
+                                            class="bi bi-file-earmark-spreadsheet-fill"></i>
+                                        {% elif ext in ['py', 'js', 'html', 'css', 'json'] %}<i
+                                            class="bi bi-file-earmark-code-fill"></i>
+                                        {% elif ext in ['zip', 'tar', 'gz'] %}<i
+                                            class="bi bi-file-earmark-zip-fill"></i>
+                                        {% elif ext in ['png', 'jpg', 'jpeg'] %}<i
+                                            class="bi bi-file-earmark-image-fill"></i>
+                                        {% else %}<i class="bi bi-file-earmark-fill"></i>{% endif %}
+                                    </span>
+                                    <div>
+                                        <a href="{{ url_for('download_file', file_id=file.id) }}" class="file-name-link"
+                                            title="Download via Signed URL">
+                                            {{ file.original_filename }}
+                                        </a>
+                                        {% if file.tags %}
+                                        <div class="mt-1">
+                                            {% for tag in file.tags.split(',') %}
+                                            {% if tag.strip() %}
+                                            <span class="tag-badge">{{ tag.strip() }}</span>
+                                            {% endif %}
+                                            {% endfor %}
+                                        </div>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </td>
+                            <td>
+                                <span
+                                    class="category-badge-pill bg-{{ category_colors.get(file.category, 'primary') }} bg-opacity-10 text-{{ category_colors.get(file.category, 'primary') }} border border-{{ category_colors.get(file.category, 'primary') }} border-opacity-25">
+                                    {{ file.category }}
+                                </span>
+                            </td>
+                            <td class="small text-muted fw-medium">{{ format_bytes(file.file_size) }}</td>
+                            <td class="small text-muted">{{ file.upload_date }}</td>
+                            <td class="text-end pe-4">
+                                <div class="d-inline-flex gap-1">
+                                    <a href="{{ url_for('download_file', file_id=file.id) }}"
+                                        class="btn btn-sm btn-outline-primary action-btn"
+                                        title="Download via Pre-Signed URL">
+                                        <i class="bi bi-download"></i>
+                                    </a>
+                                    <button type="button" class="btn btn-sm btn-outline-info action-btn"
+                                        onclick="copyDownloadUrl('{{ url_for('download_file', file_id=file.id) }}')"
+                                        title="Copy Pre-Signed Link">
+                                        <i class="bi bi-link-45deg"></i>
+                                    </button>
+                                    <button type="button" class="btn btn-sm btn-outline-secondary action-btn"
+                                        onclick="showFileMetadata({{ file|tojson|safe }})" title="View Cloud Metadata">
+                                        <i class="bi bi-info-circle"></i>
+                                    </button>
+                                    <button type="button" class="btn btn-sm btn-outline-danger action-btn"
+                                        onclick="confirmDeleteFile({{ file.id }}, '{{ file.original_filename }}')"
+                                        title="Delete File">
+                                        <i class="bi bi-trash"></i>
+                                    </button>
+                                </div>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            {% else %}
+            <div class="text-center py-5">
+                <i class="bi bi-cloud-arrow-up display-3 text-muted mb-3 d-block opacity-50"></i>
+                <h6 class="fw-bold text-dark">No files uploaded yet</h6>
+                <p class="text-muted small mb-3">Begin by uploading course notes, research papers, source code, or
+                    presentations.</p>
+                <button type="button" class="btn btn-brand-primary btn-sm px-4 rounded-pill shadow-sm"
+                    data-bs-toggle="modal" data-bs-target="#uploadModal">
+                    <i class="bi bi-cloud-arrow-up-fill me-1"></i> Upload First File
+                </button>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+<!-- Metadata Details Modal -->
+<div class="modal fade" id="metadataModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content border-0">
+            <div class="modal-header">
+                <h5 class="modal-title d-flex align-items-center gap-2">
+                    <i class="bi bi-database-check text-info"></i> Cloud File Metadata
+                </h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body p-4">
+                <table class="table table-sm table-borderless mb-0">
+                    <tbody>
+                        <tr>
+                            <td class="text-muted small fw-semibold" style="width: 35%;">Original Filename:</td>
+                            <td class="fw-semibold text-dark small" id="metaOriginalName"></td>
+                        </tr>
+                        <tr>
+                            <td class="text-muted small fw-semibold">Cloud Object Key:</td>
+                            <td class="font-monospace small text-primary text-break" id="metaS3Key"></td>
+                        </tr>
+                        <tr>
+                            <td class="text-muted small fw-semibold">SHA-256 Fingerprint:</td>
+                            <td class="font-monospace small text-muted text-break" id="metaChecksum"></td>
+                        </tr>
+                        <tr>
+                            <td class="text-muted small fw-semibold">MIME Type:</td>
+                            <td class="small text-dark" id="metaMime"></td>
+                        </tr>
+                        <tr>
+                            <td class="text-muted small fw-semibold">File Size:</td>
+                            <td class="small text-dark" id="metaSize"></td>
+                        </tr>
+                        <tr>
+                            <td class="text-muted small fw-semibold">Category:</td>
+                            <td><span class="badge bg-primary px-2 py-1 rounded-pill small" id="metaCategory"></span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="text-muted small fw-semibold">Tags:</td>
+                            <td class="small text-secondary" id="metaTags"></td>
+                        </tr>
+                        <tr>
+                            <td class="text-muted small fw-semibold">Uploaded On:</td>
+                            <td class="small text-muted" id="metaDate"></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="modal-footer bg-light border-0 py-2">
+                <button type="button" class="btn btn-secondary btn-sm rounded-pill px-3"
+                    data-bs-dismiss="modal">Close</button>
+                <a href="#" class="btn btn-brand-primary btn-sm rounded-pill px-4" id="metaDownloadBtn">
+                    <i class="bi bi-download me-1"></i> Download File
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

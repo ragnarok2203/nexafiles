@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}NexaFiles{% endblock %} — Cloud-Based Intelligent File Organization</title>
+    <!-- Modern Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <!-- Google Fonts: Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- Custom Enterprise Stylesheet -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    {% block head %}{% endblock %}
+</head>
+<body>
+
+    <!-- Top Enterprise Navigation Bar -->
+    <nav class="navbar navbar-expand-lg navbar-dark navbar-enterprise sticky-top py-2">
+        <div class="container-fluid px-4">
+            <a class="navbar-brand d-flex align-items-center gap-2" href="{{ url_for('dashboard') if current_user else url_for('login') }}">
+                <span class="brand-badge">
+                    <i class="bi bi-clouds-fill fs-5"></i>
+                </span>
+                <span class="brand-text">Nexa<span class="brand-highlight">Files</span></span>
+            </a>
+            
+            <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navbarContent">
+                {% if current_user %}
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0 ms-lg-4 gap-1">
+                    <li class="nav-item">
+                        <a class="nav-link nav-link-modern {% if request.endpoint == 'dashboard' %}active{% endif %}" href="{{ url_for('dashboard') }}">
+                            <i class="bi bi-grid-fill me-1"></i> Dashboard
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link nav-link-modern {% if request.endpoint == 'search_page' %}active{% endif %}" href="{{ url_for('search_page') }}">
+                            <i class="bi bi-search me-1"></i> Search Engine
+                        </a>
+                    </li>
+                </ul>
+
+                <!-- Storage Mode Indicator Badge -->
+                <div class="d-flex align-items-center me-3">
+                    {% if storage_status.storage_mode == 's3' %}
+                    <span class="storage-status-pill bg-success bg-opacity-25 text-success border border-success border-opacity-50" title="Connected to AWS S3 Bucket: {{ storage_status.bucket_name }}">
+                        <span class="pulse-dot bg-success"></span> AWS S3 Live
+                    </span>
+                    {% else %}
+                    <span class="storage-status-pill bg-info bg-opacity-25 text-info border border-info border-opacity-50" title="Local Cloud Emulation Mode active">
+                        <span class="pulse-dot bg-info"></span> Local Cloud Vault
+                    </span>
+                    {% endif %}
+                </div>
+
+                <!-- Theme Toggle Button -->
+                <button type="button" class="btn btn-outline-light btn-sm me-3 rounded-pill px-3 d-flex align-items-center gap-1" id="themeToggleBtn" onclick="toggleTheme()" title="Toggle Light/Dark Theme">
+                    <i class="bi bi-moon-stars-fill" id="themeIcon"></i>
+                </button>
+
+                <!-- Action Button: Upload Modal Trigger -->
+                <button type="button" class="btn btn-brand-primary btn-sm me-3 px-3 d-flex align-items-center gap-1 rounded-pill" data-bs-toggle="modal" data-bs-target="#uploadModal">
+                    <i class="bi bi-cloud-arrow-up-fill"></i> Upload File
+                </button>
+
+                <!-- User Profile & Logout -->
+                <div class="dropdown">
+                    <button class="btn btn-outline-light btn-sm dropdown-toggle rounded-pill px-3 d-flex align-items-center gap-2" type="button" data-bs-toggle="dropdown">
+                        <i class="bi bi-person-circle"></i>
+                        <span>{{ current_user.username }}</span>
+                    </button>
+                    <ul class="dropdown-menu dropdown-menu-end shadow border-0 mt-2">
+                        <li class="px-3 py-2 text-muted small">
+                            Signed in as<br><strong class="text-dark">{{ current_user.email }}</strong>
+                        </li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li>
+                            <a class="dropdown-item d-flex align-items-center gap-2 text-danger" href="{{ url_for('logout') }}">
+                                <i class="bi bi-box-arrow-right"></i> Sign Out
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+                {% else %}
+                <div class="navbar-nav ms-auto gap-2 align-items-center">
+                    <button type="button" class="btn btn-outline-light btn-sm rounded-pill px-2" id="themeToggleBtn" onclick="toggleTheme()" title="Toggle Light/Dark Theme">
+                        <i class="bi bi-moon-stars-fill" id="themeIcon"></i>
+                    </button>
+                    <a href="{{ url_for('login') }}" class="btn btn-outline-light btn-sm px-3 rounded-pill">Log In</a>
+                    <a href="{{ url_for('register') }}" class="btn btn-brand-primary btn-sm px-3 rounded-pill">Create Account</a>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </nav>
+
+    <!-- Flash Notifications Container -->
+    <div class="container-fluid px-4 mt-3">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                <div class="alert alert-{{ category }} alert-dismissible fade show shadow-sm d-flex align-items-center gap-2 rounded-3" role="alert">
+                    {% if category == 'success' %}
+                        <i class="bi bi-check-circle-fill fs-5"></i>
+                    {% elif category == 'danger' %}
+                        <i class="bi bi-exclamation-triangle-fill fs-5"></i>
+                    {% elif category == 'warning' %}
+                        <i class="bi bi-exclamation-circle-fill fs-5"></i>
+                    {% else %}
+                        <i class="bi bi-info-circle-fill fs-5"></i>
+                    {% endif %}
+                    <div>{{ message }}</div>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+    </div>
+
+    <!-- Main Content Block -->
+    <main class="container-fluid px-4 py-3">
+        {% block content %}{% endblock %}
+    </main>
+
+    <!-- Upload Modal Partial (Available across all authenticated pages) -->
+    {% if current_user %}
+    <div class="modal fade" id="uploadModal" tabindex="-1" aria-labelledby="uploadModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content border-0">
+                <div class="modal-header">
+                    <h5 class="modal-title d-flex align-items-center gap-2" id="uploadModalLabel">
+                        <i class="bi bi-cloud-arrow-up-fill text-info"></i> Upload to NexaFiles Vault
+                    </h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <form action="{{ url_for('upload_file') }}" method="POST" enctype="multipart/form-data" id="uploadForm">
+                    <div class="modal-body p-4">
+                        <!-- Drag & Drop Zone -->
+                        <div class="upload-dropzone p-4 text-center mb-3" id="dropzone">
+                            <i class="bi bi-cloud-arrow-up dropzone-icon-glow mb-2 d-block"></i>
+                            <h6 class="fw-bold mb-1">Drag and drop file here, or click to browse</h6>
+                            <p class="text-muted small mb-3">Supported formats: PDF, DOCX, TXT, CSV, XLSX, PPTX, ZIP, PNG, JPG, PY (Max: 50 MB)</p>
+                            <input type="file" name="file" id="fileInput" class="d-none" required>
+                            <button type="button" class="btn btn-outline-primary btn-sm px-4 rounded-pill fw-semibold" onclick="document.getElementById('fileInput').click()">
+                                <i class="bi bi-folder2-open me-1"></i> Browse Files
+                            </button>
+                            <div id="fileSelectionInfo" class="mt-3 text-success fw-medium small d-none">
+                                <i class="bi bi-file-earmark-check-fill me-1"></i> <span id="selectedFileName"></span> (<span id="selectedFileSize"></span>)
+                            </div>
+                        </div>
+
+                        <!-- Category Selector -->
+                        <div class="mb-3">
+                            <label for="categorySelect" class="form-label fw-semibold small text-muted">DOCUMENT CATEGORY</label>
+                            <select class="form-select form-select-sm rounded-3" name="category" id="categorySelect" required>
+                                {% for cat in categories %}
+                                <option value="{{ cat }}" {% if cat == 'Notes' %}selected{% endif %}>{{ cat }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+
+                        <!-- Tag Input Field -->
+                        <div class="mb-3">
+                            <label for="tagsInput" class="form-label fw-semibold small text-muted">METADATA TAGS (Optional, comma-separated)</label>
+                            <input type="text" class="form-control form-control-sm rounded-3" name="tags" id="tagsInput" placeholder="e.g. unit1, midsem, cloud-computing, syllabus">
+                            <div class="form-text small">Tags enable multi-attribute indexed keyword searching.</div>
+                        </div>
+
+                        <!-- Upload Progress Bar (Hidden initially) -->
+                        <div class="progress mt-3 d-none rounded-pill" id="uploadProgressBar" style="height: 8px;">
+                            <div class="progress-bar progress-bar-striped progress-bar-animated bg-primary" style="width: 100%"></div>
+                        </div>
+                    </div>
+                    <div class="modal-footer bg-light border-0 py-2">
+                        <button type="button" class="btn btn-secondary btn-sm rounded-pill px-3" data-bs-dismiss="modal">Cancel</button>
+                        <button type="submit" class="btn btn-brand-primary btn-sm rounded-pill px-4" id="submitUploadBtn">
+                            <i class="bi bi-cloud-upload-fill me-1"></i> Upload to Cloud
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+
+    <!-- Footer -->
+    <footer class="footer-enterprise mt-auto text-center">
+        <div class="container d-flex flex-column flex-md-row justify-content-between align-items-center gap-2">
+            <div>
+                <strong>NexaFiles</strong> &copy; 2026 &bull; Intelligent Cloud File Organization & Retrieval System
+            </div>
+            <div class="d-flex align-items-center gap-3">
+                <span class="badge bg-secondary bg-opacity-10 text-secondary border">Course Code: EEC401</span>
+                <span>GNA University &bull; B.Tech CSE</span>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Bootstrap 5 Bundle JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Custom Application JS -->
+    <script src="{{ url_for('static', filename='js/app.js') }}"></script>
+    <script>
+        // Theme Toggle Persistence
+        function initTheme() {
+            const savedTheme = localStorage.getItem('nexafiles-theme') || 'light';
+            document.documentElement.setAttribute('data-bs-theme', savedTheme);
+            updateThemeIcon(savedTheme);
+        }
+        function toggleTheme() {
+            const current = document.documentElement.getAttribute('data-bs-theme') || 'light';
+            const next = current === 'dark' ? 'light' : 'dark';
+            document.documentElement.setAttribute('data-bs-theme', next);
+            localStorage.setItem('nexafiles-theme', next);
+            updateThemeIcon(next);
+        }
+        function updateThemeIcon(theme) {
+            const icon = document.getElementById('themeIcon');
+            if (icon) {
+                icon.className = theme === 'dark' ? 'bi bi-sun-fill text-warning' : 'bi bi-moon-stars-fill';
+            }
+        }
+        initTheme();
+    </script>
+    {% block scripts %}{% endblock %}
+</body>
+</html>
