@@ -13,6 +13,8 @@ import time
 import mimetypes
 from datetime import datetime
 from pathlib import Path
+from collections import defaultdict
+from urllib.parse import urlparse, urljoin
 from flask import (
     Flask, render_template, request, redirect,
     url_for, flash, jsonify, send_file, abort
@@ -37,6 +39,32 @@ from services.auth_service import (
 from services.storage_service import storage_service
 from services.ai_service import ai_service
 
+# Rate limiting and brute-force mitigation trackers: ip -> list of timestamps
+_FAILED_LOGINS = defaultdict(list)
+_FAILED_SHARE_AUTH = defaultdict(list)
+
+def is_safe_url(target, host_url):
+    """Verify redirection target strictly stays on the same domain/host."""
+    if not target:
+        return False
+    ref_url = urlparse(host_url)
+    test_url = urlparse(urljoin(host_url, target))
+    return test_url.scheme in ('http', 'https') and ref_url.netloc == test_url.netloc
+
+def is_rate_limited(ip, tracker, max_attempts=5, window=60):
+    """Check if an IP address has exceeded failed authentication attempts in window seconds."""
+    now = time.time()
+    tracker[ip] = [ts for ts in tracker[ip] if now - ts < window]
+    return len(tracker[ip]) >= max_attempts
+
+def record_failed_attempt(ip, tracker):
+    """Record a failed authentication timestamp."""
+    tracker[ip].append(time.time())
+
+def clear_failed_attempts(ip, tracker):
+    """Reset failed attempts for an IP address upon successful authentication."""
+    tracker.pop(ip, None)
+
 def create_app(test_config=None):
     """Flask Application Factory Pattern."""
     app = Flask(__name__, template_folder='templates', static_folder='static')
@@ -49,6 +77,27 @@ def create_app(test_config=None):
     # Ensure database tables exist within app context
     with app.app_context():
         init_db()
+
+    # -------------------------------------------------------------
+    # Enterprise Security Headers Middleware (OWASP Secure Headers)
+    # -------------------------------------------------------------
+    @app.after_request
+    def set_security_headers(response):
+        """Inject enterprise-grade HTTP security headers on all responses."""
+        response.headers['X-Content-Type-Options'] = 'nosniff'
+        response.headers['X-Frame-Options'] = 'SAMEORIGIN'
+        response.headers['X-XSS-Protection'] = '1; mode=block'
+        response.headers['Referrer-Policy'] = 'strict-origin-when-cross-origin'
+        response.headers['Content-Security-Policy'] = (
+            "default-src 'self' https://cdn.jsdelivr.net https://fonts.googleapis.com https://fonts.gstatic.com; "
+            "img-src 'self' data: https:; "
+            "style-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://fonts.googleapis.com; "
+            "font-src 'self' https://cdn.jsdelivr.net https://fonts.gstatic.com; "
+            "script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net; "
+            "frame-src 'self';"
+        )
+        response.headers['Permissions-Policy'] = 'camera=(), microphone=(), geolocation=()'
+        return response
     
     # -------------------------------------------------------------
     # Context Processor: Inject standard variables into all templates
@@ -102,22 +151,32 @@ def create_app(test_config=None):
 
     @app.route('/login', methods=['GET', 'POST'])
     def login():
-        """User login authentication endpoint."""
+        """User login authentication endpoint with brute-force protection and open-redirect defense."""
         if get_current_user():
             return redirect(url_for('dashboard'))
             
         if request.method == 'POST':
             identifier = request.form.get('username_or_email')
             password = request.form.get('password')
+            client_ip = request.remote_addr or '127.0.0.1'
+            
+            # Rate limiting check (bypassed in pytest testing environment)
+            if not app.config.get('TESTING') and is_rate_limited(client_ip, _FAILED_LOGINS, max_attempts=5, window=60):
+                flash("Too many failed login attempts detected. Please wait 60 seconds before trying again.", "danger")
+                return render_template('login.html', identifier=identifier)
             
             user, error = authenticate_user(identifier, password)
             if user:
+                clear_failed_attempts(client_ip, _FAILED_LOGINS)
                 login_user_session(user)
-                log_activity(user['id'], 'USER_LOGIN', f"User logged in: {user['username']}", request.remote_addr)
+                log_activity(user['id'], 'USER_LOGIN', f"User logged in: {user['username']}", client_ip)
                 flash(f"Welcome back, {user['username']}!", "success")
                 next_url = request.args.get('next')
-                return redirect(next_url or url_for('dashboard'))
+                if next_url and is_safe_url(next_url, request.host_url):
+                    return redirect(next_url)
+                return redirect(url_for('dashboard'))
             else:
+                record_failed_attempt(client_ip, _FAILED_LOGINS)
                 flash(error or "Authentication failed.", "danger")
                 return render_template('login.html', identifier=identifier)
                 
@@ -552,17 +611,26 @@ def create_app(test_config=None):
 
     @app.route('/share/<token>/download', methods=['POST'])
     def download_shared_file(token):
-        """Authenticate password and stream download for shared file."""
+        """Authenticate password and stream download for shared file with brute force defense."""
         link_data = get_shared_link(token)
         if not link_data:
             abort(404, description="Share link not found.")
 
+        client_ip = request.remote_addr or '127.0.0.1'
+
         # Password validation if protected
         if link_data['password_hash']:
+            # Brute-force rate limiting protection
+            if not app.config.get('TESTING') and is_rate_limited(f"{client_ip}:{token}", _FAILED_SHARE_AUTH, max_attempts=5, window=60):
+                flash("Too many failed passphrase attempts. Please wait 60 seconds before retrying.", "danger")
+                return redirect(url_for('view_shared_link', token=token))
+
             provided_pw = request.form.get('password', '')
             if not check_password_hash(link_data['password_hash'], provided_pw):
+                record_failed_attempt(f"{client_ip}:{token}", _FAILED_SHARE_AUTH)
                 flash("Incorrect password for this protected document.", "danger")
                 return redirect(url_for('view_shared_link', token=token))
+            clear_failed_attempts(f"{client_ip}:{token}", _FAILED_SHARE_AUTH)
 
         # Check expiration
         if link_data['expires_at']:
@@ -639,7 +707,7 @@ def create_app(test_config=None):
     def stream_local_file(s3_key):
         """
         Serves local files securely when emulating S3 Pre-Signed URLs.
-        Enforces cryptographic signature and expiration time check.
+        Enforces cryptographic signature, expiration time check, and path containment.
         """
         expires = request.args.get('expires')
         sig = request.args.get('sig')
@@ -652,7 +720,14 @@ def create_app(test_config=None):
         if not valid:
             abort(403, description=f"Security verification failed: {err}")
             
-        local_path = storage_service._get_base_path() / s3_key
+        base_dir = storage_service._get_base_path().resolve()
+        try:
+            local_path = (base_dir / s3_key).resolve()
+            if not local_path.is_relative_to(base_dir):
+                abort(403, description="Access forbidden: Path traversal attempt detected.")
+        except Exception:
+            abort(400, description="Invalid path format.")
+            
         if not local_path.exists():
             abort(404, description="Binary object does not exist on storage disk.")
             

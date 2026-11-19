@@ -110,7 +110,10 @@ class StorageService:
         else:
             # Local Cloud Emulation Mode
             try:
-                target_path = self._get_base_path() / s3_key
+                base_dir = self._get_base_path().resolve()
+                target_path = (base_dir / s3_key).resolve()
+                if not target_path.is_relative_to(base_dir):
+                    return False, '', 0, "Security error: Path traversal attempt detected."
                 target_path.parent.mkdir(parents=True, exist_ok=True)
                 
                 with open(target_path, 'wb') as dst:
@@ -179,8 +182,14 @@ class StorageService:
 
     def get_local_file_path(self, s3_key):
         """Retrieve local absolute path for direct file inspection (local mode)."""
-        target = self._get_base_path() / s3_key
-        return target if target.exists() else None
+        try:
+            base_dir = self._get_base_path().resolve()
+            target = (base_dir / s3_key).resolve()
+            if not target.is_relative_to(base_dir):
+                return None
+            return target if target.exists() else None
+        except Exception:
+            return None
 
     def get_file_bytes(self, s3_key, max_bytes=None):
         """Read binary contents of a storage object."""
@@ -214,7 +223,10 @@ class StorageService:
                 return False
         else:
             try:
-                target_path = self._get_base_path() / s3_key
+                base_dir = self._get_base_path().resolve()
+                target_path = (base_dir / s3_key).resolve()
+                if not target_path.is_relative_to(base_dir):
+                    return False
                 if target_path.exists():
                     target_path.unlink()
                 return True

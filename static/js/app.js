@@ -223,14 +223,17 @@ function openAIModal(fileId, filename) {
                 bulletsList.appendChild(li);
             });
 
-            // Populate Suggested Tags
+            // Populate Suggested Tags (Sanitized against DOM XSS)
             const tagContainer = document.getElementById('aiSuggestedTags');
             tagContainer.innerHTML = '';
             data.suggested_tags.forEach(tag => {
                 const badge = document.createElement('span');
                 badge.className = 'badge bg-light text-primary border rounded-pill px-3 py-1 cursor-pointer';
                 badge.style.cursor = 'pointer';
-                badge.innerHTML = `<i class="bi bi-plus"></i> ${tag}`;
+                const icon = document.createElement('i');
+                icon.className = 'bi bi-plus me-1';
+                badge.appendChild(icon);
+                badge.appendChild(document.createTextNode(tag));
                 badge.onclick = () => addSuggestedTag(tag);
                 tagContainer.appendChild(badge);
             });
@@ -449,13 +452,26 @@ function confirmDeleteFile(fileId, fileName) {
 // -------------------------------------------------------------
 // Metadata Inspector Modal Populate
 // -------------------------------------------------------------
-function showFileMetadata(file) {
+function showFileMetadata(elOrFile) {
+    let file = elOrFile;
+    if (elOrFile && elOrFile.dataset && elOrFile.dataset.file) {
+        try {
+            file = JSON.parse(elOrFile.dataset.file);
+        } catch (e) {
+            console.error("Failed to parse file metadata", e);
+            return;
+        }
+    }
     if (!file) return;
 
     document.getElementById('metaOriginalName').textContent = file.original_filename || file.filename;
     const verEl = document.getElementById('metaVersion');
     if (verEl) {
-        verEl.innerHTML = `<span class="badge bg-primary rounded-pill px-2">v${file.version || 1}</span>`;
+        verEl.innerHTML = '';
+        const badge = document.createElement('span');
+        badge.className = 'badge bg-primary rounded-pill px-2';
+        badge.textContent = `v${file.version || 1}`;
+        verEl.appendChild(badge);
     }
     document.getElementById('metaS3Key').textContent = file.s3_key || '—';
     document.getElementById('metaChecksum').textContent = file.checksum || '—';
@@ -507,7 +523,12 @@ function showToast(message) {
 
     const toast = document.createElement('div');
     toast.className = 'toast-feedback';
-    toast.innerHTML = `<i class="bi bi-shield-check text-info fs-5"></i> <span>${message}</span>`;
+    const icon = document.createElement('i');
+    icon.className = 'bi bi-shield-check text-info fs-5 me-2';
+    const msgSpan = document.createElement('span');
+    msgSpan.textContent = message;
+    toast.appendChild(icon);
+    toast.appendChild(msgSpan);
     document.body.appendChild(toast);
 
     setTimeout(() => {

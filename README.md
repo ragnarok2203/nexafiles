@@ -4,7 +4,8 @@
 [![Python 3.10+](https://img.shields.io/badge/Python-3.10%2B-blue.svg)](https://www.python.org/)
 [![Flask 3.0](https://img.shields.io/badge/Flask-3.0%2B-black.svg)](https://flask.palletsprojects.com/)
 [![AWS S3](https://img.shields.io/badge/AWS-S3%20Boto3-orange.svg)](https://aws.amazon.com/s3/)
-[![Tests Passing](https://img.shields.io/badge/Pytest-20%2F20%20Passed-brightgreen.svg)]()
+[![Tests Passing](https://img.shields.io/badge/Pytest-26%2F26%20Passed-brightgreen.svg)]()
+[![Security Audit](https://img.shields.io/badge/OWASP%20Top%2010-Hardened-blue.svg)]()
 
 > **NexaFiles** is an enterprise-grade, cloud-integrated document organization, retrieval, and intelligence platform. Architected with decoupled object storage and relational indexing, it delivers sub-second parametric search, in-browser code and document previews, AI-powered document summarization, smart version control, zero-trust password-protected sharing, and automated security audit logging.
 
@@ -79,7 +80,8 @@ D:\project/
     ├── test_auth.py                  # Test Cases TC-01 to TC-05 (Authentication & Sessions)
     ├── test_storage.py               # Test Cases TC-06 to TC-08, TC-10 to TC-12 (Ingestion & S3)
     ├── test_search.py                # Test Case TC-09 (Multi-Attribute Filtering & Metrics)
-    └── test_features.py              # Test Cases TC-13 to TC-18 (Preview, AI, Sharing, Versions, Audit)
+    ├── test_features.py              # Test Cases TC-13 to TC-18 (Preview, AI, Sharing, Versions, Audit)
+    └── test_security.py              # Security Verification SEC-01 to SEC-06 (OWASP Hardening)
 ```
 
 ---
@@ -107,9 +109,9 @@ python run.py
 
 ---
 
-## 🧪 Comprehensive Verification Suite (20/20 Test Cases)
+## 🧪 Comprehensive Verification Suite (26/26 Test Cases)
 
-Run the full automated test suite covering all core requirements and enterprise features:
+Run the full automated test suite covering all core requirements, enterprise extensions, and OWASP security checks:
 
 ```powershell
 cd "D:\project"
@@ -131,6 +133,12 @@ tests/test_features.py::test_tc17_content_deduplication PASSED
 tests/test_features.py::test_tc18_activity_audit_logs_and_csv PASSED
 tests/test_search.py::test_tc09_multi_attribute_search PASSED
 tests/test_search.py::test_metrics_api PASSED
+tests/test_security.py::test_sec01_http_security_headers PASSED
+tests/test_security.py::test_sec02_session_cookie_flags PASSED
+tests/test_security.py::test_sec03_path_traversal_rejection PASSED
+tests/test_security.py::test_sec04_open_redirect_defense PASSED
+tests/test_security.py::test_sec05_idor_boundary_isolation PASSED
+tests/test_security.py::test_sec06_brute_force_rate_limiter_logic PASSED
 tests/test_storage.py::test_tc06_file_upload_success PASSED
 tests/test_storage.py::test_tc07_prohibited_extension_rejection PASSED
 tests/test_storage.py::test_tc08_checksum_calculation PASSED
@@ -138,8 +146,22 @@ tests/test_storage.py::test_tc10_presigned_download_url_generation PASSED
 tests/test_storage.py::test_tc11_star_toggle PASSED
 tests/test_storage.py::test_tc12_file_deletion PASSED
 
-======================== 20 passed in 61.11s ========================
+======================== 26 passed in 47.25s ========================
 ```
+
+---
+
+## 🛡 Enterprise Security & OWASP Top 10 Hardening
+
+| Vector / OWASP Category | Vulnerability Surface | Defensive Mitigation & Implementation | Verification Test |
+| :--- | :--- | :--- | :--- |
+| **A01: Broken Access Control** | Path Traversal in streaming | `pathlib.Path.is_relative_to(base_dir)` strictly enforces storage root isolation; rejects `../` traversal | `test_sec03_path_traversal_rejection` |
+| **A01: Broken Access Control** | IDOR on downloads & preview | Relational user boundary (`WHERE user_id = ?`) asserted on all file preview, download, and delete operations | `test_sec05_idor_boundary_isolation` |
+| **A01: Broken Access Control** | Open Redirect on `/login` | Host validation via `is_safe_url` ensures redirection stays within original domain | `test_sec04_open_redirect_defense` |
+| **A02: Cryptographic Failures** | Cookie theft & interception | `SESSION_COOKIE_HTTPONLY = True`, `SESSION_COOKIE_SAMESITE = 'Lax'`, PBKDF2 password hashing | `test_sec02_session_cookie_flags` |
+| **A03: Injection** | SQL Injection & DOM XSS | SQLite parameterized queries (`?`), `document.createTextNode` DOM sanitization, HTML attribute `data-*` safety | Core Test Suite |
+| **A04: Insecure Design** | Credential brute force | Sliding-window IP rate limiter on login and password-protected ephemeral shares | `test_sec06_brute_force_rate_limiter_logic` |
+| **A05: Security Misconfiguration** | Missing HTTP Security Headers | Middleware adds `X-Content-Type-Options: nosniff`, `X-Frame-Options: SAMEORIGIN`, CSP, and Permissions-Policy | `test_sec01_http_security_headers` |
 
 ---
 

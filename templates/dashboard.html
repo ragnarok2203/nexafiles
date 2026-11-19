@@ -236,13 +236,13 @@
                                     <button type="button" class="btn btn-sm btn-outline-primary action-btn" onclick="openPreviewModal({{ file.id }})" title="Quick In-Browser Preview">
                                         <i class="bi bi-eye"></i>
                                     </button>
-                                    <button type="button" class="btn btn-sm btn-outline-warning action-btn text-dark" onclick="openAIModal({{ file.id }}, '{{ file.original_filename }}')" title="AI Summary & Smart Tags">
+                                    <button type="button" class="btn btn-sm btn-outline-warning action-btn text-dark" data-id="{{ file.id }}" data-filename="{{ file.original_filename }}" onclick="openAIModal(this.dataset.id, this.dataset.filename)" title="AI Summary & Smart Tags">
                                         <i class="bi bi-stars"></i>
                                     </button>
                                     <button type="button" class="btn btn-sm btn-outline-success action-btn" onclick="openShareModal({{ file.id }})" title="Create Ephemeral Share Link">
                                         <i class="bi bi-share"></i>
                                     </button>
-                                    <button type="button" class="btn btn-sm btn-outline-dark action-btn" onclick="openVersionModal({{ file.id }}, '{{ file.original_filename }}')" title="Revision History (v{{ file.version or 1 }})">
+                                    <button type="button" class="btn btn-sm btn-outline-dark action-btn" data-id="{{ file.id }}" data-filename="{{ file.original_filename }}" onclick="openVersionModal(this.dataset.id, this.dataset.filename)" title="Revision History (v{{ file.version or 1 }})">
                                         <i class="bi bi-clock-history"></i>
                                     </button>
                                     <a href="{{ url_for('download_file', file_id=file.id) }}" class="btn btn-sm btn-outline-secondary action-btn" title="Download via Signed URL">
@@ -251,10 +251,10 @@
                                     <button type="button" class="btn btn-sm btn-outline-info action-btn" onclick="copyDownloadUrl('{{ url_for('download_file', file_id=file.id) }}')" title="Copy Pre-Signed Link">
                                         <i class="bi bi-link-45deg"></i>
                                     </button>
-                                    <button type="button" class="btn btn-sm btn-outline-secondary action-btn" onclick="showFileMetadata({{ file|tojson|safe }})" title="View Cloud Metadata">
+                                    <button type="button" class="btn btn-sm btn-outline-secondary action-btn" data-file='{{ file|tojson }}' onclick="showFileMetadata(this)" title="View Cloud Metadata">
                                         <i class="bi bi-info-circle"></i>
                                     </button>
-                                    <button type="button" class="btn btn-sm btn-outline-danger action-btn" onclick="confirmDeleteFile({{ file.id }}, '{{ file.original_filename }}')" title="Delete File">
+                                    <button type="button" class="btn btn-sm btn-outline-danger action-btn" data-id="{{ file.id }}" data-filename="{{ file.original_filename }}" onclick="confirmDeleteFile(this.dataset.id, this.dataset.filename)" title="Delete File">
                                         <i class="bi bi-trash"></i>
                                     </button>
                                 </div>

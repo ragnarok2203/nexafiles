@@ -52,6 +52,12 @@ class Config:
     MAX_CONTENT_LENGTH = MAX_CONTENT_LENGTH_MB * 1024 * 1024  # bytes
     PRESIGNED_URL_EXPIRATION = int(os.getenv('PRESIGNED_URL_EXPIRATION', 900))  # seconds (15 min)
     
+    # Session Cookie Security Flags
+    SESSION_COOKIE_HTTPONLY = True
+    SESSION_COOKIE_SAMESITE = 'Lax'
+    SESSION_COOKIE_SECURE = os.getenv('SESSION_COOKIE_SECURE', 'False').lower() in ('true', '1')
+    PERMANENT_SESSION_LIFETIME = 86400  # 24 hours
+    
     # Allowed File Extensions
     ALLOWED_EXTENSIONS = {
         'pdf', 'docx', 'doc', 'txt', 'csv', 'xlsx', 'xls',
