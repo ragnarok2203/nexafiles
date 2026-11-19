@@ -45,6 +45,11 @@
                             <i class="bi bi-search me-1"></i> Search Engine
                         </a>
                     </li>
+                    <li class="nav-item">
+                        <a class="nav-link nav-link-modern {% if request.endpoint == 'activity_page' %}active{% endif %}" href="{{ url_for('activity_page') }}">
+                            <i class="bi bi-clock-history me-1"></i> Audit Trail
+                        </a>
+                    </li>
                 </ul>
 
                 <!-- Storage Mode Indicator Badge -->
@@ -81,6 +86,11 @@
                             Signed in as<br><strong class="text-dark">{{ current_user.email }}</strong>
                         </li>
                         <li><hr class="dropdown-divider"></li>
+                        <li>
+                            <a class="dropdown-item d-flex align-items-center gap-2" href="{{ url_for('activity_page') }}">
+                                <i class="bi bi-shield-check"></i> Security Activity
+                            </a>
+                        </li>
                         <li>
                             <a class="dropdown-item d-flex align-items-center gap-2 text-danger" href="{{ url_for('logout') }}">
                                 <i class="bi bi-box-arrow-right"></i> Sign Out
@@ -129,8 +139,8 @@
         {% block content %}{% endblock %}
     </main>
 
-    <!-- Upload Modal Partial (Available across all authenticated pages) -->
     {% if current_user %}
+    <!-- Upload Modal -->
     <div class="modal fade" id="uploadModal" tabindex="-1" aria-labelledby="uploadModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content border-0">
@@ -188,6 +198,167 @@
             </div>
         </div>
     </div>
+
+    <!-- In-Browser Document Preview Modal -->
+    <div class="modal fade" id="previewModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable">
+            <div class="modal-content border-0">
+                <div class="modal-header d-flex justify-content-between align-items-center">
+                    <div class="d-flex align-items-center gap-2">
+                        <i class="bi bi-eye-fill text-info fs-5"></i>
+                        <h5 class="modal-title mb-0 fw-bold" id="previewFilename">Document Preview</h5>
+                        <span class="badge bg-secondary bg-opacity-25 text-white border ms-2 rounded-pill font-monospace small" id="previewLanguage"></span>
+                    </div>
+                    <div class="d-flex align-items-center gap-2">
+                        <button type="button" class="btn btn-outline-light btn-sm rounded-pill px-3" id="copyCodeBtn" onclick="copyPreviewContent()" style="display: none;">
+                            <i class="bi bi-clipboard me-1"></i> Copy Code
+                        </button>
+                        <a href="#" class="btn btn-brand-primary btn-sm rounded-pill px-3" id="previewDownloadBtn">
+                            <i class="bi bi-download me-1"></i> Download
+                        </a>
+                        <button type="button" class="btn-close btn-close-white ms-2" data-bs-dismiss="modal"></button>
+                    </div>
+                </div>
+                <div class="modal-body p-4" id="previewBody">
+                    <div class="text-center py-5" id="previewLoading">
+                        <div class="spinner-border text-primary" role="status"></div>
+                        <p class="text-muted small mt-2">Loading document stream from cloud vault...</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- AI Document Summarizer Modal -->
+    <div class="modal fade" id="aiSummaryModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content border-0">
+                <div class="modal-header bg-dark text-white">
+                    <h5 class="modal-title d-flex align-items-center gap-2">
+                        <i class="bi bi-stars text-warning fs-5"></i> AI Document Intelligence
+                    </h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body p-4">
+                    <div class="mb-3">
+                        <div class="small text-muted fw-bold mb-1">ANALYZING DOCUMENT:</div>
+                        <h6 class="fw-bold text-dark" id="aiDocName">Document.pdf</h6>
+                    </div>
+
+                    <div id="aiLoading" class="text-center py-4">
+                        <div class="spinner-border text-primary mb-2" role="status"></div>
+                        <p class="text-muted small mb-0">Extracting content and synthesizing 3-bullet summary...</p>
+                    </div>
+
+                    <div id="aiResult" class="d-none">
+                        <div class="card border-0 bg-light p-3 rounded-4 mb-3">
+                            <div class="fw-bold text-dark small mb-2 d-flex align-items-center gap-1">
+                                <i class="bi bi-list-check text-primary"></i> 3-Bullet Executive Summary:
+                            </div>
+                            <ul class="small text-secondary mb-0 ps-3" id="aiBulletsList"></ul>
+                        </div>
+
+                        <div class="mb-3">
+                            <div class="fw-bold text-dark small mb-1">RECOMMENDED SEARCH TAGS:</div>
+                            <div class="d-flex flex-wrap gap-1" id="aiSuggestedTags"></div>
+                            <div class="form-text small mt-1">Click a tag to add it to this file's indexing tags.</div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label small fw-semibold text-muted">CURRENT METADATA TAGS</label>
+                            <input type="text" class="form-control form-control-sm rounded-3" id="aiCurrentTags">
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer bg-light border-0 py-2">
+                    <button type="button" class="btn btn-secondary btn-sm rounded-pill px-3" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-brand-primary btn-sm rounded-pill px-4" id="aiApplyBtn" onclick="saveAITags()">
+                        <i class="bi bi-check-lg me-1"></i> Apply AI Summary & Tags
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Ephemeral Share Link Generator Modal -->
+    <div class="modal fade" id="shareModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content border-0">
+                <div class="modal-header">
+                    <h5 class="modal-title d-flex align-items-center gap-2">
+                        <i class="bi bi-share-fill text-info"></i> Ephemeral Secure Share Link
+                    </h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body p-4">
+                    <div class="mb-3">
+                        <label class="form-label small fw-semibold text-muted">LINK EXPIRATION WINDOW</label>
+                        <select class="form-select form-select-sm rounded-3" id="shareExpiry">
+                            <option value="1">1 Hour (High Security)</option>
+                            <option value="24" selected>24 Hours (Standard)</option>
+                            <option value="168">7 Days (Team Review)</option>
+                            <option value="720">30 Days (Extended)</option>
+                        </select>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label small fw-semibold text-muted">ACCESS PASSPHRASE (Optional)</label>
+                        <input type="password" class="form-control form-control-sm rounded-3" id="sharePassword" placeholder="Leave blank for open token access">
+                        <div class="form-text small">Recipients must enter this password before the file can be downloaded.</div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label small fw-semibold text-muted">MAX DOWNLOAD LIMIT (Optional)</label>
+                        <input type="number" class="form-control form-control-sm rounded-3" id="shareMaxDownloads" value="0" min="0" placeholder="0 = Unlimited">
+                        <div class="form-text small">Link automatically self-destructs after this number of downloads.</div>
+                    </div>
+
+                    <div id="shareLinkContainer" class="d-none mt-3 pt-3 border-top">
+                        <label class="form-label small fw-bold text-success">
+                            <i class="bi bi-check-circle-fill me-1"></i> SHAREABLE PUBLIC LINK GENERATED:
+                        </label>
+                        <div class="input-group">
+                            <input type="text" class="form-control form-control-sm font-monospace" id="generatedShareUrl" readonly>
+                            <button class="btn btn-outline-primary btn-sm" type="button" onclick="copyGeneratedShareUrl()">
+                                <i class="bi bi-clipboard"></i> Copy
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer bg-light border-0 py-2">
+                    <button type="button" class="btn btn-secondary btn-sm rounded-pill px-3" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-brand-primary btn-sm rounded-pill px-4" id="generateShareBtn" onclick="submitShareCreation()">
+                        <i class="bi bi-link-45deg me-1"></i> Generate Link
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Smart Version History Modal -->
+    <div class="modal fade" id="versionModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content border-0">
+                <div class="modal-header">
+                    <h5 class="modal-title d-flex align-items-center gap-2">
+                        <i class="bi bi-clock-history text-info"></i> Revision History
+                    </h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body p-4">
+                    <h6 class="fw-bold text-dark mb-3" id="versionDocName">Document.pdf</h6>
+                    <div id="versionList">
+                        <div class="text-center py-3">
+                            <div class="spinner-border spinner-border-sm text-primary" role="status"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer bg-light border-0 py-2">
+                    <button type="button" class="btn btn-secondary btn-sm rounded-pill px-3" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
     {% endif %}
 
     <!-- Footer -->
@@ -208,7 +379,6 @@
     <!-- Custom Application JS -->
     <script src="{{ url_for('static', filename='js/app.js') }}"></script>
     <script>
-        // Theme Toggle Persistence
         function initTheme() {
             const savedTheme = localStorage.getItem('nexafiles-theme') || 'light';
             document.documentElement.setAttribute('data-bs-theme', savedTheme);

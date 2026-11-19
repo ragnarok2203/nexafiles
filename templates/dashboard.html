@@ -10,20 +10,20 @@
         <div>
             <div class="d-flex align-items-center gap-2 mb-1">
                 <h3 class="fw-bold mb-0 text-dark">Cloud Storage Dashboard</h3>
-                <span
-                    class="badge bg-primary bg-opacity-10 text-primary border border-primary border-opacity-25 rounded-pill px-3 py-1 small">
-                    Enterprise v2.0
+                <span class="badge bg-primary bg-opacity-10 text-primary border border-primary border-opacity-25 rounded-pill px-3 py-1 small">
+                    Enterprise Edition
                 </span>
             </div>
-            <p class="text-muted small mb-0">Decoupled cloud architecture &bull; Centralized metrics, category
-                distributions, and real-time ingestion.</p>
+            <p class="text-muted small mb-0">Decoupled cloud architecture &bull; Centralized metrics, in-browser previews, AI summarization & zero-trust sharing.</p>
         </div>
         <div class="d-flex align-items-center gap-2">
+            <a href="{{ url_for('activity_page') }}" class="btn btn-outline-secondary btn-sm px-3 rounded-pill fw-medium">
+                <i class="bi bi-clock-history me-1"></i> Audit Trail
+            </a>
             <a href="{{ url_for('search_page') }}" class="btn btn-outline-secondary btn-sm px-3 rounded-pill fw-medium">
                 <i class="bi bi-search me-1"></i> Search Files
             </a>
-            <button type="button" class="btn btn-brand-primary btn-sm px-4 rounded-pill shadow-sm fw-semibold"
-                data-bs-toggle="modal" data-bs-target="#uploadModal">
+            <button type="button" class="btn btn-brand-primary btn-sm px-4 rounded-pill shadow-sm fw-semibold" data-bs-toggle="modal" data-bs-target="#uploadModal">
                 <i class="bi bi-cloud-arrow-up-fill me-1"></i> Upload File
             </button>
         </div>
@@ -35,18 +35,14 @@
             <div class="d-flex align-items-center gap-2">
                 <i class="bi bi-pie-chart-fill text-primary fs-5"></i>
                 <span class="fw-bold text-dark small">Cloud Storage Utilization:</span>
-                <span class="text-muted small"><strong>{{ metrics.formatted_size }}</strong> allocated across {{
-                    metrics.total_files }} documents</span>
+                <span class="text-muted small"><strong>{{ metrics.formatted_size }}</strong> allocated across {{ metrics.total_files }} documents</span>
             </div>
             <div class="small text-muted">
-                Engine: <span class="badge bg-light text-dark border fw-semibold">{% if storage_status.storage_mode ==
-                    's3' %}AWS S3 Standard (SSE-S3){% else %}Local Cloud Emulation Vault{% endif %}</span>
+                Engine: <span class="badge bg-light text-dark border fw-semibold">{% if storage_status.storage_mode == 's3' %}AWS S3 Standard (SSE-S3){% else %}Local Cloud Emulation Vault{% endif %}</span>
             </div>
         </div>
         <div class="progress rounded-pill" style="height: 6px;">
-            <div class="progress-bar bg-primary" role="progressbar"
-                style="width: {% if metrics.total_files > 0 %}18%{% else %}2%{% endif %};" aria-valuenow="18"
-                aria-valuemin="0" aria-valuemax="100"></div>
+            <div class="progress-bar bg-primary" role="progressbar" style="width: {% if metrics.total_files > 0 %}18%{% else %}2%{% endif %};" aria-valuenow="18" aria-valuemin="0" aria-valuemax="100"></div>
         </div>
     </div>
 
@@ -120,8 +116,7 @@
         <div class="d-flex justify-content-between align-items-center mb-3">
             <div>
                 <h5 class="fw-bold mb-0 text-dark">Document Categories</h5>
-                <p class="text-muted small mb-0">Multi-dimensional classification for academic & professional resources
-                </p>
+                <p class="text-muted small mb-0">Multi-dimensional classification for academic & professional resources</p>
             </div>
             <a href="{{ url_for('search_page') }}" class="text-primary small text-decoration-none fw-semibold">
                 Explore all categories <i class="bi bi-arrow-right"></i>
@@ -134,8 +129,7 @@
                 <a href="{{ url_for('search_page', category=cat) }}" class="text-decoration-none">
                     <div class="category-card h-100">
                         <div class="d-flex justify-content-between align-items-center mb-2">
-                            <span
-                                class="category-badge-pill bg-{{ category_colors.get(cat, 'primary') }} bg-opacity-10 text-{{ category_colors.get(cat, 'primary') }} border border-{{ category_colors.get(cat, 'primary') }} border-opacity-25">
+                            <span class="category-badge-pill bg-{{ category_colors.get(cat, 'primary') }} bg-opacity-10 text-{{ category_colors.get(cat, 'primary') }} border border-{{ category_colors.get(cat, 'primary') }} border-opacity-25">
                                 {{ cat }}
                             </span>
                             <span class="fw-bold text-dark fs-5">{{ cat_data.count }}</span>
@@ -145,9 +139,7 @@
                             <span class="fw-semibold text-dark">{{ format_bytes(cat_data.bytes) }}</span>
                         </div>
                         <div class="category-progress">
-                            <div class="bg-{{ category_colors.get(cat, 'primary') }}"
-                                style="height: 100%; width: {% if cat_data.count > 0 %}40%{% else %}0%{% endif %};">
-                            </div>
+                            <div class="bg-{{ category_colors.get(cat, 'primary') }}" style="height: 100%; width: {% if cat_data.count > 0 %}40%{% else %}0%{% endif %};"></div>
                         </div>
                     </div>
                 </a>
@@ -186,8 +178,7 @@
                         <tr id="row-file-{{ file.id }}">
                             <td class="ps-4">
                                 <div class="d-flex align-items-center gap-3">
-                                    <button class="star-btn" onclick="toggleFileStar({{ file.id }}, this)"
-                                        title="Toggle Star">
+                                    <button class="star-btn" onclick="toggleFileStar({{ file.id }}, this)" title="Toggle Star">
                                         {% if file.is_starred %}
                                         <i class="bi bi-star-fill text-warning fs-5"></i>
                                         {% else %}
@@ -206,27 +197,27 @@
                                         {% if ext == 'pdf' %}<i class="bi bi-file-earmark-pdf-fill"></i>
                                         {% elif ext in ['doc', 'docx'] %}<i class="bi bi-file-earmark-word-fill"></i>
                                         {% elif ext in ['ppt', 'pptx'] %}<i class="bi bi-file-earmark-slides-fill"></i>
-                                        {% elif ext in ['xls', 'xlsx', 'csv'] %}<i
-                                            class="bi bi-file-earmark-spreadsheet-fill"></i>
-                                        {% elif ext in ['py', 'js', 'html', 'css', 'json'] %}<i
-                                            class="bi bi-file-earmark-code-fill"></i>
-                                        {% elif ext in ['zip', 'tar', 'gz'] %}<i
-                                            class="bi bi-file-earmark-zip-fill"></i>
-                                        {% elif ext in ['png', 'jpg', 'jpeg'] %}<i
-                                            class="bi bi-file-earmark-image-fill"></i>
+                                        {% elif ext in ['xls', 'xlsx', 'csv'] %}<i class="bi bi-file-earmark-spreadsheet-fill"></i>
+                                        {% elif ext in ['py', 'js', 'html', 'css', 'json'] %}<i class="bi bi-file-earmark-code-fill"></i>
+                                        {% elif ext in ['zip', 'tar', 'gz'] %}<i class="bi bi-file-earmark-zip-fill"></i>
+                                        {% elif ext in ['png', 'jpg', 'jpeg'] %}<i class="bi bi-file-earmark-image-fill"></i>
                                         {% else %}<i class="bi bi-file-earmark-fill"></i>{% endif %}
                                     </span>
                                     <div>
-                                        <a href="{{ url_for('download_file', file_id=file.id) }}" class="file-name-link"
-                                            title="Download via Signed URL">
-                                            {{ file.original_filename }}
-                                        </a>
+                                        <div class="d-flex align-items-center gap-1">
+                                            <a href="javascript:void(0)" onclick="openPreviewModal({{ file.id }})" class="file-name-link" title="Click for In-Browser Preview">
+                                                {{ file.original_filename }}
+                                            </a>
+                                            {% if file.version and file.version > 1 %}
+                                            <span class="badge bg-primary bg-opacity-10 text-primary border rounded-pill px-2 py-0 small" style="font-size: 0.7rem;">v{{ file.version }}</span>
+                                            {% endif %}
+                                        </div>
                                         {% if file.tags %}
                                         <div class="mt-1">
                                             {% for tag in file.tags.split(',') %}
-                                            {% if tag.strip() %}
-                                            <span class="tag-badge">{{ tag.strip() }}</span>
-                                            {% endif %}
+                                                {% if tag.strip() %}
+                                                <span class="tag-badge">{{ tag.strip() }}</span>
+                                                {% endif %}
                                             {% endfor %}
                                         </div>
                                         {% endif %}
@@ -234,8 +225,7 @@
                                 </div>
                             </td>
                             <td>
-                                <span
-                                    class="category-badge-pill bg-{{ category_colors.get(file.category, 'primary') }} bg-opacity-10 text-{{ category_colors.get(file.category, 'primary') }} border border-{{ category_colors.get(file.category, 'primary') }} border-opacity-25">
+                                <span class="category-badge-pill bg-{{ category_colors.get(file.category, 'primary') }} bg-opacity-10 text-{{ category_colors.get(file.category, 'primary') }} border border-{{ category_colors.get(file.category, 'primary') }} border-opacity-25">
                                     {{ file.category }}
                                 </span>
                             </td>
@@ -243,23 +233,28 @@
                             <td class="small text-muted">{{ file.upload_date }}</td>
                             <td class="text-end pe-4">
                                 <div class="d-inline-flex gap-1">
-                                    <a href="{{ url_for('download_file', file_id=file.id) }}"
-                                        class="btn btn-sm btn-outline-primary action-btn"
-                                        title="Download via Pre-Signed URL">
+                                    <button type="button" class="btn btn-sm btn-outline-primary action-btn" onclick="openPreviewModal({{ file.id }})" title="Quick In-Browser Preview">
+                                        <i class="bi bi-eye"></i>
+                                    </button>
+                                    <button type="button" class="btn btn-sm btn-outline-warning action-btn text-dark" onclick="openAIModal({{ file.id }}, '{{ file.original_filename }}')" title="AI Summary & Smart Tags">
+                                        <i class="bi bi-stars"></i>
+                                    </button>
+                                    <button type="button" class="btn btn-sm btn-outline-success action-btn" onclick="openShareModal({{ file.id }})" title="Create Ephemeral Share Link">
+                                        <i class="bi bi-share"></i>
+                                    </button>
+                                    <button type="button" class="btn btn-sm btn-outline-dark action-btn" onclick="openVersionModal({{ file.id }}, '{{ file.original_filename }}')" title="Revision History (v{{ file.version or 1 }})">
+                                        <i class="bi bi-clock-history"></i>
+                                    </button>
+                                    <a href="{{ url_for('download_file', file_id=file.id) }}" class="btn btn-sm btn-outline-secondary action-btn" title="Download via Signed URL">
                                         <i class="bi bi-download"></i>
                                     </a>
-                                    <button type="button" class="btn btn-sm btn-outline-info action-btn"
-                                        onclick="copyDownloadUrl('{{ url_for('download_file', file_id=file.id) }}')"
-                                        title="Copy Pre-Signed Link">
+                                    <button type="button" class="btn btn-sm btn-outline-info action-btn" onclick="copyDownloadUrl('{{ url_for('download_file', file_id=file.id) }}')" title="Copy Pre-Signed Link">
                                         <i class="bi bi-link-45deg"></i>
                                     </button>
-                                    <button type="button" class="btn btn-sm btn-outline-secondary action-btn"
-                                        onclick="showFileMetadata({{ file|tojson|safe }})" title="View Cloud Metadata">
+                                    <button type="button" class="btn btn-sm btn-outline-secondary action-btn" onclick="showFileMetadata({{ file|tojson|safe }})" title="View Cloud Metadata">
                                         <i class="bi bi-info-circle"></i>
                                     </button>
-                                    <button type="button" class="btn btn-sm btn-outline-danger action-btn"
-                                        onclick="confirmDeleteFile({{ file.id }}, '{{ file.original_filename }}')"
-                                        title="Delete File">
+                                    <button type="button" class="btn btn-sm btn-outline-danger action-btn" onclick="confirmDeleteFile({{ file.id }}, '{{ file.original_filename }}')" title="Delete File">
                                         <i class="bi bi-trash"></i>
                                     </button>
                                 </div>
@@ -273,10 +268,8 @@
             <div class="text-center py-5">
                 <i class="bi bi-cloud-arrow-up display-3 text-muted mb-3 d-block opacity-50"></i>
                 <h6 class="fw-bold text-dark">No files uploaded yet</h6>
-                <p class="text-muted small mb-3">Begin by uploading course notes, research papers, source code, or
-                    presentations.</p>
-                <button type="button" class="btn btn-brand-primary btn-sm px-4 rounded-pill shadow-sm"
-                    data-bs-toggle="modal" data-bs-target="#uploadModal">
+                <p class="text-muted small mb-3">Begin by uploading course notes, research papers, source code, or presentations.</p>
+                <button type="button" class="btn btn-brand-primary btn-sm px-4 rounded-pill shadow-sm" data-bs-toggle="modal" data-bs-target="#uploadModal">
                     <i class="bi bi-cloud-arrow-up-fill me-1"></i> Upload First File
                 </button>
             </div>
@@ -303,6 +296,10 @@
                             <td class="fw-semibold text-dark small" id="metaOriginalName"></td>
                         </tr>
                         <tr>
+                            <td class="text-muted small fw-semibold">Version:</td>
+                            <td class="small" id="metaVersion"><span class="badge bg-primary rounded-pill px-2">v1</span></td>
+                        </tr>
+                        <tr>
                             <td class="text-muted small fw-semibold">Cloud Object Key:</td>
                             <td class="font-monospace small text-primary text-break" id="metaS3Key"></td>
                         </tr>
@@ -320,8 +317,7 @@
                         </tr>
                         <tr>
                             <td class="text-muted small fw-semibold">Category:</td>
-                            <td><span class="badge bg-primary px-2 py-1 rounded-pill small" id="metaCategory"></span>
-                            </td>
+                            <td><span class="badge bg-primary px-2 py-1 rounded-pill small" id="metaCategory"></span></td>
                         </tr>
                         <tr>
                             <td class="text-muted small fw-semibold">Tags:</td>
@@ -335,8 +331,7 @@
                 </table>
             </div>
             <div class="modal-footer bg-light border-0 py-2">
-                <button type="button" class="btn btn-secondary btn-sm rounded-pill px-3"
-                    data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-secondary btn-sm rounded-pill px-3" data-bs-dismiss="modal">Close</button>
                 <a href="#" class="btn btn-brand-primary btn-sm rounded-pill px-4" id="metaDownloadBtn">
                     <i class="bi bi-download me-1"></i> Download File
                 </a>

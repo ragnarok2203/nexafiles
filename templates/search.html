@@ -10,13 +10,11 @@
         <div>
             <div class="d-flex align-items-center gap-2 mb-1">
                 <h3 class="fw-bold mb-0 text-dark">Multi-Attribute Search Engine</h3>
-                <span
-                    class="badge bg-primary bg-opacity-10 text-primary border border-primary border-opacity-25 rounded-pill px-3 py-1 small">
+                <span class="badge bg-primary bg-opacity-10 text-primary border border-primary border-opacity-25 rounded-pill px-3 py-1 small">
                     Parametric Indexing
                 </span>
             </div>
-            <p class="text-muted small mb-0">Query cloud files across filenames, categories, metadata tags, and document
-                extensions in real time.</p>
+            <p class="text-muted small mb-0">Query cloud files across filenames, categories, metadata tags, and document extensions in real time.</p>
         </div>
         <div>
             <a href="{{ url_for('dashboard') }}" class="btn btn-outline-secondary btn-sm px-3 rounded-pill fw-medium">
@@ -32,10 +30,7 @@
             <div class="mb-3">
                 <div class="search-bar-modern d-flex align-items-center gap-2">
                     <i class="bi bi-search text-muted fs-5"></i>
-                    <input type="text" class="form-control border-0 shadow-none px-2 py-2" name="q" id="searchKeyword"
-                        value="{{ query or '' }}"
-                        placeholder="Search by title, keywords, or tags (e.g. 'lecture', 'syllabus', 'aws', 'python')..."
-                        autofocus>
+                    <input type="text" class="form-control border-0 shadow-none px-2 py-2" name="q" id="searchKeyword" value="{{ query or '' }}" placeholder="Search by title, keywords, or tags (e.g. 'lecture', 'syllabus', 'aws', 'python')..." autofocus>
                     <button class="btn btn-brand-primary rounded-pill px-4 py-2 fw-semibold" type="submit">
                         Search Vault
                     </button>
@@ -47,11 +42,10 @@
                 <!-- Category Filter -->
                 <div class="col-md-4 col-lg-3">
                     <label class="form-label small fw-semibold text-muted mb-1">DOCUMENT CATEGORY</label>
-                    <select class="form-select form-select-sm rounded-pill" name="category" id="searchCategory"
-                        onchange="document.getElementById('searchForm').submit()">
+                    <select class="form-select form-select-sm rounded-pill" name="category" id="searchCategory" onchange="document.getElementById('searchForm').submit()">
                         <option value="">All Categories</option>
                         {% for cat in categories %}
-                        <option value="{{ cat }}" {% if selected_category==cat %}selected{% endif %}>{{ cat }}</option>
+                        <option value="{{ cat }}" {% if selected_category == cat %}selected{% endif %}>{{ cat }}</option>
                         {% endfor %}
                     </select>
                 </div>
@@ -59,30 +53,23 @@
                 <!-- File Type Filter -->
                 <div class="col-md-4 col-lg-3">
                     <label class="form-label small fw-semibold text-muted mb-1">DOCUMENT FORMAT</label>
-                    <select class="form-select form-select-sm rounded-pill" name="type" id="searchType"
-                        onchange="document.getElementById('searchForm').submit()">
+                    <select class="form-select form-select-sm rounded-pill" name="type" id="searchType" onchange="document.getElementById('searchForm').submit()">
                         <option value="">All Formats</option>
-                        <option value="pdf" {% if selected_type=='pdf' %}selected{% endif %}>PDF Document (.pdf)
-                        </option>
-                        <option value="docx" {% if selected_type=='docx' %}selected{% endif %}>Word Document (.docx)
-                        </option>
-                        <option value="txt" {% if selected_type=='txt' %}selected{% endif %}>Text File (.txt)</option>
-                        <option value="pptx" {% if selected_type=='pptx' %}selected{% endif %}>PowerPoint (.pptx)
-                        </option>
-                        <option value="xlsx" {% if selected_type=='xlsx' %}selected{% endif %}>Excel Spreadsheet (.xlsx)
-                        </option>
-                        <option value="py" {% if selected_type=='py' %}selected{% endif %}>Python Script (.py)</option>
-                        <option value="zip" {% if selected_type=='zip' %}selected{% endif %}>Archive (.zip)</option>
-                        <option value="png" {% if selected_type=='png' %}selected{% endif %}>Image (.png, .jpg)</option>
+                        <option value="pdf" {% if selected_type == 'pdf' %}selected{% endif %}>PDF Document (.pdf)</option>
+                        <option value="docx" {% if selected_type == 'docx' %}selected{% endif %}>Word Document (.docx)</option>
+                        <option value="txt" {% if selected_type == 'txt' %}selected{% endif %}>Text File (.txt)</option>
+                        <option value="pptx" {% if selected_type == 'pptx' %}selected{% endif %}>PowerPoint (.pptx)</option>
+                        <option value="xlsx" {% if selected_type == 'xlsx' %}selected{% endif %}>Excel Spreadsheet (.xlsx)</option>
+                        <option value="py" {% if selected_type == 'py' %}selected{% endif %}>Python Script (.py)</option>
+                        <option value="zip" {% if selected_type == 'zip' %}selected{% endif %}>Archive (.zip)</option>
+                        <option value="png" {% if selected_type == 'png' %}selected{% endif %}>Image (.png, .jpg)</option>
                     </select>
                 </div>
 
                 <!-- Starred Only Toggle -->
                 <div class="col-md-4 col-lg-3 pt-md-4">
                     <div class="form-check form-switch">
-                        <input class="form-check-input" type="checkbox" name="starred" value="1" id="searchStarred" {%
-                            if is_starred=='1' %}checked{% endif %}
-                            onchange="document.getElementById('searchForm').submit()">
+                        <input class="form-check-input" type="checkbox" name="starred" value="1" id="searchStarred" {% if is_starred == '1' %}checked{% endif %} onchange="document.getElementById('searchForm').submit()">
                         <label class="form-check-label small fw-semibold text-dark" for="searchStarred">
                             <i class="bi bi-star-fill text-warning me-1"></i> Starred items only
                         </label>
@@ -91,8 +78,7 @@
 
                 <!-- Reset Filters Button -->
                 <div class="col-md-12 col-lg-3 text-lg-end pt-lg-4">
-                    <a href="{{ url_for('search_page') }}"
-                        class="btn btn-outline-secondary btn-sm rounded-pill px-3 fw-medium">
+                    <a href="{{ url_for('search_page') }}" class="btn btn-outline-secondary btn-sm rounded-pill px-3 fw-medium">
                         <i class="bi bi-arrow-counterclockwise me-1"></i> Reset Filters
                     </a>
                 </div>
@@ -106,8 +92,7 @@
             <div>
                 <h5 class="fw-bold mb-0 text-dark">
                     Search Results
-                    <span class="badge bg-primary bg-opacity-10 text-primary ms-2 rounded-pill fs-6 fw-bold">{{
-                        results|length }} found</span>
+                    <span class="badge bg-primary bg-opacity-10 text-primary ms-2 rounded-pill fs-6 fw-bold">{{ results|length }} found</span>
                 </h5>
             </div>
             <div class="text-muted small">
@@ -134,8 +119,7 @@
                         <tr id="row-file-{{ file.id }}">
                             <td class="ps-4">
                                 <div class="d-flex align-items-center gap-3">
-                                    <button class="star-btn" onclick="toggleFileStar({{ file.id }}, this)"
-                                        title="Toggle Star">
+                                    <button class="star-btn" onclick="toggleFileStar({{ file.id }}, this)" title="Toggle Star">
                                         {% if file.is_starred %}
                                         <i class="bi bi-star-fill text-warning fs-5"></i>
                                         {% else %}
@@ -154,27 +138,27 @@
                                         {% if ext == 'pdf' %}<i class="bi bi-file-earmark-pdf-fill"></i>
                                         {% elif ext in ['doc', 'docx'] %}<i class="bi bi-file-earmark-word-fill"></i>
                                         {% elif ext in ['ppt', 'pptx'] %}<i class="bi bi-file-earmark-slides-fill"></i>
-                                        {% elif ext in ['xls', 'xlsx', 'csv'] %}<i
-                                            class="bi bi-file-earmark-spreadsheet-fill"></i>
-                                        {% elif ext in ['py', 'js', 'html', 'css', 'json'] %}<i
-                                            class="bi bi-file-earmark-code-fill"></i>
-                                        {% elif ext in ['zip', 'tar', 'gz'] %}<i
-                                            class="bi bi-file-earmark-zip-fill"></i>
-                                        {% elif ext in ['png', 'jpg', 'jpeg'] %}<i
-                                            class="bi bi-file-earmark-image-fill"></i>
+                                        {% elif ext in ['xls', 'xlsx', 'csv'] %}<i class="bi bi-file-earmark-spreadsheet-fill"></i>
+                                        {% elif ext in ['py', 'js', 'html', 'css', 'json'] %}<i class="bi bi-file-earmark-code-fill"></i>
+                                        {% elif ext in ['zip', 'tar', 'gz'] %}<i class="bi bi-file-earmark-zip-fill"></i>
+                                        {% elif ext in ['png', 'jpg', 'jpeg'] %}<i class="bi bi-file-earmark-image-fill"></i>
                                         {% else %}<i class="bi bi-file-earmark-fill"></i>{% endif %}
                                     </span>
                                     <div>
-                                        <a href="{{ url_for('download_file', file_id=file.id) }}" class="file-name-link"
-                                            title="Download directly via Pre-Signed URL">
-                                            {{ file.original_filename }}
-                                        </a>
+                                        <div class="d-flex align-items-center gap-1">
+                                            <a href="javascript:void(0)" onclick="openPreviewModal({{ file.id }})" class="file-name-link" title="Click for In-Browser Preview">
+                                                {{ file.original_filename }}
+                                            </a>
+                                            {% if file.version and file.version > 1 %}
+                                            <span class="badge bg-primary bg-opacity-10 text-primary border rounded-pill px-2 py-0 small" style="font-size: 0.7rem;">v{{ file.version }}</span>
+                                            {% endif %}
+                                        </div>
                                         {% if file.tags %}
                                         <div class="mt-1">
                                             {% for tag in file.tags.split(',') %}
-                                            {% if tag.strip() %}
-                                            <span class="tag-badge">{{ tag.strip() }}</span>
-                                            {% endif %}
+                                                {% if tag.strip() %}
+                                                <span class="tag-badge">{{ tag.strip() }}</span>
+                                                {% endif %}
                                             {% endfor %}
                                         </div>
                                         {% endif %}
@@ -182,14 +166,12 @@
                                 </div>
                             </td>
                             <td>
-                                <span
-                                    class="category-badge-pill bg-{{ category_colors.get(file.category, 'primary') }} bg-opacity-10 text-{{ category_colors.get(file.category, 'primary') }} border border-{{ category_colors.get(file.category, 'primary') }} border-opacity-25">
+                                <span class="category-badge-pill bg-{{ category_colors.get(file.category, 'primary') }} bg-opacity-10 text-{{ category_colors.get(file.category, 'primary') }} border border-{{ category_colors.get(file.category, 'primary') }} border-opacity-25">
                                     {{ file.category }}
                                 </span>
                             </td>
                             <td>
-                                <span
-                                    class="badge bg-secondary bg-opacity-10 text-secondary text-uppercase small px-2 py-1 border">
+                                <span class="badge bg-secondary bg-opacity-10 text-secondary text-uppercase small px-2 py-1 border">
                                     {{ file.file_type }}
                                 </span>
                             </td>
@@ -197,23 +179,28 @@
                             <td class="small text-muted">{{ file.upload_date }}</td>
                             <td class="text-end pe-4">
                                 <div class="d-inline-flex gap-1">
-                                    <a href="{{ url_for('download_file', file_id=file.id) }}"
-                                        class="btn btn-sm btn-outline-primary action-btn"
-                                        title="Download Pre-Signed URL">
+                                    <button type="button" class="btn btn-sm btn-outline-primary action-btn" onclick="openPreviewModal({{ file.id }})" title="Quick In-Browser Preview">
+                                        <i class="bi bi-eye"></i>
+                                    </button>
+                                    <button type="button" class="btn btn-sm btn-outline-warning action-btn text-dark" onclick="openAIModal({{ file.id }}, '{{ file.original_filename }}')" title="AI Summary & Smart Tags">
+                                        <i class="bi bi-stars"></i>
+                                    </button>
+                                    <button type="button" class="btn btn-sm btn-outline-success action-btn" onclick="openShareModal({{ file.id }})" title="Create Ephemeral Share Link">
+                                        <i class="bi bi-share"></i>
+                                    </button>
+                                    <button type="button" class="btn btn-sm btn-outline-dark action-btn" onclick="openVersionModal({{ file.id }}, '{{ file.original_filename }}')" title="Revision History (v{{ file.version or 1 }})">
+                                        <i class="bi bi-clock-history"></i>
+                                    </button>
+                                    <a href="{{ url_for('download_file', file_id=file.id) }}" class="btn btn-sm btn-outline-secondary action-btn" title="Download via Signed URL">
                                         <i class="bi bi-download"></i>
                                     </a>
-                                    <button type="button" class="btn btn-sm btn-outline-info action-btn"
-                                        onclick="copyDownloadUrl('{{ url_for('download_file', file_id=file.id) }}')"
-                                        title="Copy Pre-Signed Link">
+                                    <button type="button" class="btn btn-sm btn-outline-info action-btn" onclick="copyDownloadUrl('{{ url_for('download_file', file_id=file.id) }}')" title="Copy Direct Download Link">
                                         <i class="bi bi-link-45deg"></i>
                                     </button>
-                                    <button type="button" class="btn btn-sm btn-outline-secondary action-btn"
-                                        onclick="showFileMetadata({{ file|tojson|safe }})" title="View Cloud Metadata">
+                                    <button type="button" class="btn btn-sm btn-outline-secondary action-btn" onclick="showFileMetadata({{ file|tojson|safe }})" title="View Cloud Metadata">
                                         <i class="bi bi-info-circle"></i>
                                     </button>
-                                    <button type="button" class="btn btn-sm btn-outline-danger action-btn"
-                                        onclick="confirmDeleteFile({{ file.id }}, '{{ file.original_filename }}')"
-                                        title="Delete File">
+                                    <button type="button" class="btn btn-sm btn-outline-danger action-btn" onclick="confirmDeleteFile({{ file.id }}, '{{ file.original_filename }}')" title="Delete File">
                                         <i class="bi bi-trash"></i>
                                     </button>
                                 </div>
@@ -227,10 +214,8 @@
             <div class="text-center py-5">
                 <i class="bi bi-search display-3 text-muted mb-3 d-block opacity-50"></i>
                 <h6 class="fw-bold text-dark">No matching files found</h6>
-                <p class="text-muted small mb-3">Try adjusting your keyword, choosing a different category, or resetting
-                    the search filters.</p>
-                <a href="{{ url_for('search_page') }}"
-                    class="btn btn-outline-primary btn-sm rounded-pill px-4 fw-semibold">
+                <p class="text-muted small mb-3">Try adjusting your keyword, choosing a different category, or resetting the search filters.</p>
+                <a href="{{ url_for('search_page') }}" class="btn btn-outline-primary btn-sm rounded-pill px-4 fw-semibold">
                     Reset Search Filters
                 </a>
             </div>
@@ -257,6 +242,10 @@
                             <td class="fw-semibold text-dark small" id="metaOriginalName"></td>
                         </tr>
                         <tr>
+                            <td class="text-muted small fw-semibold">Version:</td>
+                            <td class="small" id="metaVersion"><span class="badge bg-primary rounded-pill px-2">v1</span></td>
+                        </tr>
+                        <tr>
                             <td class="text-muted small fw-semibold">Cloud Object Key:</td>
                             <td class="font-monospace small text-primary text-break" id="metaS3Key"></td>
                         </tr>
@@ -274,8 +263,7 @@
                         </tr>
                         <tr>
                             <td class="text-muted small fw-semibold">Category:</td>
-                            <td><span class="badge bg-primary px-2 py-1 rounded-pill small" id="metaCategory"></span>
-                            </td>
+                            <td><span class="badge bg-primary px-2 py-1 rounded-pill small" id="metaCategory"></span></td>
                         </tr>
                         <tr>
                             <td class="text-muted small fw-semibold">Tags:</td>
@@ -289,8 +277,7 @@
                 </table>
             </div>
             <div class="modal-footer bg-light border-0 py-2">
-                <button type="button" class="btn btn-secondary btn-sm rounded-pill px-3"
-                    data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-secondary btn-sm rounded-pill px-3" data-bs-dismiss="modal">Close</button>
                 <a href="#" class="btn btn-brand-primary btn-sm rounded-pill px-4" id="metaDownloadBtn">
                     <i class="bi bi-download me-1"></i> Download File
                 </a>
