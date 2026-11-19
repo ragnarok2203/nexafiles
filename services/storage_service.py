@@ -177,6 +177,32 @@ class StorageService:
         except Exception as e:
             return False, f"Signature validation error: {str(e)}"
 
+    def get_local_file_path(self, s3_key):
+        """Retrieve local absolute path for direct file inspection (local mode)."""
+        target = self._get_base_path() / s3_key
+        return target if target.exists() else None
+
+    def get_file_bytes(self, s3_key, max_bytes=None):
+        """Read binary contents of a storage object."""
+        if self.mode == 's3' and self.s3_client:
+            try:
+                resp = self.s3_client.get_object(Bucket=self.bucket_name, Key=s3_key)
+                body = resp['Body']
+                return body.read(max_bytes) if max_bytes else body.read()
+            except Exception as e:
+                print(f"[StorageService] Failed to read S3 object: {e}")
+                return None
+        else:
+            target = self.get_local_file_path(s3_key)
+            if not target:
+                return None
+            try:
+                with open(target, 'rb') as f:
+                    return f.read(max_bytes) if max_bytes else f.read()
+            except Exception as e:
+                print(f"[StorageService] Failed to read local file: {e}")
+                return None
+
     def delete_object(self, s3_key):
         """Delete binary payload from storage."""
         if self.mode == 's3' and self.s3_client:
