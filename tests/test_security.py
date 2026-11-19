@@ -28,7 +28,7 @@ def test_sec01_http_security_headers(client):
 
 def test_sec02_session_cookie_flags(client):
     """SEC-02: Authenticated session cookies enforce HttpOnly and SameSite."""
-    res = client.post('/login', data={'username_or_email': 'harleen', 'password': 'password123'})
+    res = client.post('/login', data={'username_or_email': 'akshit', 'password': 'password123'})
     set_cookie = res.headers.get('Set-Cookie', '')
     assert 'HttpOnly' in set_cookie
     assert 'SameSite=Lax' in set_cookie
@@ -42,7 +42,7 @@ def test_sec03_path_traversal_rejection(client):
 def test_sec04_open_redirect_defense(client):
     """SEC-04: External open redirect query is neutralized to internal dashboard."""
     response = client.post('/login?next=https://malicious-external-phishing.com', data={
-        'username_or_email': 'harleen',
+        'username_or_email': 'akshit',
         'password': 'password123'
     }, follow_redirects=False)
     
@@ -55,13 +55,13 @@ def test_sec05_idor_boundary_isolation(app, auth_client):
     """SEC-05: User B cannot access, preview, or delete User A's private documents."""
     # User 1 (auth_client) uploads a private document
     upload_res = auth_client.post('/upload', data={
-        'file': (io.BytesIO(b"Harleen's confidential personal notes."), 'harleen_private.txt'),
+        'file': (io.BytesIO(b"Akshit's confidential personal notes."), 'akshit_private.txt'),
         'category': 'Notes'
     }, content_type='multipart/form-data', follow_redirects=True)
     assert upload_res.status_code == 200
 
     # Retrieve file ID from search
-    search_res = auth_client.get('/api/search?q=harleen_private.txt')
+    search_res = auth_client.get('/api/search?q=akshit_private.txt')
     file_id = search_res.get_json()['results'][0]['id']
 
     # Create an independent test client for User 2 (attacker)

@@ -104,7 +104,7 @@ python run.py
 ```
 
 * **Web Portal URL**: [http://127.0.0.1:5000](http://127.0.0.1:5000)
-* **Pre-seeded Demo User**: `harleen` (or `harleen@gnauniversity.edu.in`)
+* **Pre-seeded Demo User**: `akshit` (or `akshit@gnauniversity.edu.in`)
 * **Password**: `password123` *(or click the **"Use Demo Account"** button on the login screen)*
 
 ---

@@ -25,8 +25,8 @@ def seed_demo_environment():
         
         # 1. Create Demo User
         success, msg, user_id = register_user(
-            username='harleen',
-            email='harleen@gnauniversity.edu.in',
+            username='akshit',
+            email='akshit@gnauniversity.edu.in',
             password='password123'
         )
         
@@ -84,7 +84,7 @@ def seed_demo_environment():
                         tags=tags,
                         checksum=checksum
                     )
-            print("[+] Seeded demo user 'harleen' (password: password123) with 5 sample documents!")
+            print("[+] Seeded demo user 'akshit' (password: password123) with 5 sample documents!")
     
     conn.close()
 
@@ -102,7 +102,7 @@ if __name__ == '__main__':
     print(f"[*] Database Path  : {Config.DATABASE}")
     print(f"[*] Local Vault    : {Config.LOCAL_STORAGE_PATH}")
     print(f"[*] Access Portal  : http://127.0.0.1:{Config.PORT}")
-    print(f"[*] Demo User      : harleen / password123")
+    print(f"[*] Demo User      : akshit / password123")
     print("=" * 70)
     print("Press CTRL+C to stop the server.\n")
     

@@ -19,8 +19,8 @@ def test_tc01_user_registration_success(client):
 def test_tc02_duplicate_user_registration_rejection(client):
     """TC-02: Duplicate username/email registration is rejected."""
     response = client.post('/register', data={
-        'username': 'harleen',
-        'email': 'harleen@gnauniversity.edu.in',
+        'username': 'akshit',
+        'email': 'akshit@gnauniversity.edu.in',
         'password': 'password123',
         'confirm_password': 'password123'
     }, follow_redirects=True)
@@ -31,18 +31,18 @@ def test_tc02_duplicate_user_registration_rejection(client):
 def test_tc03_user_login_success(client):
     """TC-03: Valid credentials authenticate and create session."""
     response = client.post('/login', data={
-        'username_or_email': 'harleen',
+        'username_or_email': 'akshit',
         'password': 'password123'
     }, follow_redirects=True)
     
     assert response.status_code == 200
-    assert b"Welcome back, harleen" in response.data
+    assert b"Welcome back, akshit" in response.data
     assert b"Cloud Storage Dashboard" in response.data
 
 def test_tc04_invalid_password_rejection(client):
     """TC-04: Incorrect password fails authentication."""
     response = client.post('/login', data={
-        'username_or_email': 'harleen',
+        'username_or_email': 'akshit',
         'password': 'wrongpassword'
     }, follow_redirects=True)
     

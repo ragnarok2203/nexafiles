@@ -34,8 +34,8 @@ def app():
     app = create_app(test_config)
     
     with app.app_context():
-        # Pre-seed a test user (harleen / password123)
-        register_user('harleen', 'harleen@gnauniversity.edu.in', 'password123')
+        # Pre-seed a test user (akshit / password123)
+        register_user('akshit', 'akshit@gnauniversity.edu.in', 'password123')
         
     yield app
     
@@ -58,7 +58,7 @@ def client(app):
 def auth_client(client):
     """Pre-authenticated test client."""
     client.post('/login', data={
-        'username_or_email': 'harleen',
+        'username_or_email': 'akshit',
         'password': 'password123'
     }, follow_redirects=True)
     return client
