@@ -34,7 +34,17 @@ except ImportError:
 
 class Config:
     """Application configuration parameters."""
-    SECRET_KEY = os.getenv('SECRET_KEY', 'nexafiles-dev-secret-key-2026')
+    # Cryptographic Session & Token Signing Key
+    # Automatically generates a secure random token in production/cloud if not explicitly set
+    _env_secret = os.getenv('SECRET_KEY')
+    if _env_secret:
+        SECRET_KEY = _env_secret
+    elif os.getenv('VERCEL') or os.getenv('VERCEL_ENV') or os.getenv('FLASK_ENV') == 'production':
+        import secrets
+        SECRET_KEY = secrets.token_hex(32)
+    else:
+        SECRET_KEY = 'nexafiles-dev-secret-key-2026'
+
     DEBUG = os.getenv('DEBUG', 'True').lower() in ('true', '1', 'yes')
     PORT = int(os.getenv('PORT', 5000))
     

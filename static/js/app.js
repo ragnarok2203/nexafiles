@@ -10,6 +10,15 @@ document.addEventListener('DOMContentLoaded', function () {
 let activeFileId = null;
 let currentPreviewRawCode = '';
 
+function showSafeAlert(container, message, type = 'danger') {
+    if (!container) return;
+    container.innerHTML = '';
+    const alertDiv = document.createElement('div');
+    alertDiv.className = `alert alert-${type}`;
+    alertDiv.textContent = message;
+    container.appendChild(alertDiv);
+}
+
 // -------------------------------------------------------------
 // Drag & Drop File Upload Handler
 // -------------------------------------------------------------
@@ -127,7 +136,7 @@ function openPreviewModal(fileId) {
         .then(res => res.json())
         .then(data => {
             if (!data.success) {
-                body.innerHTML = `<div class="alert alert-danger">${data.error || 'Unable to preview file.'}</div>`;
+                showSafeAlert(body, data.error || 'Unable to preview file.');
                 return;
             }
 
@@ -168,7 +177,7 @@ function openPreviewModal(fileId) {
             }
         })
         .catch(err => {
-            body.innerHTML = `<div class="alert alert-danger">Error loading document preview: ${err.message}</div>`;
+            showSafeAlert(body, 'Error loading document preview: ' + err.message);
         });
 }
 
@@ -212,7 +221,7 @@ function openAIModal(fileId, filename) {
             }
 
             document.getElementById('aiResult').classList.remove('d-none');
-            
+
             // Populate 3 bullets
             const bulletsList = document.getElementById('aiBulletsList');
             bulletsList.innerHTML = '';
@@ -259,7 +268,7 @@ function addSuggestedTag(tag) {
 function saveAITags() {
     if (!activeFileId) return;
     const tags = document.getElementById('aiCurrentTags').value;
-    
+
     // Gather bullets for summary
     const lis = document.querySelectorAll('#aiBulletsList li');
     const summary = Array.from(lis).map(li => li.textContent).join(' \u2022 ');
@@ -269,16 +278,16 @@ function saveAITags() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ tags: tags, summary: summary })
     })
-    .then(res => res.json())
-    .then(data => {
-        if (data.success) {
-            showToast('AI Summary & Metadata tags saved!');
-            const modal = bootstrap.Modal.getInstance(document.getElementById('aiSummaryModal'));
-            if (modal) modal.hide();
-        } else {
-            alert(data.error || 'Failed to update tags.');
-        }
-    });
+        .then(res => res.json())
+        .then(data => {
+            if (data.success) {
+                showToast('AI Summary & Metadata tags saved!');
+                const modal = bootstrap.Modal.getInstance(document.getElementById('aiSummaryModal'));
+                if (modal) modal.hide();
+            } else {
+                alert(data.error || 'Failed to update tags.');
+            }
+        });
 }
 
 // -------------------------------------------------------------
@@ -317,21 +326,21 @@ function submitShareCreation() {
             max_downloads: parseInt(maxDl)
         })
     })
-    .then(res => res.json())
-    .then(data => {
-        btn.disabled = false;
-        if (data.success) {
-            document.getElementById('shareLinkContainer').classList.remove('d-none');
-            document.getElementById('generatedShareUrl').value = data.share_url;
-            showToast('Share link created successfully!');
-        } else {
-            alert(data.error || 'Failed to generate share link.');
-        }
-    })
-    .catch(err => {
-        btn.disabled = false;
-        alert('Share creation error: ' + err.message);
-    });
+        .then(res => res.json())
+        .then(data => {
+            btn.disabled = false;
+            if (data.success) {
+                document.getElementById('shareLinkContainer').classList.remove('d-none');
+                document.getElementById('generatedShareUrl').value = data.share_url;
+                showToast('Share link created successfully!');
+            } else {
+                alert(data.error || 'Failed to generate share link.');
+            }
+        })
+        .catch(err => {
+            btn.disabled = false;
+            alert('Share creation error: ' + err.message);
+        });
 }
 
 function copyGeneratedShareUrl() {
@@ -361,7 +370,7 @@ function openVersionModal(fileId, filename) {
         .then(res => res.json())
         .then(data => {
             if (!data.success) {
-                listEl.innerHTML = `<div class="alert alert-danger">${data.error || 'Failed to load versions.'}</div>`;
+                showSafeAlert(listEl, data.error || 'Failed to load versions.');
                 return;
             }
 
@@ -388,14 +397,14 @@ function openVersionModal(fileId, filename) {
                             </div>
                         </div>
                         <div>
-                            ${isCurrent ? 
-                                '<span class="badge bg-success bg-opacity-10 text-success border border-success border-opacity-25 rounded-pill px-3 py-1">Active</span>' :
-                                `<form method="POST" action="/restore-version/${fileId}/${v.id}" class="d-inline">
+                            ${isCurrent ?
+                        '<span class="badge bg-success bg-opacity-10 text-success border border-success border-opacity-25 rounded-pill px-3 py-1">Active</span>' :
+                        `<form method="POST" action="/restore-version/${fileId}/${v.id}" class="d-inline">
                                     <button type="submit" class="btn btn-outline-primary btn-sm rounded-pill px-3" onclick="return confirm('Restore this version as active?')">
                                         <i class="bi bi-arrow-counterclockwise me-1"></i> Restore
                                     </button>
                                  </form>`
-                            }
+                    }
                         </div>
                     </div>
                 `;
@@ -416,22 +425,22 @@ function toggleFileStar(fileId, btnElement) {
             'Content-Type': 'application/json'
         }
     })
-    .then(res => res.json())
-    .then(data => {
-        if (data.success) {
-            const icon = btnElement.querySelector('i');
-            if (data.is_starred) {
-                icon.className = 'bi bi-star-fill text-warning fs-5';
+        .then(res => res.json())
+        .then(data => {
+            if (data.success) {
+                const icon = btnElement.querySelector('i');
+                if (data.is_starred) {
+                    icon.className = 'bi bi-star-fill text-warning fs-5';
+                } else {
+                    icon.className = 'bi bi-star text-muted fs-5';
+                }
             } else {
-                icon.className = 'bi bi-star text-muted fs-5';
+                alert('Failed to update favorite status.');
             }
-        } else {
-            alert('Failed to update favorite status.');
-        }
-    })
-    .catch(err => {
-        console.error('Star toggle error:', err);
-    });
+        })
+        .catch(err => {
+            console.error('Star toggle error:', err);
+        });
 }
 
 // -------------------------------------------------------------
