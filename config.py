@@ -9,9 +9,17 @@ from pathlib import Path
 
 # Base directories
 BASE_DIR = Path(__file__).resolve().parent
-DATA_DIR = BASE_DIR / 'data'
-STORAGE_DIR = DATA_DIR / 'storage'
-DATABASE_PATH = DATA_DIR / 'nexafiles.db'
+
+# Check for Vercel Serverless environment
+IS_VERCEL = bool(os.getenv('VERCEL') or os.getenv('VERCEL_ENV'))
+if IS_VERCEL:
+    DATA_DIR = Path('/tmp') / 'data'
+    STORAGE_DIR = DATA_DIR / 'storage'
+    DATABASE_PATH = DATA_DIR / 'nexafiles.db'
+else:
+    DATA_DIR = BASE_DIR / 'data'
+    STORAGE_DIR = DATA_DIR / 'storage'
+    DATABASE_PATH = DATA_DIR / 'nexafiles.db'
 
 # Ensure required runtime directories exist
 DATA_DIR.mkdir(parents=True, exist_ok=True)

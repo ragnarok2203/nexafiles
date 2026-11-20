@@ -30,15 +30,15 @@
     </div>
 
     <!-- Storage Quota Status Bar -->
-    <div class="card border-0 shadow-sm rounded-4 p-3 bg-white mb-4">
+    <div class="card-glass p-3 mb-4">
         <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-2 mb-2">
             <div class="d-flex align-items-center gap-2">
                 <i class="bi bi-pie-chart-fill text-primary fs-5"></i>
-                <span class="fw-bold text-dark small">Cloud Storage Utilization:</span>
+                <span class="fw-bold small">Cloud Storage Utilization:</span>
                 <span class="text-muted small"><strong>{{ metrics.formatted_size }}</strong> allocated across {{ metrics.total_files }} documents</span>
             </div>
             <div class="small text-muted">
-                Engine: <span class="badge bg-light text-dark border fw-semibold">{% if storage_status.storage_mode == 's3' %}AWS S3 Standard (SSE-S3){% else %}Local Cloud Emulation Vault{% endif %}</span>
+                Engine: <span class="badge bg-light text-primary border border-primary border-opacity-25 fw-semibold">{% if storage_status.storage_mode == 's3' %}AWS S3 Standard (SSE-S3){% else %}Local Cloud Emulation Vault{% endif %}</span>
             </div>
         </div>
         <div class="progress rounded-pill" style="height: 6px;">
