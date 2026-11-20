@@ -1,0 +1,1260 @@
+/* ==========================================================================
+   NexaFiles Ultra-Modern Design System
+   Next-Gen SaaS / Glassmorphic Cloud Platform Theme
+   Inspired by Linear, Vercel & Raycast Pro
+   ========================================================================== */
+
+:root {
+    /* Dynamic Brand Palette */
+    --brand-primary: #6366f1;
+    --brand-primary-hover: #4f46e5;
+    --brand-primary-light: rgba(99, 102, 241, 0.12);
+    --brand-cyan: #06b6d4;
+    --brand-violet: #8b5cf6;
+    --brand-emerald: #10b981;
+    --brand-amber: #f59e0b;
+    --brand-rose: #f43f5e;
+    
+    /* Gradients */
+    --brand-gradient: linear-gradient(135deg, #6366f1 0%, #8b5cf6 50%, #06b6d4 100%);
+    --brand-gradient-hover: linear-gradient(135deg, #4f46e5 0%, #7c3aed 50%, #0891b2 100%);
+    --brand-gradient-subtle: linear-gradient(135deg, rgba(99, 102, 241, 0.08) 0%, rgba(6, 182, 212, 0.08) 100%);
+    --accent-glow: 0 0 25px rgba(99, 102, 241, 0.35);
+
+    /* Light Theme Surfaces & Atmosphere */
+    --bg-page: #f8fafc;
+    --bg-body-mesh: 
+        radial-gradient(at 0% 0%, rgba(99, 102, 241, 0.08) 0px, transparent 50%),
+        radial-gradient(at 100% 0%, rgba(6, 182, 212, 0.08) 0px, transparent 50%),
+        radial-gradient(at 50% 100%, rgba(139, 92, 246, 0.06) 0px, transparent 50%),
+        #f8fafc;
+    --bg-card: #ffffff;
+    --bg-surface-elevated: #ffffff;
+    --border-color: #e2e8f0;
+    --border-color-glow: rgba(99, 102, 241, 0.45);
+    --border-color-subtle: rgba(226, 232, 240, 0.7);
+    --text-primary: #0f172a;
+    --text-secondary: #334155;
+    --text-muted: #64748b;
+    
+    /* Shadows */
+    --shadow-subtle: 0 2px 8px -2px rgba(15, 23, 42, 0.05);
+    --shadow-card: 0 4px 20px -2px rgba(15, 23, 42, 0.07), 0 0 0 1px rgba(226, 232, 240, 0.9);
+    --shadow-card-hover: 0 18px 36px -4px rgba(99, 102, 241, 0.16), 0 0 0 1px rgba(99, 102, 241, 0.4);
+    --shadow-modal: 0 30px 60px -12px rgba(15, 23, 42, 0.25);
+    
+    /* Transitions & Radii */
+    --ease-smooth: cubic-bezier(0.16, 1, 0.3, 1);
+    --transition-speed: 0.25s;
+    --radius-sm: 0.5rem;
+    --radius-md: 0.75rem;
+    --radius-lg: 1rem;
+    --radius-xl: 1.25rem;
+    --radius-pill: 9999px;
+}
+
+/* ==========================================================================
+   Dark Theme (Obsidian Aurora)
+   ========================================================================== */
+[data-bs-theme="dark"] {
+    --bg-page: #090d16;
+    --bg-body-mesh: 
+        radial-gradient(at 0% 0%, rgba(99, 102, 241, 0.20) 0px, transparent 50%),
+        radial-gradient(at 100% 0%, rgba(6, 182, 212, 0.16) 0px, transparent 50%),
+        radial-gradient(at 50% 100%, rgba(139, 92, 246, 0.14) 0px, transparent 50%),
+        #090d16;
+    --bg-card: #131b2e;
+    --bg-surface-elevated: #1a253d;
+    --border-color: rgba(255, 255, 255, 0.14);
+    --border-color-glow: rgba(99, 102, 241, 0.6);
+    --border-color-subtle: rgba(255, 255, 255, 0.08);
+    --text-primary: #f8fafc;
+    --text-secondary: #cbd5e1;
+    --text-muted: #94a3b8;
+    --brand-primary-light: rgba(99, 102, 241, 0.24);
+    --shadow-subtle: 0 2px 10px rgba(0, 0, 0, 0.4);
+    --shadow-card: 0 8px 30px -4px rgba(0, 0, 0, 0.6), 0 0 0 1px rgba(255, 255, 255, 0.1);
+    --shadow-card-hover: 0 20px 45px -10px rgba(99, 102, 241, 0.35), 0 0 0 1px rgba(99, 102, 241, 0.6);
+}
+
+/* ==========================================================================
+   DYNAMIC MOOD THEMES (Multi-Palette Emotion Engine)
+   Moods: obsidian (default), cyberpunk, emerald, sunset, arctic, midnight
+   ========================================================================== */
+
+/* --- 1. OBSIDIAN (Deep Focus & Cyber Aurora) --- */
+[data-mood="obsidian"] {
+    --brand-primary: #6366f1;
+    --brand-primary-hover: #4f46e5;
+    --brand-primary-light: rgba(99, 102, 241, 0.18);
+    --brand-cyan: #06b6d4;
+    --brand-violet: #8b5cf6;
+    --brand-gradient: linear-gradient(135deg, #6366f1 0%, #8b5cf6 50%, #06b6d4 100%);
+    --brand-gradient-hover: linear-gradient(135deg, #4f46e5 0%, #7c3aed 50%, #0891b2 100%);
+    --brand-gradient-subtle: linear-gradient(135deg, rgba(99, 102, 241, 0.12) 0%, rgba(6, 182, 212, 0.12) 100%);
+    --accent-glow: 0 0 32px rgba(99, 102, 241, 0.45);
+    --accent-glow-btn: rgba(99, 102, 241, 0.45);
+    --border-color-glow: rgba(99, 102, 241, 0.6);
+    --mood-color: #6366f1;
+    --mood-name: "Deep Focus";
+}
+[data-bs-theme="dark"][data-mood="obsidian"],
+[data-bs-theme="dark"]:not([data-mood]) {
+    --bg-page: #090d16;
+    --bg-body-mesh: 
+        radial-gradient(at 0% 0%, rgba(99, 102, 241, 0.22) 0px, transparent 55%),
+        radial-gradient(at 100% 0%, rgba(6, 182, 212, 0.18) 0px, transparent 55%),
+        radial-gradient(at 50% 100%, rgba(139, 92, 246, 0.16) 0px, transparent 60%),
+        #090d16;
+    --bg-card: #131b2e;
+    --bg-surface-elevated: #1a253d;
+    --border-color: rgba(99, 102, 241, 0.25);
+    --shadow-card: 0 8px 30px -4px rgba(0, 0, 0, 0.6), 0 0 0 1px rgba(99, 102, 241, 0.25);
+    --shadow-card-hover: 0 20px 45px -10px rgba(99, 102, 241, 0.35), 0 0 0 1px rgba(99, 102, 241, 0.6);
+}
+
+/* --- 2. CYBERPUNK (Hyper Energy & Neon Rush) --- */
+[data-mood="cyberpunk"] {
+    --brand-primary: #ec4899;
+    --brand-primary-hover: #db2777;
+    --brand-primary-light: rgba(236, 72, 153, 0.22);
+    --brand-cyan: #06b6d4;
+    --brand-violet: #a855f7;
+    --brand-gradient: linear-gradient(135deg, #ec4899 0%, #a855f7 50%, #06b6d4 100%);
+    --brand-gradient-hover: linear-gradient(135deg, #db2777 0%, #9333ea 50%, #0891b2 100%);
+    --brand-gradient-subtle: linear-gradient(135deg, rgba(236, 72, 153, 0.14) 0%, rgba(6, 182, 212, 0.14) 100%);
+    --accent-glow: 0 0 35px rgba(236, 72, 153, 0.6);
+    --accent-glow-btn: rgba(236, 72, 153, 0.5);
+    --border-color-glow: rgba(236, 72, 153, 0.6);
+    --mood-color: #ec4899;
+    --mood-name: "Neon Rush";
+}
+[data-bs-theme="dark"][data-mood="cyberpunk"] {
+    --bg-page: #0f051d;
+    --bg-body-mesh: 
+        radial-gradient(at 0% 0%, rgba(236, 72, 153, 0.26) 0px, transparent 55%),
+        radial-gradient(at 100% 10%, rgba(6, 182, 212, 0.22) 0px, transparent 55%),
+        radial-gradient(at 50% 100%, rgba(168, 85, 247, 0.22) 0px, transparent 60%),
+        #0f051d;
+    --bg-card: #201133;
+    --bg-surface-elevated: #2c1747;
+    --border-color: rgba(236, 72, 153, 0.3);
+    --shadow-card: 0 8px 30px -4px rgba(0, 0, 0, 0.6), 0 0 0 1px rgba(236, 72, 153, 0.25);
+    --shadow-card-hover: 0 20px 45px -10px rgba(236, 72, 153, 0.35), 0 0 0 1px rgba(236, 72, 153, 0.6);
+}
+[data-bs-theme="light"][data-mood="cyberpunk"] {
+    --bg-body-mesh: 
+        radial-gradient(at 0% 0%, rgba(236, 72, 153, 0.12) 0px, transparent 50%),
+        radial-gradient(at 100% 0%, rgba(6, 182, 212, 0.10) 0px, transparent 50%),
+        radial-gradient(at 50% 100%, rgba(168, 85, 247, 0.08) 0px, transparent 50%),
+        #fdf4f9;
+    --bg-card: #ffffff;
+}
+
+/* --- 3. EMERALD (Calm Zen & Matrix Flow) --- */
+[data-mood="emerald"] {
+    --brand-primary: #10b981;
+    --brand-primary-hover: #059669;
+    --brand-primary-light: rgba(16, 185, 129, 0.22);
+    --brand-cyan: #14b8a6;
+    --brand-violet: #34d399;
+    --brand-gradient: linear-gradient(135deg, #10b981 0%, #14b8a6 50%, #34d399 100%);
+    --brand-gradient-hover: linear-gradient(135deg, #059669 0%, #0d9488 50%, #10b981 100%);
+    --brand-gradient-subtle: linear-gradient(135deg, rgba(16, 185, 129, 0.14) 0%, rgba(20, 184, 166, 0.14) 100%);
+    --accent-glow: 0 0 35px rgba(16, 185, 129, 0.55);
+    --accent-glow-btn: rgba(16, 185, 129, 0.45);
+    --border-color-glow: rgba(16, 185, 129, 0.55);
+    --mood-color: #10b981;
+    --mood-name: "Zen Flow";
+}
+[data-bs-theme="dark"][data-mood="emerald"] {
+    --bg-page: #04150e;
+    --bg-body-mesh: 
+        radial-gradient(at 0% 0%, rgba(16, 185, 129, 0.26) 0px, transparent 55%),
+        radial-gradient(at 100% 10%, rgba(20, 184, 166, 0.22) 0px, transparent 55%),
+        radial-gradient(at 50% 100%, rgba(52, 211, 153, 0.16) 0px, transparent 60%),
+        #04150e;
+    --bg-card: #0c261e;
+    --bg-surface-elevated: #11362b;
+    --border-color: rgba(16, 185, 129, 0.3);
+    --shadow-card: 0 8px 30px -4px rgba(0, 0, 0, 0.6), 0 0 0 1px rgba(16, 185, 129, 0.25);
+    --shadow-card-hover: 0 20px 45px -10px rgba(16, 185, 129, 0.35), 0 0 0 1px rgba(16, 185, 129, 0.6);
+}
+[data-bs-theme="light"][data-mood="emerald"] {
+    --bg-body-mesh: 
+        radial-gradient(at 0% 0%, rgba(16, 185, 129, 0.12) 0px, transparent 50%),
+        radial-gradient(at 100% 0%, rgba(20, 184, 166, 0.10) 0px, transparent 50%),
+        radial-gradient(at 50% 100%, rgba(52, 211, 153, 0.08) 0px, transparent 50%),
+        #f2faf6;
+    --bg-card: #ffffff;
+}
+
+/* --- 4. SUNSET (Creative Fire & Solar Amber) --- */
+[data-mood="sunset"] {
+    --brand-primary: #f59e0b;
+    --brand-primary-hover: #d97706;
+    --brand-primary-light: rgba(245, 158, 11, 0.22);
+    --brand-cyan: #fb923c;
+    --brand-violet: #f43f5e;
+    --brand-gradient: linear-gradient(135deg, #f59e0b 0%, #f43f5e 50%, #fb923c 100%);
+    --brand-gradient-hover: linear-gradient(135deg, #d97706 0%, #e11d48 50%, #f97316 100%);
+    --brand-gradient-subtle: linear-gradient(135deg, rgba(245, 158, 11, 0.15) 0%, rgba(244, 63, 94, 0.15) 100%);
+    --accent-glow: 0 0 35px rgba(245, 158, 11, 0.55);
+    --accent-glow-btn: rgba(245, 158, 11, 0.45);
+    --border-color-glow: rgba(245, 158, 11, 0.55);
+    --mood-color: #f59e0b;
+    --mood-name: "Creative Fire";
+}
+[data-bs-theme="dark"][data-mood="sunset"] {
+    --bg-page: #1a0914;
+    --bg-body-mesh: 
+        radial-gradient(at 0% 0%, rgba(244, 63, 94, 0.26) 0px, transparent 55%),
+        radial-gradient(at 100% 10%, rgba(245, 158, 11, 0.25) 0px, transparent 55%),
+        radial-gradient(at 50% 100%, rgba(251, 146, 60, 0.18) 0px, transparent 60%),
+        #1a0914;
+    --bg-card: #2c1220;
+    --bg-surface-elevated: #3d1a2d;
+    --border-color: rgba(245, 158, 11, 0.3);
+    --shadow-card: 0 8px 30px -4px rgba(0, 0, 0, 0.6), 0 0 0 1px rgba(245, 158, 11, 0.25);
+    --shadow-card-hover: 0 20px 45px -10px rgba(245, 158, 11, 0.35), 0 0 0 1px rgba(245, 158, 11, 0.6);
+}
+[data-bs-theme="light"][data-mood="sunset"] {
+    --bg-body-mesh: 
+        radial-gradient(at 0% 0%, rgba(245, 158, 11, 0.12) 0px, transparent 50%),
+        radial-gradient(at 100% 0%, rgba(244, 63, 94, 0.10) 0px, transparent 50%),
+        radial-gradient(at 50% 100%, rgba(251, 146, 60, 0.08) 0px, transparent 50%),
+        #fffaf5;
+    --bg-card: #ffffff;
+}
+
+/* --- 5. ARCTIC (Frost Chill & Glacier Peak) --- */
+[data-mood="arctic"] {
+    --brand-primary: #0284c7;
+    --brand-primary-hover: #0369a1;
+    --brand-primary-light: rgba(2, 132, 199, 0.2);
+    --brand-cyan: #06b6d4;
+    --brand-violet: #38bdf8;
+    --brand-gradient: linear-gradient(135deg, #0284c7 0%, #06b6d4 50%, #38bdf8 100%);
+    --brand-gradient-hover: linear-gradient(135deg, #0369a1 0%, #0891b2 50%, #0ea5e9 100%);
+    --brand-gradient-subtle: linear-gradient(135deg, rgba(2, 132, 199, 0.12) 0%, rgba(6, 182, 212, 0.12) 100%);
+    --accent-glow: 0 0 35px rgba(2, 132, 199, 0.5);
+    --accent-glow-btn: rgba(2, 132, 199, 0.45);
+    --border-color-glow: rgba(2, 132, 199, 0.5);
+    --mood-color: #0284c7;
+    --mood-name: "Frost Chill";
+}
+[data-bs-theme="dark"][data-mood="arctic"] {
+    --bg-page: #081726;
+    --bg-body-mesh: 
+        radial-gradient(at 0% 0%, rgba(2, 132, 199, 0.26) 0px, transparent 55%),
+        radial-gradient(at 100% 10%, rgba(6, 182, 212, 0.22) 0px, transparent 55%),
+        radial-gradient(at 50% 100%, rgba(56, 189, 248, 0.18) 0px, transparent 60%),
+        #081726;
+    --bg-card: #10243b;
+    --bg-surface-elevated: #163354;
+    --border-color: rgba(2, 132, 199, 0.3);
+    --shadow-card: 0 8px 30px -4px rgba(0, 0, 0, 0.6), 0 0 0 1px rgba(2, 132, 199, 0.25);
+    --shadow-card-hover: 0 20px 45px -10px rgba(2, 132, 199, 0.35), 0 0 0 1px rgba(2, 132, 199, 0.6);
+}
+[data-bs-theme="light"][data-mood="arctic"] {
+    --bg-body-mesh: 
+        radial-gradient(at 0% 0%, rgba(2, 132, 199, 0.12) 0px, transparent 50%),
+        radial-gradient(at 100% 0%, rgba(6, 182, 212, 0.10) 0px, transparent 50%),
+        radial-gradient(at 50% 100%, rgba(56, 189, 248, 0.08) 0px, transparent 50%),
+        #f0f8ff;
+    --bg-card: #ffffff;
+}
+
+/* --- 6. MIDNIGHT (Executive Royalty & Sapphire) --- */
+[data-mood="midnight"] {
+    --brand-primary: #3b82f6;
+    --brand-primary-hover: #2563eb;
+    --brand-primary-light: rgba(59, 130, 246, 0.2);
+    --brand-cyan: #6366f1;
+    --brand-violet: #1d4ed8;
+    --brand-gradient: linear-gradient(135deg, #3b82f6 0%, #6366f1 50%, #1d4ed8 100%);
+    --brand-gradient-hover: linear-gradient(135deg, #2563eb 0%, #4f46e5 50%, #1e40af 100%);
+    --brand-gradient-subtle: linear-gradient(135deg, rgba(59, 130, 246, 0.14) 0%, rgba(99, 102, 241, 0.14) 100%);
+    --accent-glow: 0 0 35px rgba(59, 130, 246, 0.55);
+    --accent-glow-btn: rgba(59, 130, 246, 0.45);
+    --border-color-glow: rgba(59, 130, 246, 0.55);
+    --mood-color: #3b82f6;
+    --mood-name: "Royalty";
+}
+[data-bs-theme="dark"][data-mood="midnight"] {
+    --bg-page: #040a1b;
+    --bg-body-mesh: 
+        radial-gradient(at 0% 0%, rgba(59, 130, 246, 0.28) 0px, transparent 55%),
+        radial-gradient(at 100% 10%, rgba(99, 102, 241, 0.24) 0px, transparent 55%),
+        radial-gradient(at 50% 100%, rgba(29, 78, 216, 0.20) 0px, transparent 60%),
+        #040a1b;
+    --bg-card: #0d1a38;
+    --bg-surface-elevated: #142754;
+    --border-color: rgba(59, 130, 246, 0.3);
+    --shadow-card: 0 8px 30px -4px rgba(0, 0, 0, 0.6), 0 0 0 1px rgba(59, 130, 246, 0.25);
+    --shadow-card-hover: 0 20px 45px -10px rgba(59, 130, 246, 0.35), 0 0 0 1px rgba(59, 130, 246, 0.6);
+}
+[data-bs-theme="light"][data-mood="midnight"] {
+    --bg-body-mesh: 
+        radial-gradient(at 0% 0%, rgba(59, 130, 246, 0.12) 0px, transparent 50%),
+        radial-gradient(at 100% 0%, rgba(99, 102, 241, 0.10) 0px, transparent 50%),
+        radial-gradient(at 50% 100%, rgba(29, 78, 216, 0.08) 0px, transparent 50%),
+        #f4f7ff;
+    --bg-card: #ffffff;
+}
+
+/* ==========================================================================
+   Base Layout & Typography
+   ========================================================================== */
+body {
+    font-family: 'Plus Jakarta Sans', 'Inter', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+    background: var(--bg-body-mesh);
+    background-attachment: fixed;
+    color: var(--text-primary);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    letter-spacing: -0.015em;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+main {
+    flex: 1;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    font-family: 'Plus Jakarta Sans', 'Inter', sans-serif;
+    letter-spacing: -0.03em;
+    color: var(--text-primary) !important;
+    font-weight: 700;
+}
+
+.text-dark {
+    color: var(--text-primary) !important;
+}
+
+.text-muted {
+    color: var(--text-muted) !important;
+}
+
+/* ==========================================================================
+   Enterprise Glassmorphic Navbar
+   ========================================================================== */
+.navbar-enterprise {
+    background: rgba(9, 13, 22, 0.88) !important;
+    backdrop-filter: blur(20px) saturate(180%);
+    -webkit-backdrop-filter: blur(20px) saturate(180%);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.25);
+    z-index: 1030;
+}
+
+.brand-badge {
+    background: var(--brand-gradient);
+    color: #ffffff;
+    width: 40px;
+    height: 40px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: var(--radius-md);
+    box-shadow: 0 0 20px rgba(99, 102, 241, 0.5);
+    transition: transform var(--transition-speed) ease, box-shadow var(--transition-speed) ease;
+}
+
+.brand-badge:hover {
+    transform: rotate(5deg) scale(1.05);
+    box-shadow: 0 0 28px rgba(6, 182, 212, 0.6);
+}
+
+.brand-text {
+    font-weight: 800;
+    font-size: 1.25rem;
+    letter-spacing: -0.035em;
+    color: #ffffff;
+}
+
+.brand-text .brand-highlight {
+    background: linear-gradient(135deg, #a5b4fc 0%, #38bdf8 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.nav-link-modern {
+    color: #94a3b8 !important;
+    font-weight: 500;
+    font-size: 0.9rem;
+    padding: 0.5rem 0.95rem !important;
+    border-radius: var(--radius-pill);
+    transition: all var(--transition-speed) ease;
+}
+
+.nav-link-modern:hover {
+    color: #ffffff !important;
+    background: rgba(255, 255, 255, 0.08);
+}
+
+.nav-link-modern.active {
+    color: #ffffff !important;
+    background: rgba(99, 102, 241, 0.28);
+    border: 1px solid rgba(165, 180, 252, 0.35);
+    box-shadow: 0 0 15px rgba(99, 102, 241, 0.25);
+}
+
+/* Storage Badge Indicator */
+.storage-status-pill {
+    font-size: 0.78rem;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+    border-radius: var(--radius-pill);
+    padding: 0.4rem 0.95rem;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    backdrop-filter: blur(8px);
+}
+
+.pulse-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    display: inline-block;
+    box-shadow: 0 0 10px currentColor;
+    animation: pulseGlow 2s infinite;
+}
+
+@keyframes pulseGlow {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.3; transform: scale(0.8); }
+}
+
+/* ==========================================================================
+   Metric Summary Cards (Elevated Glass)
+   ========================================================================== */
+.metric-card {
+    background: var(--bg-card);
+    backdrop-filter: blur(16px) saturate(180%);
+    -webkit-backdrop-filter: blur(16px) saturate(180%);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-xl);
+    padding: 1.4rem 1.35rem;
+    box-shadow: var(--shadow-card);
+    position: relative;
+    overflow: hidden;
+    transition: transform var(--transition-speed) var(--ease-smooth),
+                box-shadow var(--transition-speed) var(--ease-smooth),
+                border-color var(--transition-speed) ease;
+}
+
+.metric-card:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-card-hover);
+    border-color: var(--border-color-glow);
+}
+
+.metric-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: var(--card-accent, var(--brand-gradient));
+    box-shadow: 0 0 10px rgba(99, 102, 241, 0.5);
+}
+
+.metric-icon-box {
+    width: 54px;
+    height: 54px;
+    border-radius: var(--radius-lg);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.55rem;
+    flex-shrink: 0;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.06);
+    transition: transform var(--transition-speed) ease;
+}
+
+.metric-card:hover .metric-icon-box {
+    transform: scale(1.1) rotate(3deg);
+}
+
+.metric-label {
+    font-size: 0.72rem;
+    text-transform: uppercase;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    color: var(--text-muted);
+}
+
+.metric-value {
+    font-size: 1.95rem;
+    font-weight: 800;
+    letter-spacing: -0.04em;
+    color: var(--text-primary);
+    line-height: 1.2;
+    margin: 0.15rem 0;
+}
+
+.metric-subtext {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+}
+
+/* ==========================================================================
+   Categories & Folders Cards
+   ========================================================================== */
+.category-card {
+    background: var(--bg-card);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-xl);
+    padding: 1.2rem;
+    box-shadow: var(--shadow-card);
+    transition: all var(--transition-speed) var(--ease-smooth);
+    position: relative;
+    overflow: hidden;
+}
+
+.category-card:hover {
+    transform: translateY(-5px);
+    border-color: var(--border-color-glow);
+    box-shadow: var(--shadow-card-hover);
+}
+
+.category-badge-pill {
+    font-size: 0.78rem;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+    border-radius: var(--radius-pill);
+    padding: 0.3rem 0.75rem;
+}
+
+.category-progress {
+    height: 5px;
+    background-color: rgba(148, 163, 184, 0.15);
+    border-radius: var(--radius-pill);
+    overflow: hidden;
+    margin-top: 0.85rem;
+}
+
+/* ==========================================================================
+   Modern Data Table & File Row Styling
+   ========================================================================== */
+.table-modern-card {
+    background: var(--bg-card);
+    backdrop-filter: blur(18px) saturate(180%);
+    -webkit-backdrop-filter: blur(18px) saturate(180%);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-xl);
+    box-shadow: var(--shadow-card);
+    overflow: hidden;
+}
+
+.table-modern-card .card-header {
+    background: var(--bg-card);
+    border-bottom: 1px solid var(--border-color);
+    padding: 1.3rem 1.6rem;
+}
+
+.table-modern {
+    margin-bottom: 0;
+    color: var(--text-primary);
+}
+
+.table-modern thead th {
+    background: rgba(241, 245, 249, 0.6);
+    font-size: 0.72rem;
+    text-transform: uppercase;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    color: var(--text-muted);
+    border-bottom: 1px solid var(--border-color);
+    padding: 0.95rem 1.2rem;
+}
+
+[data-bs-theme="dark"] .table-modern thead th {
+    background: rgba(17, 24, 39, 0.7);
+}
+
+.table-modern tbody tr {
+    transition: background-color 0.15s ease, transform 0.15s ease;
+    border-bottom: 1px solid var(--border-color-subtle);
+}
+
+.table-modern tbody tr:hover {
+    background-color: rgba(99, 102, 241, 0.05);
+}
+
+.table-modern td {
+    padding: 1.05rem 1.2rem;
+    vertical-align: middle;
+}
+
+/* File Icon Capsules by Extension (Vibrant Glow Badges) */
+.file-capsule {
+    width: 42px;
+    height: 42px;
+    border-radius: var(--radius-md);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.25rem;
+    flex-shrink: 0;
+    transition: transform var(--transition-speed) ease;
+}
+
+.file-capsule:hover {
+    transform: scale(1.1);
+}
+
+.file-capsule-pdf { 
+    background: linear-gradient(135deg, #fee2e2 0%, #fecaca 100%); 
+    color: #ef4444; 
+    border: 1px solid #fca5a5; 
+    box-shadow: 0 4px 12px rgba(239, 68, 68, 0.15); 
+}
+.file-capsule-doc, .file-capsule-docx { 
+    background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%); 
+    color: #3b82f6; 
+    border: 1px solid #93c5fd; 
+    box-shadow: 0 4px 12px rgba(59, 130, 246, 0.15); 
+}
+.file-capsule-ppt, .file-capsule-pptx { 
+    background: linear-gradient(135deg, #ffedd5 0%, #fed7aa 100%); 
+    color: #f97316; 
+    border: 1px solid #fdba74; 
+    box-shadow: 0 4px 12px rgba(249, 115, 22, 0.15); 
+}
+.file-capsule-xls, .file-capsule-xlsx, .file-capsule-csv { 
+    background: linear-gradient(135deg, #dcfce7 0%, #bbf7d0 100%); 
+    color: #10b981; 
+    border: 1px solid #86efac; 
+    box-shadow: 0 4px 12px rgba(16, 185, 129, 0.15); 
+}
+.file-capsule-code { 
+    background: linear-gradient(135deg, #f3e8ff 0%, #e9d5ff 100%); 
+    color: #a855f7; 
+    border: 1px solid #d8b4fe; 
+    box-shadow: 0 4px 12px rgba(168, 85, 247, 0.15); 
+}
+.file-capsule-archive { 
+    background: linear-gradient(135deg, #e2e8f0 0%, #cbd5e1 100%); 
+    color: #475569; 
+    border: 1px solid #94a3b8; 
+}
+.file-capsule-media { 
+    background: linear-gradient(135deg, #fce7f3 0%, #fbcfe8 100%); 
+    color: #ec4899; 
+    border: 1px solid #f472b6; 
+    box-shadow: 0 4px 12px rgba(236, 72, 153, 0.15); 
+}
+.file-capsule-default { 
+    background: #f1f5f9; 
+    color: #64748b; 
+    border: 1px solid #e2e8f0; 
+}
+
+/* Dark mode variations for capsules */
+[data-bs-theme="dark"] .file-capsule-pdf { background: rgba(239, 68, 68, 0.18); border-color: rgba(239, 68, 68, 0.35); }
+[data-bs-theme="dark"] .file-capsule-doc, [data-bs-theme="dark"] .file-capsule-docx { background: rgba(59, 130, 246, 0.18); border-color: rgba(59, 130, 246, 0.35); }
+[data-bs-theme="dark"] .file-capsule-ppt, [data-bs-theme="dark"] .file-capsule-pptx { background: rgba(249, 115, 22, 0.18); border-color: rgba(249, 115, 22, 0.35); }
+[data-bs-theme="dark"] .file-capsule-xls, [data-bs-theme="dark"] .file-capsule-xlsx, [data-bs-theme="dark"] .file-capsule-csv { background: rgba(16, 185, 129, 0.18); border-color: rgba(16, 185, 129, 0.35); }
+[data-bs-theme="dark"] .file-capsule-code { background: rgba(168, 85, 247, 0.18); border-color: rgba(168, 85, 247, 0.35); }
+[data-bs-theme="dark"] .file-capsule-media { background: rgba(236, 72, 153, 0.18); border-color: rgba(236, 72, 153, 0.35); }
+
+.file-name-link {
+    font-weight: 600;
+    color: var(--text-primary);
+    text-decoration: none;
+    transition: color 0.15s ease;
+    display: inline-block;
+    max-width: 440px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    vertical-align: middle;
+}
+
+.file-name-link:hover {
+    color: var(--brand-primary);
+}
+
+.tag-badge {
+    font-size: 0.72rem;
+    font-weight: 600;
+    background: rgba(99, 102, 241, 0.08);
+    color: var(--brand-primary);
+    border: 1px solid rgba(99, 102, 241, 0.2);
+    border-radius: var(--radius-pill);
+    padding: 0.18rem 0.6rem;
+    margin-right: 0.25rem;
+    transition: all 0.15s ease;
+}
+
+.tag-badge:hover {
+    background: rgba(99, 102, 241, 0.18);
+    border-color: rgba(99, 102, 241, 0.4);
+}
+
+/* Star Favorite Action Button */
+.star-btn {
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    padding: 0.2rem;
+    transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+    outline: none;
+}
+
+.star-btn:hover {
+    transform: scale(1.35) rotate(15deg);
+}
+
+/* Action Button Group */
+.action-btn {
+    width: 34px;
+    height: 34px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: var(--radius-md) !important;
+    padding: 0;
+    transition: all 0.15s ease;
+}
+
+.action-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.12);
+}
+
+/* ==========================================================================
+   Drag & Drop Upload Dropzone (Luminous Aurora)
+   ========================================================================== */
+.upload-dropzone {
+    border: 2px dashed rgba(99, 102, 241, 0.35);
+    border-radius: var(--radius-xl);
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.6) 0%, rgba(241, 245, 249, 0.6) 100%);
+    backdrop-filter: blur(12px);
+    cursor: pointer;
+    transition: all var(--transition-speed) ease;
+    position: relative;
+    overflow: hidden;
+}
+
+[data-bs-theme="dark"] .upload-dropzone {
+    border-color: rgba(99, 102, 241, 0.4);
+    background: linear-gradient(180deg, rgba(17, 24, 39, 0.7) 0%, rgba(31, 41, 55, 0.5) 100%);
+}
+
+.upload-dropzone:hover, .upload-dropzone.drag-active {
+    border-color: var(--brand-primary);
+    background: var(--brand-gradient-subtle);
+    box-shadow: 0 0 30px rgba(99, 102, 241, 0.25);
+    transform: scale(1.008);
+}
+
+.dropzone-icon-glow {
+    font-size: 3.8rem;
+    background: var(--brand-gradient);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    filter: drop-shadow(0 6px 18px rgba(99, 102, 241, 0.35));
+    animation: floatIcon 3s ease-in-out infinite alternate;
+}
+
+@keyframes floatIcon {
+    from { transform: translateY(0); }
+    to { transform: translateY(-6px); }
+}
+
+/* ==========================================================================
+   Authentication & Card Layouts
+   ========================================================================== */
+.auth-wrapper {
+    min-height: calc(100vh - 160px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2.5rem 1rem;
+}
+
+.auth-card {
+    background: var(--bg-card);
+    backdrop-filter: blur(24px) saturate(180%);
+    -webkit-backdrop-filter: blur(24px) saturate(180%);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-xl);
+    box-shadow: var(--shadow-modal), 0 0 1px 1px rgba(99, 102, 241, 0.15);
+    overflow: hidden;
+    width: 100%;
+    max-width: 460px;
+    transition: transform var(--transition-speed) ease, box-shadow var(--transition-speed) ease;
+}
+
+.auth-card:hover {
+    box-shadow: var(--shadow-modal), 0 0 35px rgba(99, 102, 241, 0.2);
+}
+
+.auth-card .card-header {
+    background: linear-gradient(180deg, #0f172a 0%, #1e1b4b 100%);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    padding: 2.4rem 1.6rem 2rem;
+    text-align: center;
+    color: #ffffff;
+}
+
+.auth-card .form-control {
+    border-radius: var(--radius-md);
+    padding: 0.72rem 1rem;
+    font-size: 0.94rem;
+    border: 1px solid var(--border-color);
+    background: var(--bg-surface-elevated);
+    color: var(--text-primary);
+    transition: all 0.2s ease;
+}
+
+.auth-card .form-control:focus {
+    border-color: var(--brand-primary);
+    box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.18);
+    background: var(--bg-surface-elevated);
+}
+
+/* Modern Primary Buttons with Glow */
+.btn-brand-primary {
+    background: var(--brand-gradient);
+    border: none;
+    color: #ffffff;
+    font-weight: 600;
+    box-shadow: 0 4px 16px rgba(99, 102, 241, 0.35);
+    transition: all 0.25s var(--ease-smooth);
+}
+
+.btn-brand-primary:hover, .btn-brand-primary:focus {
+    color: #ffffff;
+    background: var(--brand-gradient-hover);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(99, 102, 241, 0.5);
+}
+
+/* Search Bar Input */
+.search-bar-modern {
+    background: var(--bg-card);
+    backdrop-filter: blur(16px);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-pill);
+    box-shadow: var(--shadow-subtle);
+    padding: 0.35rem 0.45rem 0.35rem 1.35rem;
+    transition: all 0.2s ease;
+}
+
+.search-bar-modern:focus-within {
+    border-color: var(--brand-primary);
+    box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.15), var(--shadow-card);
+}
+
+/* Modals */
+.modal-content {
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-xl);
+    box-shadow: var(--shadow-modal);
+    background: var(--bg-card);
+    backdrop-filter: blur(24px) saturate(180%);
+    -webkit-backdrop-filter: blur(24px) saturate(180%);
+}
+
+.modal-header {
+    background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 100%);
+    color: #ffffff;
+    border-top-left-radius: var(--radius-xl);
+    border-top-right-radius: var(--radius-xl);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    padding: 1.25rem 1.5rem;
+}
+
+/* Toast & Notification Enhancements */
+.toast-feedback {
+    position: fixed;
+    bottom: 2rem;
+    right: 2rem;
+    z-index: 1090;
+    background: rgba(15, 23, 42, 0.92);
+    backdrop-filter: blur(16px);
+    color: #ffffff;
+    padding: 0.85rem 1.4rem;
+    border-radius: var(--radius-lg);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 16px 36px rgba(0, 0, 0, 0.35), 0 0 20px rgba(99, 102, 241, 0.3);
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    font-size: 0.9rem;
+    font-weight: 500;
+    animation: slideUpFade 0.3s ease;
+}
+
+@keyframes slideUpFade {
+    from { opacity: 0; transform: translateY(15px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* Footer Styling */
+.footer-enterprise {
+    background: var(--bg-card);
+    backdrop-filter: blur(16px);
+    border-top: 1px solid var(--border-color);
+    color: var(--text-muted);
+    font-size: 0.84rem;
+    padding: 1.6rem 0;
+}
+
+/* ==========================================================================
+   Theme Compatibility Overrides (Eliminates Glitches in Dark Mode)
+   ========================================================================== */
+[data-bs-theme="dark"] .text-dark {
+    color: #f8fafc !important;
+}
+
+[data-bs-theme="dark"] .bg-white {
+    background-color: var(--bg-card) !important;
+    border-color: var(--border-color) !important;
+}
+
+[data-bs-theme="dark"] .bg-light {
+    background-color: rgba(255, 255, 255, 0.04) !important;
+    color: #cbd5e1 !important;
+}
+
+[data-bs-theme="dark"] .table {
+    --bs-table-color: #f8fafc;
+    --bs-table-bg: transparent;
+    --bs-table-border-color: rgba(255, 255, 255, 0.08);
+}
+
+[data-bs-theme="dark"] .list-group-item {
+    background-color: transparent;
+    border-color: rgba(255, 255, 255, 0.08);
+    color: #f8fafc;
+}
+
+[data-bs-theme="dark"] .input-group-text {
+    background-color: rgba(255, 255, 255, 0.06) !important;
+    border-color: rgba(255, 255, 255, 0.12) !important;
+    color: #cbd5e1 !important;
+}
+
+[data-bs-theme="dark"] .form-control {
+    background-color: rgba(15, 23, 42, 0.8) !important;
+    border-color: rgba(255, 255, 255, 0.12) !important;
+    color: #f8fafc !important;
+}
+
+[data-bs-theme="dark"] .form-control:focus {
+    background-color: rgba(15, 23, 42, 0.95) !important;
+    border-color: var(--brand-primary) !important;
+}
+
+[data-bs-theme="dark"] .modal-body {
+    background-color: var(--bg-card) !important;
+    color: #f8fafc !important;
+}
+
+[data-bs-theme="dark"] .modal-footer {
+    background-color: rgba(15, 23, 42, 0.95) !important;
+    border-color: rgba(255, 255, 255, 0.08) !important;
+}
+
+.card-glass {
+    background: var(--bg-card);
+    backdrop-filter: blur(20px) saturate(180%);
+    -webkit-backdrop-filter: blur(20px) saturate(180%);
+    border: 1px solid var(--border-color);
+    box-shadow: var(--shadow-card);
+    border-radius: var(--radius-xl);
+}
+
+/* ==========================================================================
+   3D DASHBOARD ENGINE (Perspective, Multi-Layer Depth, Glare & Hologram)
+   ========================================================================== */
+
+/* Perspective Scene Container */
+.dashboard-3d-scene {
+    perspective: 1200px;
+    perspective-origin: 50% 30%;
+    transform-style: preserve-3d;
+}
+
+/* Base 3D Interactive Tilt Card */
+.tilt-card-3d {
+    transform-style: preserve-3d;
+    will-change: transform;
+    position: relative;
+    border-radius: var(--radius-xl);
+    transition: transform 0.14s cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow 0.25s ease, border-color 0.25s ease;
+}
+
+/* Layered Z Parallax Relief (Stereoscopic Depth) */
+.tilt-layer-deep {
+    transform: translateZ(44px);
+    transform-style: preserve-3d;
+    transition: transform 0.2s ease-out;
+}
+
+.tilt-layer-mid {
+    transform: translateZ(30px);
+    transform-style: preserve-3d;
+    transition: transform 0.2s ease-out;
+}
+
+.tilt-layer-shallow {
+    transform: translateZ(18px);
+    transform-style: preserve-3d;
+    transition: transform 0.2s ease-out;
+}
+
+.tilt-layer-float {
+    transform: translateZ(36px);
+    transform-style: preserve-3d;
+    transition: transform 0.2s ease-out;
+}
+
+/* Specular Hologram Glare Sheen Layer */
+.glare-sheen {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    border-radius: inherit;
+    pointer-events: none;
+    z-index: 15;
+    opacity: 0;
+    transition: opacity 0.35s ease;
+    mix-blend-mode: overlay;
+    background: radial-gradient(circle at var(--glare-x, 50%) var(--glare-y, 50%), rgba(255, 255, 255, 0.35) 0%, transparent 65%);
+}
+
+.tilt-card-3d:hover .glare-sheen {
+    opacity: 1;
+}
+
+/* Disable 3D tilt when explicitly toggled off */
+[data-3d-mode="off"] .tilt-card-3d {
+    transform: none !important;
+    transition: none !important;
+}
+[data-3d-mode="off"] .tilt-layer-deep,
+[data-3d-mode="off"] .tilt-layer-mid,
+[data-3d-mode="off"] .tilt-layer-shallow,
+[data-3d-mode="off"] .tilt-layer-float {
+    transform: none !important;
+}
+
+/* ==========================================================================
+   3D Dynamic Mood Dock (Vibe Engine)
+   ========================================================================== */
+.mood-dock-3d {
+    background: var(--bg-card);
+    backdrop-filter: blur(24px) saturate(190%);
+    -webkit-backdrop-filter: blur(24px) saturate(190%);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-xl);
+    padding: 1.15rem 1.4rem;
+    box-shadow: var(--shadow-card);
+    position: relative;
+    overflow: hidden;
+    margin-bottom: 1.5rem;
+    transform-style: preserve-3d;
+}
+
+.mood-dock-3d::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(circle at 10% 50%, var(--brand-primary-light) 0%, transparent 50%);
+    pointer-events: none;
+    opacity: 0.7;
+}
+
+.mood-chip-btn {
+    border: 1px solid var(--border-color);
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: var(--radius-pill);
+    padding: 0.45rem 0.95rem;
+    font-size: 0.82rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+    position: relative;
+    user-select: none;
+    text-decoration: none !important;
+}
+
+.mood-chip-btn:hover {
+    transform: translateY(-3px) scale(1.04);
+    border-color: var(--border-color-glow);
+    background: rgba(255, 255, 255, 0.12);
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.15);
+    color: var(--text-primary);
+}
+
+.mood-chip-btn.active {
+    background: var(--brand-gradient);
+    color: #ffffff !important;
+    border-color: transparent;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25), var(--accent-glow);
+    transform: translateY(-2px) scale(1.06);
+}
+
+.mood-swatch-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    display: inline-block;
+    box-shadow: 0 0 10px currentColor;
+    flex-shrink: 0;
+}
+
+/* ==========================================================================
+   3D Metric Hologram Cards
+   ========================================================================== */
+.metric-card-3d {
+    background: var(--bg-card);
+    backdrop-filter: blur(18px) saturate(180%);
+    -webkit-backdrop-filter: blur(18px) saturate(180%);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-xl);
+    padding: 1.5rem 1.4rem;
+    box-shadow: var(--shadow-card);
+    position: relative;
+    overflow: hidden;
+    transform-style: preserve-3d;
+}
+
+.metric-card-3d::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: var(--card-accent, var(--brand-gradient));
+    box-shadow: 0 0 14px var(--card-accent, var(--brand-primary));
+}
+
+.metric-card-3d .metric-icon-box {
+    width: 58px;
+    height: 58px;
+    border-radius: var(--radius-lg);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.65rem;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+/* 3D Storage Gauge Cylinder */
+.quota-card-3d {
+    background: var(--bg-card);
+    backdrop-filter: blur(20px) saturate(180%);
+    -webkit-backdrop-filter: blur(20px) saturate(180%);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-xl);
+    padding: 1.25rem 1.4rem;
+    box-shadow: var(--shadow-card);
+    position: relative;
+    overflow: hidden;
+    transform-style: preserve-3d;
+}
+
+.progress-3d {
+    height: 10px;
+    border-radius: var(--radius-pill);
+    background: rgba(148, 163, 184, 0.15);
+    overflow: hidden;
+    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.2);
+    position: relative;
+}
+
+.progress-bar-3d {
+    background: var(--brand-gradient);
+    height: 100%;
+    border-radius: var(--radius-pill);
+    box-shadow: 0 0 16px var(--brand-primary);
+    position: relative;
+    overflow: hidden;
+    transition: width 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.progress-bar-3d::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+    animation: barShine 2.5s infinite;
+}
+
+@keyframes barShine {
+    0% { transform: translateX(-100%); }
+    100% { transform: translateX(100%); }
+}
+
+/* 3D Badge & Status Indicators */
+.badge-3d {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    padding: 0.35rem 0.8rem;
+    font-size: 0.75rem;
+    font-weight: 700;
+    border-radius: var(--radius-pill);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+/* 3D Dropdown Menu Enhancements */
+.dropdown-menu-3d {
+    background: var(--bg-card) !important;
+    backdrop-filter: blur(24px) saturate(200%) !important;
+    -webkit-backdrop-filter: blur(24px) saturate(200%) !important;
+    border: 1px solid var(--border-color) !important;
+    border-radius: var(--radius-lg) !important;
+    box-shadow: var(--shadow-modal) !important;
+    overflow: hidden;
+}
+
+.dropdown-item-mood {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.6rem 1rem;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    transition: all 0.18s ease;
+    border-radius: var(--radius-md);
+    margin: 0.15rem 0.35rem;
+    cursor: pointer;
+}
+
+.dropdown-item-mood:hover {
+    background: var(--brand-primary-light);
+    color: var(--brand-primary);
+    transform: translateX(4px);
+}
+
+.dropdown-item-mood.active {
+    background: var(--brand-gradient);
+    color: #ffffff !important;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}

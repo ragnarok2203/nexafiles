@@ -3,79 +3,95 @@
 {% block title %}Create Account — NexaFiles{% endblock %}
 
 {% block content %}
-<div class="auth-wrapper dashboard-3d-scene">
-    <div class="auth-card tilt-card-3d" data-tilt-max="8">
-        <div class="card-header">
-            <div class="brand-badge mb-3 mx-auto" style="width: 52px; height: 52px; font-size: 1.6rem;">
-                <i class="bi bi-person-plus-fill"></i>
+<div class="auth-wrapper">
+    <div class="auth-card">
+        <div class="auth-wrapper dashboard-3d-scene">
+            <div class="auth-card tilt-card-3d" data-tilt-max="8">
+                <div class="card-header">
+                    <div class="brand-badge mb-3 mx-auto" style="width: 52px; height: 52px; font-size: 1.6rem;">
+                        <i class="bi bi-person-plus-fill"></i>
+                    </div>
+                    <h4 class="fw-bold mb-1 brand-text">Create Account</h4>
+                    <p class="text-white-50 small mb-0">Join NexaFiles Intelligent Cloud Storage Vault</p>
+                </div>
+                <div class="card-body p-4">
+                    <form action="{{ url_for('register') }}" method="POST">
+                        <div class="mb-3">
+                            <label for="reg_username" class="form-label small fw-semibold text-muted">USERNAME</label>
+                            <div class="input-group">
+                                <span class="input-group-text bg-light border-end-0"><i
+                                        class="bi bi-person text-muted"></i></span>
+                                <input type="text" class="form-control border-start-0" id="reg_username" name="username"
+                                    value="{{ username or '' }}" placeholder="Choose a username (min 3 chars)" required
+                                    autofocus>
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="reg_email" class="form-label small fw-semibold text-muted">EMAIL ADDRESS</label>
+                            <div class="input-group">
+                                <span class="input-group-text bg-light border-end-0"><i
+                                        class="bi bi-envelope text-muted"></i></span>
+                                <input type="email" class="form-control border-start-0" id="reg_email" name="email"
+                                    value="{{ email or '' }}" placeholder="student@gnauniversity.edu.in" required>
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="reg_password" class="form-label small fw-semibold text-muted">PASSWORD</label>
+                            <div class="input-group">
+                                <span class="input-group-text bg-light border-end-0"><i
+                                        class="bi bi-shield-lock text-muted"></i></span>
+                                <input type="password" class="form-control border-start-0 border-end-0"
+                                    id="reg_password" name="password" placeholder="Choose a password (min 6 chars)"
+                                    required>
+                                <button class="btn btn-light border border-start-0 text-muted" type="button"
+                                    onclick="togglePasswordVisibility('reg_password', this)">
+                                    <i class="bi bi-eye"></i>
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="reg_confirm" class="form-label small fw-semibold text-muted">CONFIRM
+                                PASSWORD</label>
+                            <div class="input-group">
+                                <span class="input-group-text bg-light border-end-0"><i
+                                        class="bi bi-shield-check text-muted"></i></span>
+                                <input type="password" class="form-control border-start-0 border-end-0" id="reg_confirm"
+                                    name="confirm_password" placeholder="Re-enter your password" required>
+                                <button class="btn btn-light border border-start-0 text-muted" type="button"
+                                    onclick="togglePasswordVisibility('reg_confirm', this)">
+                                    <i class="bi bi-eye"></i>
+                                </button>
+                            </div>
+                        </div>
+
+                        <button type="submit" class="btn btn-brand-primary w-100 py-2 rounded-pill fw-semibold mt-2">
+                            <i class="bi bi-check-circle-fill me-1"></i> Register Account
+                        </button>
+                    </form>
+                </div>
+                <div class="card-footer bg-light p-3 text-center border-0 small text-muted">
+                    Already registered? <a href="{{ url_for('login') }}"
+                        class="text-primary fw-semibold text-decoration-none">Sign In</a>
+                </div>
             </div>
-            <h4 class="fw-bold mb-1 brand-text">Create Account</h4>
-            <p class="text-white-50 small mb-0">Join NexaFiles Intelligent Cloud Storage Vault</p>
         </div>
-        <div class="card-body p-4">
-            <form action="{{ url_for('register') }}" method="POST">
-                <div class="mb-3">
-                    <label for="reg_username" class="form-label small fw-semibold text-muted">USERNAME</label>
-                    <div class="input-group">
-                        <span class="input-group-text bg-light border-end-0"><i class="bi bi-person text-muted"></i></span>
-                        <input type="text" class="form-control border-start-0" id="reg_username" name="username" value="{{ username or '' }}" placeholder="Choose a username (min 3 chars)" required autofocus>
-                    </div>
-                </div>
+        {% endblock %}
 
-                <div class="mb-3">
-                    <label for="reg_email" class="form-label small fw-semibold text-muted">EMAIL ADDRESS</label>
-                    <div class="input-group">
-                        <span class="input-group-text bg-light border-end-0"><i class="bi bi-envelope text-muted"></i></span>
-                        <input type="email" class="form-control border-start-0" id="reg_email" name="email" value="{{ email or '' }}" placeholder="student@gnauniversity.edu.in" required>
-                    </div>
-                </div>
-
-                <div class="mb-3">
-                    <label for="reg_password" class="form-label small fw-semibold text-muted">PASSWORD</label>
-                    <div class="input-group">
-                        <span class="input-group-text bg-light border-end-0"><i class="bi bi-shield-lock text-muted"></i></span>
-                        <input type="password" class="form-control border-start-0 border-end-0" id="reg_password" name="password" placeholder="Choose a password (min 6 chars)" required>
-                        <button class="btn btn-light border border-start-0 text-muted" type="button" onclick="togglePasswordVisibility('reg_password', this)">
-                            <i class="bi bi-eye"></i>
-                        </button>
-                    </div>
-                </div>
-
-                <div class="mb-3">
-                    <label for="reg_confirm" class="form-label small fw-semibold text-muted">CONFIRM PASSWORD</label>
-                    <div class="input-group">
-                        <span class="input-group-text bg-light border-end-0"><i class="bi bi-shield-check text-muted"></i></span>
-                        <input type="password" class="form-control border-start-0 border-end-0" id="reg_confirm" name="confirm_password" placeholder="Re-enter your password" required>
-                        <button class="btn btn-light border border-start-0 text-muted" type="button" onclick="togglePasswordVisibility('reg_confirm', this)">
-                            <i class="bi bi-eye"></i>
-                        </button>
-                    </div>
-                </div>
-
-                <button type="submit" class="btn btn-brand-primary w-100 py-2 rounded-pill fw-semibold mt-2">
-                    <i class="bi bi-check-circle-fill me-1"></i> Register Account
-                </button>
-            </form>
-        </div>
-        <div class="card-footer bg-light p-3 text-center border-0 small text-muted">
-            Already registered? <a href="{{ url_for('login') }}" class="text-primary fw-semibold text-decoration-none">Sign In</a>
-        </div>
-    </div>
-</div>
-{% endblock %}
-
-{% block scripts %}
-<script>
-function togglePasswordVisibility(fieldId, btn) {
-    const input = document.getElementById(fieldId);
-    const icon = btn.querySelector('i');
-    if (input.type === 'password') {
-        input.type = 'text';
-        icon.className = 'bi bi-eye-slash';
-    } else {
-        input.type = 'password';
-        icon.className = 'bi bi-eye';
-    }
-}
-</script>
-{% endblock %}
+        {% block scripts %}
+        <script>
+            function togglePasswordVisibility(fieldId, btn) {
+                const input = document.getElementById(fieldId);
+                const icon = btn.querySelector('i');
+                if (input.type === 'password') {
+                    input.type = 'text';
+                    icon.className = 'bi bi-eye-slash';
+                } else {
+                    input.type = 'password';
+                    icon.className = 'bi bi-eye';
+                }
+            }
+        </script>
+        {% endblock %}

@@ -65,9 +65,15 @@ def clear_failed_attempts(ip, tracker):
     """Reset failed attempts for an IP address upon successful authentication."""
     tracker.pop(ip, None)
 
+BASE_DIR = Path(__file__).resolve().parent
+
 def create_app(test_config=None):
     """Flask Application Factory Pattern."""
-    app = Flask(__name__, template_folder='templates', static_folder='static')
+    app = Flask(
+        __name__,
+        template_folder=str(BASE_DIR / 'templates'),
+        static_folder=str(BASE_DIR / 'static')
+    )
     
     # Apply configuration
     app.config.from_object(Config)
