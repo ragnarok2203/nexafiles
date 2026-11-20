@@ -1,9 +1,22 @@
 <!DOCTYPE html>
-<html lang="en" data-bs-theme="light">
+<html lang="en" data-bs-theme="dark" data-mood="obsidian" data-3d-mode="on">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}NexaFiles{% endblock %} — Cloud-Based Intelligent File Organization</title>
+    <!-- Instant Theme & Dynamic Mood Initializer (Eliminates FOUC) -->
+    <script>
+        (function() {
+            try {
+                const savedTheme = localStorage.getItem('nexafiles-theme') || 'dark';
+                const savedMood = localStorage.getItem('nexafiles-mood-theme') || 'obsidian';
+                const saved3D = localStorage.getItem('nexafiles-3d-mode') || 'on';
+                document.documentElement.setAttribute('data-bs-theme', savedTheme);
+                document.documentElement.setAttribute('data-mood', savedMood);
+                document.documentElement.setAttribute('data-3d-mode', saved3D);
+            } catch (e) {}
+        })();
+    </script>
     <!-- Modern Bootstrap 5 CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <!-- Bootstrap Icons -->
@@ -65,6 +78,79 @@
                     {% endif %}
                 </div>
 
+                <!-- Dynamic Mood Selector Dropdown -->
+                <div class="dropdown me-2">
+                    <button class="btn btn-outline-light btn-sm dropdown-toggle rounded-pill px-3 d-flex align-items-center gap-2" type="button" id="moodDropdownBtn" data-bs-toggle="dropdown" aria-expanded="false" title="Choose Dynamic Mood Theme">
+                        <i class="bi bi-palette-fill text-warning"></i>
+                        <span id="navbarMoodBadge" class="d-none d-sm-inline-flex align-items-center">Mood</span>
+                    </button>
+                    <ul class="dropdown-menu dropdown-menu-end dropdown-menu-3d shadow border-0 mt-2 p-2" style="min-width: 250px;" aria-labelledby="moodDropdownBtn">
+                        <li class="px-2 py-1 text-muted small fw-bold text-uppercase" style="font-size: 0.68rem; letter-spacing: 0.08em;">
+                            Dynamic Mood Themes
+                        </li>
+                        <li><hr class="dropdown-divider my-1"></li>
+                        <li>
+                            <a class="dropdown-item-mood" data-mood-target="obsidian" onclick="setMoodTheme('obsidian')">
+                                <span class="d-flex align-items-center gap-2">
+                                    <span class="mood-swatch-dot" style="color: #6366f1; background-color: #6366f1;"></span>
+                                    <span>🌌 Deep Focus</span>
+                                </span>
+                                <i class="bi bi-check2 text-success mood-check-icon" style="display: none;"></i>
+                            </a>
+                        </li>
+                        <li>
+                            <a class="dropdown-item-mood" data-mood-target="cyberpunk" onclick="setMoodTheme('cyberpunk')">
+                                <span class="d-flex align-items-center gap-2">
+                                    <span class="mood-swatch-dot" style="color: #ec4899; background-color: #ec4899;"></span>
+                                    <span>⚡ Neon Rush</span>
+                                </span>
+                                <i class="bi bi-check2 text-success mood-check-icon" style="display: none;"></i>
+                            </a>
+                        </li>
+                        <li>
+                            <a class="dropdown-item-mood" data-mood-target="emerald" onclick="setMoodTheme('emerald')">
+                                <span class="d-flex align-items-center gap-2">
+                                    <span class="mood-swatch-dot" style="color: #10b981; background-color: #10b981;"></span>
+                                    <span>🌿 Zen Flow</span>
+                                </span>
+                                <i class="bi bi-check2 text-success mood-check-icon" style="display: none;"></i>
+                            </a>
+                        </li>
+                        <li>
+                            <a class="dropdown-item-mood" data-mood-target="sunset" onclick="setMoodTheme('sunset')">
+                                <span class="d-flex align-items-center gap-2">
+                                    <span class="mood-swatch-dot" style="color: #f59e0b; background-color: #f59e0b;"></span>
+                                    <span>🔥 Creative Fire</span>
+                                </span>
+                                <i class="bi bi-check2 text-success mood-check-icon" style="display: none;"></i>
+                            </a>
+                        </li>
+                        <li>
+                            <a class="dropdown-item-mood" data-mood-target="arctic" onclick="setMoodTheme('arctic')">
+                                <span class="d-flex align-items-center gap-2">
+                                    <span class="mood-swatch-dot" style="color: #0284c7; background-color: #0284c7;"></span>
+                                    <span>❄️ Frost Chill</span>
+                                </span>
+                                <i class="bi bi-check2 text-success mood-check-icon" style="display: none;"></i>
+                            </a>
+                        </li>
+                        <li>
+                            <a class="dropdown-item-mood" data-mood-target="midnight" onclick="setMoodTheme('midnight')">
+                                <span class="d-flex align-items-center gap-2">
+                                    <span class="mood-swatch-dot" style="color: #3b82f6; background-color: #3b82f6;"></span>
+                                    <span>💎 Royalty</span>
+                                </span>
+                                <i class="bi bi-check2 text-success mood-check-icon" style="display: none;"></i>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- 3D Physics Tilt FX Toggle -->
+                <button type="button" class="btn btn-outline-info btn-sm rounded-pill px-3 me-2 d-flex align-items-center gap-1 active" id="toggle3DModeBtn" onclick="toggle3DMode()" title="Toggle 3D Dashboard Depth & Tilt Effects">
+                    <i class="bi bi-badge-3d-fill"></i> <span class="d-none d-md-inline">3D Active</span>
+                </button>
+
                 <!-- Theme Toggle Button -->
                 <button type="button" class="btn btn-outline-light btn-sm me-3 rounded-pill px-3 d-flex align-items-center gap-1" id="themeToggleBtn" onclick="toggleTheme()" title="Toggle Light/Dark Theme">
                     <i class="bi bi-moon-stars-fill" id="themeIcon"></i>
@@ -100,8 +186,79 @@
                 </div>
                 {% else %}
                 <div class="navbar-nav ms-auto gap-2 align-items-center">
-                    <button type="button" class="btn btn-outline-light btn-sm rounded-pill px-2" id="themeToggleBtn" onclick="toggleTheme()" title="Toggle Light/Dark Theme">
-                        <i class="bi bi-moon-stars-fill" id="themeIcon"></i>
+                    <!-- Dynamic Mood Selector Dropdown -->
+                    <div class="dropdown">
+                        <button class="btn btn-outline-light btn-sm dropdown-toggle rounded-pill px-3 d-flex align-items-center gap-2" type="button" id="moodDropdownBtnGuest" data-bs-toggle="dropdown" aria-expanded="false" title="Choose Dynamic Mood Theme">
+                            <i class="bi bi-palette-fill text-warning"></i>
+                            <span class="d-none d-sm-inline-flex align-items-center">Mood</span>
+                        </button>
+                        <ul class="dropdown-menu dropdown-menu-end dropdown-menu-3d shadow border-0 mt-2 p-2" style="min-width: 250px;" aria-labelledby="moodDropdownBtnGuest">
+                            <li class="px-2 py-1 text-muted small fw-bold text-uppercase" style="font-size: 0.68rem; letter-spacing: 0.08em;">
+                                Dynamic Mood Themes
+                            </li>
+                            <li><hr class="dropdown-divider my-1"></li>
+                            <li>
+                                <a class="dropdown-item-mood" data-mood-target="obsidian" onclick="setMoodTheme('obsidian')">
+                                    <span class="d-flex align-items-center gap-2">
+                                        <span class="mood-swatch-dot" style="color: #6366f1; background-color: #6366f1;"></span>
+                                        <span>🌌 Deep Focus</span>
+                                    </span>
+                                    <i class="bi bi-check2 text-success mood-check-icon" style="display: none;"></i>
+                                </a>
+                            </li>
+                            <li>
+                                <a class="dropdown-item-mood" data-mood-target="cyberpunk" onclick="setMoodTheme('cyberpunk')">
+                                    <span class="d-flex align-items-center gap-2">
+                                        <span class="mood-swatch-dot" style="color: #ec4899; background-color: #ec4899;"></span>
+                                        <span>⚡ Neon Rush</span>
+                                    </span>
+                                    <i class="bi bi-check2 text-success mood-check-icon" style="display: none;"></i>
+                                </a>
+                            </li>
+                            <li>
+                                <a class="dropdown-item-mood" data-mood-target="emerald" onclick="setMoodTheme('emerald')">
+                                    <span class="d-flex align-items-center gap-2">
+                                        <span class="mood-swatch-dot" style="color: #10b981; background-color: #10b981;"></span>
+                                        <span>🌿 Zen Flow</span>
+                                    </span>
+                                    <i class="bi bi-check2 text-success mood-check-icon" style="display: none;"></i>
+                                </a>
+                            </li>
+                            <li>
+                                <a class="dropdown-item-mood" data-mood-target="sunset" onclick="setMoodTheme('sunset')">
+                                    <span class="d-flex align-items-center gap-2">
+                                        <span class="mood-swatch-dot" style="color: #f59e0b; background-color: #f59e0b;"></span>
+                                        <span>🔥 Creative Fire</span>
+                                    </span>
+                                    <i class="bi bi-check2 text-success mood-check-icon" style="display: none;"></i>
+                                </a>
+                            </li>
+                            <li>
+                                <a class="dropdown-item-mood" data-mood-target="arctic" onclick="setMoodTheme('arctic')">
+                                    <span class="d-flex align-items-center gap-2">
+                                        <span class="mood-swatch-dot" style="color: #0284c7; background-color: #0284c7;"></span>
+                                        <span>❄️ Frost Chill</span>
+                                    </span>
+                                    <i class="bi bi-check2 text-success mood-check-icon" style="display: none;"></i>
+                                </a>
+                            </li>
+                            <li>
+                                <a class="dropdown-item-mood" data-mood-target="midnight" onclick="setMoodTheme('midnight')">
+                                    <span class="d-flex align-items-center gap-2">
+                                        <span class="mood-swatch-dot" style="color: #3b82f6; background-color: #3b82f6;"></span>
+                                        <span>💎 Royalty</span>
+                                    </span>
+                                    <i class="bi bi-check2 text-success mood-check-icon" style="display: none;"></i>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                    <!-- 3D Physics Tilt FX Toggle -->
+                    <button type="button" class="btn btn-outline-info btn-sm rounded-pill px-2 d-flex align-items-center gap-1 active" id="toggle3DModeBtnGuest" onclick="toggle3DMode()" title="Toggle 3D Dashboard Depth & Tilt Effects">
+                        <i class="bi bi-badge-3d-fill"></i>
+                    </button>
+                    <button type="button" class="btn btn-outline-light btn-sm rounded-pill px-2" id="themeToggleBtnGuest" onclick="toggleTheme()" title="Toggle Light/Dark Theme">
+                        <i class="bi bi-moon-stars-fill" id="themeIconGuest"></i>
                     </button>
                     <a href="{{ url_for('login') }}" class="btn btn-outline-light btn-sm px-3 rounded-pill">Log In</a>
                     <a href="{{ url_for('register') }}" class="btn btn-brand-primary btn-sm px-3 rounded-pill">Create Account</a>
@@ -152,17 +309,19 @@
                 </div>
                 <form action="{{ url_for('upload_file') }}" method="POST" enctype="multipart/form-data" id="uploadForm">
                     <div class="modal-body p-4">
-                        <!-- Drag & Drop Zone -->
-                        <div class="upload-dropzone p-4 text-center mb-3" id="dropzone">
-                            <i class="bi bi-cloud-arrow-up dropzone-icon-glow mb-2 d-block"></i>
-                            <h6 class="fw-bold mb-1">Drag and drop file here, or click to browse</h6>
-                            <p class="text-muted small mb-3">Supported formats: PDF, DOCX, TXT, CSV, XLSX, PPTX, ZIP, PNG, JPG, PY (Max: 50 MB)</p>
-                            <input type="file" name="file" id="fileInput" class="d-none" required>
-                            <button type="button" class="btn btn-outline-primary btn-sm px-4 rounded-pill fw-semibold" onclick="document.getElementById('fileInput').click()">
-                                <i class="bi bi-folder2-open me-1"></i> Browse Files
-                            </button>
-                            <div id="fileSelectionInfo" class="mt-3 text-success fw-medium small d-none">
-                                <i class="bi bi-file-earmark-check-fill me-1"></i> <span id="selectedFileName"></span> (<span id="selectedFileSize"></span>)
+                        <!-- Drag & Drop Zone (3D Interactive Tilt) -->
+                        <div class="upload-dropzone tilt-card-3d p-4 text-center mb-3" id="dropzone" data-tilt-max="10">
+                            <i class="bi bi-cloud-arrow-up dropzone-icon-glow mb-2 d-block tilt-layer-deep"></i>
+                            <div class="tilt-layer-mid">
+                                <h6 class="fw-bold mb-1">Drag and drop file here, or click to browse</h6>
+                                <p class="text-muted small mb-3">Supported formats: PDF, DOCX, TXT, CSV, XLSX, PPTX, ZIP, PNG, JPG, PY (Max: 50 MB)</p>
+                                <input type="file" name="file" id="fileInput" class="d-none" required>
+                                <button type="button" class="btn btn-outline-primary btn-sm px-4 rounded-pill fw-semibold" onclick="document.getElementById('fileInput').click()">
+                                    <i class="bi bi-folder2-open me-1"></i> Browse Files
+                                </button>
+                                <div id="fileSelectionInfo" class="mt-3 text-success fw-medium small d-none">
+                                    <i class="bi bi-file-earmark-check-fill me-1"></i> <span id="selectedFileName"></span> (<span id="selectedFileSize"></span>)
+                                </div>
                             </div>
                         </div>
 
@@ -380,22 +539,26 @@
     <script src="{{ url_for('static', filename='js/app.js') }}"></script>
     <script>
         function initTheme() {
-            const savedTheme = localStorage.getItem('nexafiles-theme') || 'light';
+            const savedTheme = localStorage.getItem('nexafiles-theme') || 'dark';
             document.documentElement.setAttribute('data-bs-theme', savedTheme);
             updateThemeIcon(savedTheme);
+            if (typeof initMoodThemes === 'function') initMoodThemes();
+            if (typeof init3DTilt === 'function') init3DTilt();
         }
         function toggleTheme() {
-            const current = document.documentElement.getAttribute('data-bs-theme') || 'light';
+            const current = document.documentElement.getAttribute('data-bs-theme') || 'dark';
             const next = current === 'dark' ? 'light' : 'dark';
             document.documentElement.setAttribute('data-bs-theme', next);
             localStorage.setItem('nexafiles-theme', next);
             updateThemeIcon(next);
         }
         function updateThemeIcon(theme) {
-            const icon = document.getElementById('themeIcon');
-            if (icon) {
-                icon.className = theme === 'dark' ? 'bi bi-sun-fill text-warning' : 'bi bi-moon-stars-fill';
-            }
+            ['themeIcon', 'themeIconGuest'].forEach(id => {
+                const icon = document.getElementById(id);
+                if (icon) {
+                    icon.className = theme === 'dark' ? 'bi bi-sun-fill text-warning' : 'bi bi-moon-stars-fill';
+                }
+            });
         }
         initTheme();
     </script>

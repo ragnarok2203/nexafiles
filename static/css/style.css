@@ -78,6 +78,220 @@
 }
 
 /* ==========================================================================
+   DYNAMIC MOOD THEMES (Multi-Palette Emotion Engine)
+   Moods: obsidian (default), cyberpunk, emerald, sunset, arctic, midnight
+   ========================================================================== */
+
+/* --- 1. OBSIDIAN (Deep Focus & Cyber Aurora) --- */
+[data-mood="obsidian"] {
+    --brand-primary: #6366f1;
+    --brand-primary-hover: #4f46e5;
+    --brand-primary-light: rgba(99, 102, 241, 0.18);
+    --brand-cyan: #06b6d4;
+    --brand-violet: #8b5cf6;
+    --brand-gradient: linear-gradient(135deg, #6366f1 0%, #8b5cf6 50%, #06b6d4 100%);
+    --brand-gradient-hover: linear-gradient(135deg, #4f46e5 0%, #7c3aed 50%, #0891b2 100%);
+    --brand-gradient-subtle: linear-gradient(135deg, rgba(99, 102, 241, 0.12) 0%, rgba(6, 182, 212, 0.12) 100%);
+    --accent-glow: 0 0 32px rgba(99, 102, 241, 0.45);
+    --accent-glow-btn: rgba(99, 102, 241, 0.45);
+    --border-color-glow: rgba(99, 102, 241, 0.5);
+    --mood-color: #6366f1;
+    --mood-name: "Deep Focus";
+}
+[data-bs-theme="dark"][data-mood="obsidian"],
+[data-bs-theme="dark"]:not([data-mood]) {
+    --bg-page: #090d16;
+    --bg-body-mesh: 
+        radial-gradient(at 0% 0%, rgba(99, 102, 241, 0.22) 0px, transparent 55%),
+        radial-gradient(at 100% 0%, rgba(6, 182, 212, 0.18) 0px, transparent 55%),
+        radial-gradient(at 50% 100%, rgba(139, 92, 246, 0.16) 0px, transparent 60%),
+        #090d16;
+    --bg-card: rgba(15, 23, 42, 0.82);
+    --bg-surface-elevated: #111827;
+    --shadow-card-hover: 0 20px 45px -10px rgba(99, 102, 241, 0.32), 0 0 1px 1px rgba(99, 102, 241, 0.5);
+}
+
+/* --- 2. CYBERPUNK (Hyper Energy & Neon Rush) --- */
+[data-mood="cyberpunk"] {
+    --brand-primary: #ec4899;
+    --brand-primary-hover: #db2777;
+    --brand-primary-light: rgba(236, 72, 153, 0.22);
+    --brand-cyan: #06b6d4;
+    --brand-violet: #a855f7;
+    --brand-gradient: linear-gradient(135deg, #ec4899 0%, #a855f7 50%, #06b6d4 100%);
+    --brand-gradient-hover: linear-gradient(135deg, #db2777 0%, #9333ea 50%, #0891b2 100%);
+    --brand-gradient-subtle: linear-gradient(135deg, rgba(236, 72, 153, 0.14) 0%, rgba(6, 182, 212, 0.14) 100%);
+    --accent-glow: 0 0 35px rgba(236, 72, 153, 0.6);
+    --accent-glow-btn: rgba(236, 72, 153, 0.5);
+    --border-color-glow: rgba(236, 72, 153, 0.6);
+    --mood-color: #ec4899;
+    --mood-name: "Neon Rush";
+}
+[data-bs-theme="dark"][data-mood="cyberpunk"] {
+    --bg-page: #0f051d;
+    --bg-body-mesh: 
+        radial-gradient(at 0% 0%, rgba(236, 72, 153, 0.26) 0px, transparent 55%),
+        radial-gradient(at 100% 10%, rgba(6, 182, 212, 0.22) 0px, transparent 55%),
+        radial-gradient(at 50% 100%, rgba(168, 85, 247, 0.22) 0px, transparent 60%),
+        #0f051d;
+    --bg-card: rgba(26, 11, 46, 0.82);
+    --bg-surface-elevated: #1f0d38;
+    --shadow-card-hover: 0 20px 45px -10px rgba(236, 72, 153, 0.35), 0 0 1px 1px rgba(236, 72, 153, 0.5);
+}
+[data-bs-theme="light"][data-mood="cyberpunk"] {
+    --bg-body-mesh: 
+        radial-gradient(at 0% 0%, rgba(236, 72, 153, 0.12) 0px, transparent 50%),
+        radial-gradient(at 100% 0%, rgba(6, 182, 212, 0.10) 0px, transparent 50%),
+        radial-gradient(at 50% 100%, rgba(168, 85, 247, 0.08) 0px, transparent 50%),
+        #fdf4f9;
+    --bg-card: rgba(255, 255, 255, 0.9);
+}
+
+/* --- 3. EMERALD (Calm Zen & Matrix Flow) --- */
+[data-mood="emerald"] {
+    --brand-primary: #10b981;
+    --brand-primary-hover: #059669;
+    --brand-primary-light: rgba(16, 185, 129, 0.22);
+    --brand-cyan: #14b8a6;
+    --brand-violet: #34d399;
+    --brand-gradient: linear-gradient(135deg, #10b981 0%, #14b8a6 50%, #34d399 100%);
+    --brand-gradient-hover: linear-gradient(135deg, #059669 0%, #0d9488 50%, #10b981 100%);
+    --brand-gradient-subtle: linear-gradient(135deg, rgba(16, 185, 129, 0.14) 0%, rgba(20, 184, 166, 0.14) 100%);
+    --accent-glow: 0 0 35px rgba(16, 185, 129, 0.55);
+    --accent-glow-btn: rgba(16, 185, 129, 0.45);
+    --border-color-glow: rgba(16, 185, 129, 0.55);
+    --mood-color: #10b981;
+    --mood-name: "Zen Flow";
+}
+[data-bs-theme="dark"][data-mood="emerald"] {
+    --bg-page: #04150e;
+    --bg-body-mesh: 
+        radial-gradient(at 0% 0%, rgba(16, 185, 129, 0.26) 0px, transparent 55%),
+        radial-gradient(at 100% 10%, rgba(20, 184, 166, 0.22) 0px, transparent 55%),
+        radial-gradient(at 50% 100%, rgba(52, 211, 153, 0.16) 0px, transparent 60%),
+        #04150e;
+    --bg-card: rgba(6, 32, 24, 0.82);
+    --bg-surface-elevated: #092e21;
+    --shadow-card-hover: 0 20px 45px -10px rgba(16, 185, 129, 0.35), 0 0 1px 1px rgba(16, 185, 129, 0.5);
+}
+[data-bs-theme="light"][data-mood="emerald"] {
+    --bg-body-mesh: 
+        radial-gradient(at 0% 0%, rgba(16, 185, 129, 0.12) 0px, transparent 50%),
+        radial-gradient(at 100% 0%, rgba(20, 184, 166, 0.10) 0px, transparent 50%),
+        radial-gradient(at 50% 100%, rgba(52, 211, 153, 0.08) 0px, transparent 50%),
+        #f2faf6;
+    --bg-card: rgba(255, 255, 255, 0.9);
+}
+
+/* --- 4. SUNSET (Creative Fire & Solar Amber) --- */
+[data-mood="sunset"] {
+    --brand-primary: #f59e0b;
+    --brand-primary-hover: #d97706;
+    --brand-primary-light: rgba(245, 158, 11, 0.22);
+    --brand-cyan: #fb923c;
+    --brand-violet: #f43f5e;
+    --brand-gradient: linear-gradient(135deg, #f59e0b 0%, #f43f5e 50%, #fb923c 100%);
+    --brand-gradient-hover: linear-gradient(135deg, #d97706 0%, #e11d48 50%, #f97316 100%);
+    --brand-gradient-subtle: linear-gradient(135deg, rgba(245, 158, 11, 0.15) 0%, rgba(244, 63, 94, 0.15) 100%);
+    --accent-glow: 0 0 35px rgba(245, 158, 11, 0.55);
+    --accent-glow-btn: rgba(245, 158, 11, 0.45);
+    --border-color-glow: rgba(245, 158, 11, 0.55);
+    --mood-color: #f59e0b;
+    --mood-name: "Creative Fire";
+}
+[data-bs-theme="dark"][data-mood="sunset"] {
+    --bg-page: #1a0914;
+    --bg-body-mesh: 
+        radial-gradient(at 0% 0%, rgba(244, 63, 94, 0.26) 0px, transparent 55%),
+        radial-gradient(at 100% 10%, rgba(245, 158, 11, 0.25) 0px, transparent 55%),
+        radial-gradient(at 50% 100%, rgba(251, 146, 60, 0.18) 0px, transparent 60%),
+        #1a0914;
+    --bg-card: rgba(38, 16, 26, 0.82);
+    --bg-surface-elevated: #361424;
+    --shadow-card-hover: 0 20px 45px -10px rgba(245, 158, 11, 0.35), 0 0 1px 1px rgba(245, 158, 11, 0.5);
+}
+[data-bs-theme="light"][data-mood="sunset"] {
+    --bg-body-mesh: 
+        radial-gradient(at 0% 0%, rgba(245, 158, 11, 0.12) 0px, transparent 50%),
+        radial-gradient(at 100% 0%, rgba(244, 63, 94, 0.10) 0px, transparent 50%),
+        radial-gradient(at 50% 100%, rgba(251, 146, 60, 0.08) 0px, transparent 50%),
+        #fffaf5;
+    --bg-card: rgba(255, 255, 255, 0.9);
+}
+
+/* --- 5. ARCTIC (Frost Chill & Glacier Peak) --- */
+[data-mood="arctic"] {
+    --brand-primary: #0284c7;
+    --brand-primary-hover: #0369a1;
+    --brand-primary-light: rgba(2, 132, 199, 0.2);
+    --brand-cyan: #06b6d4;
+    --brand-violet: #38bdf8;
+    --brand-gradient: linear-gradient(135deg, #0284c7 0%, #06b6d4 50%, #38bdf8 100%);
+    --brand-gradient-hover: linear-gradient(135deg, #0369a1 0%, #0891b2 50%, #0ea5e9 100%);
+    --brand-gradient-subtle: linear-gradient(135deg, rgba(2, 132, 199, 0.12) 0%, rgba(6, 182, 212, 0.12) 100%);
+    --accent-glow: 0 0 35px rgba(2, 132, 199, 0.5);
+    --accent-glow-btn: rgba(2, 132, 199, 0.45);
+    --border-color-glow: rgba(2, 132, 199, 0.5);
+    --mood-color: #0284c7;
+    --mood-name: "Frost Chill";
+}
+[data-bs-theme="dark"][data-mood="arctic"] {
+    --bg-page: #081726;
+    --bg-body-mesh: 
+        radial-gradient(at 0% 0%, rgba(2, 132, 199, 0.26) 0px, transparent 55%),
+        radial-gradient(at 100% 10%, rgba(6, 182, 212, 0.22) 0px, transparent 55%),
+        radial-gradient(at 50% 100%, rgba(56, 189, 248, 0.18) 0px, transparent 60%),
+        #081726;
+    --bg-card: rgba(13, 29, 49, 0.82);
+    --bg-surface-elevated: #10263f;
+    --shadow-card-hover: 0 20px 45px -10px rgba(2, 132, 199, 0.35), 0 0 1px 1px rgba(2, 132, 199, 0.5);
+}
+[data-bs-theme="light"][data-mood="arctic"] {
+    --bg-body-mesh: 
+        radial-gradient(at 0% 0%, rgba(2, 132, 199, 0.12) 0px, transparent 50%),
+        radial-gradient(at 100% 0%, rgba(6, 182, 212, 0.10) 0px, transparent 50%),
+        radial-gradient(at 50% 100%, rgba(56, 189, 248, 0.08) 0px, transparent 50%),
+        #f0f8ff;
+    --bg-card: rgba(255, 255, 255, 0.9);
+}
+
+/* --- 6. MIDNIGHT (Executive Royalty & Sapphire) --- */
+[data-mood="midnight"] {
+    --brand-primary: #3b82f6;
+    --brand-primary-hover: #2563eb;
+    --brand-primary-light: rgba(59, 130, 246, 0.2);
+    --brand-cyan: #6366f1;
+    --brand-violet: #1d4ed8;
+    --brand-gradient: linear-gradient(135deg, #3b82f6 0%, #6366f1 50%, #1d4ed8 100%);
+    --brand-gradient-hover: linear-gradient(135deg, #2563eb 0%, #4f46e5 50%, #1e40af 100%);
+    --brand-gradient-subtle: linear-gradient(135deg, rgba(59, 130, 246, 0.14) 0%, rgba(99, 102, 241, 0.14) 100%);
+    --accent-glow: 0 0 35px rgba(59, 130, 246, 0.55);
+    --accent-glow-btn: rgba(59, 130, 246, 0.45);
+    --border-color-glow: rgba(59, 130, 246, 0.55);
+    --mood-color: #3b82f6;
+    --mood-name: "Royalty";
+}
+[data-bs-theme="dark"][data-mood="midnight"] {
+    --bg-page: #040a1b;
+    --bg-body-mesh: 
+        radial-gradient(at 0% 0%, rgba(59, 130, 246, 0.28) 0px, transparent 55%),
+        radial-gradient(at 100% 10%, rgba(99, 102, 241, 0.24) 0px, transparent 55%),
+        radial-gradient(at 50% 100%, rgba(29, 78, 216, 0.20) 0px, transparent 60%),
+        #040a1b;
+    --bg-card: rgba(10, 20, 48, 0.82);
+    --bg-surface-elevated: #0e1c44;
+    --shadow-card-hover: 0 20px 45px -10px rgba(59, 130, 246, 0.35), 0 0 1px 1px rgba(59, 130, 246, 0.5);
+}
+[data-bs-theme="light"][data-mood="midnight"] {
+    --bg-body-mesh: 
+        radial-gradient(at 0% 0%, rgba(59, 130, 246, 0.12) 0px, transparent 50%),
+        radial-gradient(at 100% 0%, rgba(99, 102, 241, 0.10) 0px, transparent 50%),
+        radial-gradient(at 50% 100%, rgba(29, 78, 216, 0.08) 0px, transparent 50%),
+        #f4f7ff;
+    --bg-card: rgba(255, 255, 255, 0.9);
+}
+
+/* ==========================================================================
    Base Layout & Typography
    ========================================================================== */
 body {
@@ -744,4 +958,287 @@ h1, h2, h3, h4, h5, h6 {
     border: 1px solid var(--border-color);
     box-shadow: var(--shadow-card);
     border-radius: var(--radius-xl);
+}
+
+/* ==========================================================================
+   3D DASHBOARD ENGINE (Perspective, Multi-Layer Depth, Glare & Hologram)
+   ========================================================================== */
+
+/* Perspective Scene Container */
+.dashboard-3d-scene {
+    perspective: 1200px;
+    perspective-origin: 50% 30%;
+    transform-style: preserve-3d;
+}
+
+/* Base 3D Interactive Tilt Card */
+.tilt-card-3d {
+    transform-style: preserve-3d;
+    will-change: transform;
+    position: relative;
+    border-radius: var(--radius-xl);
+    transition: transform 0.14s cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow 0.25s ease, border-color 0.25s ease;
+}
+
+/* Layered Z Parallax Relief (Stereoscopic Depth) */
+.tilt-layer-deep {
+    transform: translateZ(44px);
+    transform-style: preserve-3d;
+    transition: transform 0.2s ease-out;
+}
+
+.tilt-layer-mid {
+    transform: translateZ(30px);
+    transform-style: preserve-3d;
+    transition: transform 0.2s ease-out;
+}
+
+.tilt-layer-shallow {
+    transform: translateZ(18px);
+    transform-style: preserve-3d;
+    transition: transform 0.2s ease-out;
+}
+
+.tilt-layer-float {
+    transform: translateZ(36px);
+    transform-style: preserve-3d;
+    transition: transform 0.2s ease-out;
+}
+
+/* Specular Hologram Glare Sheen Layer */
+.glare-sheen {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    border-radius: inherit;
+    pointer-events: none;
+    z-index: 15;
+    opacity: 0;
+    transition: opacity 0.35s ease;
+    mix-blend-mode: overlay;
+    background: radial-gradient(circle at var(--glare-x, 50%) var(--glare-y, 50%), rgba(255, 255, 255, 0.35) 0%, transparent 65%);
+}
+
+.tilt-card-3d:hover .glare-sheen {
+    opacity: 1;
+}
+
+/* Disable 3D tilt when explicitly toggled off */
+[data-3d-mode="off"] .tilt-card-3d {
+    transform: none !important;
+    transition: none !important;
+}
+[data-3d-mode="off"] .tilt-layer-deep,
+[data-3d-mode="off"] .tilt-layer-mid,
+[data-3d-mode="off"] .tilt-layer-shallow,
+[data-3d-mode="off"] .tilt-layer-float {
+    transform: none !important;
+}
+
+/* ==========================================================================
+   3D Dynamic Mood Dock (Vibe Engine)
+   ========================================================================== */
+.mood-dock-3d {
+    background: var(--bg-card);
+    backdrop-filter: blur(24px) saturate(190%);
+    -webkit-backdrop-filter: blur(24px) saturate(190%);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-xl);
+    padding: 1.15rem 1.4rem;
+    box-shadow: var(--shadow-card);
+    position: relative;
+    overflow: hidden;
+    margin-bottom: 1.5rem;
+    transform-style: preserve-3d;
+}
+
+.mood-dock-3d::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(circle at 10% 50%, var(--brand-primary-light) 0%, transparent 50%);
+    pointer-events: none;
+    opacity: 0.7;
+}
+
+.mood-chip-btn {
+    border: 1px solid var(--border-color);
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: var(--radius-pill);
+    padding: 0.45rem 0.95rem;
+    font-size: 0.82rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+    position: relative;
+    user-select: none;
+    text-decoration: none !important;
+}
+
+.mood-chip-btn:hover {
+    transform: translateY(-3px) scale(1.04);
+    border-color: var(--border-color-glow);
+    background: rgba(255, 255, 255, 0.12);
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.15);
+    color: var(--text-primary);
+}
+
+.mood-chip-btn.active {
+    background: var(--brand-gradient);
+    color: #ffffff !important;
+    border-color: transparent;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25), var(--accent-glow);
+    transform: translateY(-2px) scale(1.06);
+}
+
+.mood-swatch-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    display: inline-block;
+    box-shadow: 0 0 10px currentColor;
+    flex-shrink: 0;
+}
+
+/* ==========================================================================
+   3D Metric Hologram Cards
+   ========================================================================== */
+.metric-card-3d {
+    background: var(--bg-card);
+    backdrop-filter: blur(18px) saturate(180%);
+    -webkit-backdrop-filter: blur(18px) saturate(180%);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-xl);
+    padding: 1.5rem 1.4rem;
+    box-shadow: var(--shadow-card);
+    position: relative;
+    overflow: hidden;
+    transform-style: preserve-3d;
+}
+
+.metric-card-3d::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: var(--card-accent, var(--brand-gradient));
+    box-shadow: 0 0 14px var(--card-accent, var(--brand-primary));
+}
+
+.metric-card-3d .metric-icon-box {
+    width: 58px;
+    height: 58px;
+    border-radius: var(--radius-lg);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.65rem;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+/* 3D Storage Gauge Cylinder */
+.quota-card-3d {
+    background: var(--bg-card);
+    backdrop-filter: blur(20px) saturate(180%);
+    -webkit-backdrop-filter: blur(20px) saturate(180%);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-xl);
+    padding: 1.25rem 1.4rem;
+    box-shadow: var(--shadow-card);
+    position: relative;
+    overflow: hidden;
+    transform-style: preserve-3d;
+}
+
+.progress-3d {
+    height: 10px;
+    border-radius: var(--radius-pill);
+    background: rgba(148, 163, 184, 0.15);
+    overflow: hidden;
+    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.2);
+    position: relative;
+}
+
+.progress-bar-3d {
+    background: var(--brand-gradient);
+    height: 100%;
+    border-radius: var(--radius-pill);
+    box-shadow: 0 0 16px var(--brand-primary);
+    position: relative;
+    overflow: hidden;
+    transition: width 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.progress-bar-3d::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+    animation: barShine 2.5s infinite;
+}
+
+@keyframes barShine {
+    0% { transform: translateX(-100%); }
+    100% { transform: translateX(100%); }
+}
+
+/* 3D Badge & Status Indicators */
+.badge-3d {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    padding: 0.35rem 0.8rem;
+    font-size: 0.75rem;
+    font-weight: 700;
+    border-radius: var(--radius-pill);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+/* 3D Dropdown Menu Enhancements */
+.dropdown-menu-3d {
+    background: var(--bg-card) !important;
+    backdrop-filter: blur(24px) saturate(200%) !important;
+    -webkit-backdrop-filter: blur(24px) saturate(200%) !important;
+    border: 1px solid var(--border-color) !important;
+    border-radius: var(--radius-lg) !important;
+    box-shadow: var(--shadow-modal) !important;
+    overflow: hidden;
+}
+
+.dropdown-item-mood {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.6rem 1rem;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    transition: all 0.18s ease;
+    border-radius: var(--radius-md);
+    margin: 0.15rem 0.35rem;
+    cursor: pointer;
+}
+
+.dropdown-item-mood:hover {
+    background: var(--brand-primary-light);
+    color: var(--brand-primary);
+    transform: translateX(4px);
+}
+
+.dropdown-item-mood.active {
+    background: var(--brand-gradient);
+    color: #ffffff !important;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
 }

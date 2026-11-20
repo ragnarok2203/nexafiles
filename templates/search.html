@@ -3,7 +3,7 @@
 {% block title %}Search & Retrieval Engine — NexaFiles{% endblock %}
 
 {% block content %}
-<div class="container-fluid py-3">
+<div class="container-fluid py-3 dashboard-3d-scene">
 
     <!-- Header -->
     <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3 mb-4">
@@ -24,7 +24,7 @@
     </div>
 
     <!-- Filter Control Card -->
-    <div class="card-glass p-4 mb-4">
+    <div class="card-glass tilt-card-3d p-4 mb-4" data-tilt-max="5">
         <form action="{{ url_for('search_page') }}" method="GET" id="searchForm">
             <!-- Keyword Search Input -->
             <div class="mb-3">

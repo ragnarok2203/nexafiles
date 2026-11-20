@@ -2,6 +2,8 @@
 // Enterprise Edition: Previews, AI Summaries, Ephemeral Sharing & Version Control
 
 document.addEventListener('DOMContentLoaded', function () {
+    initMoodThemes();
+    init3DTilt();
     initDropzone();
     initUploadForm();
 });
@@ -546,4 +548,191 @@ function showToast(message) {
         toast.style.transform = 'translateY(15px)';
         setTimeout(() => toast.remove(), 300);
     }, 3200);
+}
+
+// =============================================================
+// DYNAMIC MOOD THEME & 3D DASHBOARD ENGINE
+// =============================================================
+
+const MOOD_METADATA = {
+    obsidian: {
+        name: 'Deep Focus',
+        icon: 'bi-stars',
+        emoji: '🌌',
+        color: '#6366f1',
+        vibe: 'Deep space cyber aurora & locked-in focus'
+    },
+    cyberpunk: {
+        name: 'Neon Rush',
+        icon: 'bi-lightning-charge-fill',
+        emoji: '⚡',
+        color: '#ec4899',
+        vibe: 'Synthwave hyperdrive & vibrant neon pulse'
+    },
+    emerald: {
+        name: 'Zen Flow',
+        icon: 'bi-tree-fill',
+        emoji: '🌿',
+        color: '#10b981',
+        vibe: 'Tranquil calm, clarity & balanced mindset'
+    },
+    sunset: {
+        name: 'Creative Fire',
+        icon: 'bi-fire',
+        emoji: '🔥',
+        color: '#f59e0b',
+        vibe: 'Warm radiant energy, passion & creative flow'
+    },
+    arctic: {
+        name: 'Frost Chill',
+        icon: 'bi-snow',
+        emoji: '❄️',
+        color: '#0284c7',
+        vibe: 'Glacial clarity, diamond ice & crisp thoughts'
+    },
+    midnight: {
+        name: 'Royalty',
+        icon: 'bi-gem',
+        emoji: '💎',
+        color: '#3b82f6',
+        vibe: 'Executive sapphire, sovereign power & prestige'
+    }
+};
+
+function initMoodThemes() {
+    const savedMood = localStorage.getItem('nexafiles-mood-theme') || 'obsidian';
+    setMoodTheme(savedMood, false);
+}
+
+function setMoodTheme(moodKey, triggerFeedback = true) {
+    if (!MOOD_METADATA[moodKey]) moodKey = 'obsidian';
+    
+    document.documentElement.setAttribute('data-mood', moodKey);
+    localStorage.setItem('nexafiles-mood-theme', moodKey);
+
+    const meta = MOOD_METADATA[moodKey];
+
+    // Update active state on mood chips in dock
+    document.querySelectorAll('.mood-chip-btn').forEach(btn => {
+        const isMatch = btn.getAttribute('data-mood-target') === moodKey;
+        btn.classList.toggle('active', isMatch);
+        if (isMatch) {
+            btn.setAttribute('aria-pressed', 'true');
+        } else {
+            btn.removeAttribute('aria-pressed');
+        }
+    });
+
+    // Update navbar mood badge & dropdown
+    const navBadge = document.getElementById('navbarMoodBadge');
+    if (navBadge) {
+        navBadge.innerHTML = `<span class="mood-swatch-dot me-1" style="color: ${meta.color}; background-color: ${meta.color};"></span> ${meta.emoji} ${meta.name}`;
+    }
+
+    // Update dropdown active checkmarks
+    document.querySelectorAll('.dropdown-item-mood').forEach(item => {
+        const isMatch = item.getAttribute('data-mood-target') === moodKey;
+        item.classList.toggle('active', isMatch);
+        const check = item.querySelector('.mood-check-icon');
+        if (check) check.style.display = isMatch ? 'inline-block' : 'none';
+    });
+
+    // Update vibe description text on dashboard dock
+    const vibeText = document.getElementById('moodVibeText');
+    if (vibeText) {
+        vibeText.textContent = `${meta.emoji} ${meta.vibe}`;
+    }
+
+    if (triggerFeedback) {
+        showToast(`Mood theme switched to ${meta.emoji} ${meta.name}!`);
+    }
+}
+
+// -------------------------------------------------------------
+// Interactive 3D Card Tilt Engine
+// -------------------------------------------------------------
+function init3DTilt() {
+    // Check 3D mode setting
+    const saved3D = localStorage.getItem('nexafiles-3d-mode') || 'on';
+    document.documentElement.setAttribute('data-3d-mode', saved3D);
+    update3DModeButton(saved3D);
+
+    const cards = document.querySelectorAll('.tilt-card-3d');
+    cards.forEach(card => {
+        // Ensure glare element exists
+        if (!card.querySelector('.glare-sheen')) {
+            const glare = document.createElement('div');
+            glare.className = 'glare-sheen';
+            card.appendChild(glare);
+        }
+
+        let isHovered = false;
+        let animationFrameId = null;
+
+        card.addEventListener('mouseenter', () => {
+            if (document.documentElement.getAttribute('data-3d-mode') === 'off') return;
+            isHovered = true;
+            card.style.transition = 'transform 0.1s ease-out, box-shadow 0.25s ease';
+        });
+
+        card.addEventListener('mousemove', (e) => {
+            if (document.documentElement.getAttribute('data-3d-mode') === 'off') return;
+            if (!isHovered) isHovered = true;
+
+            if (animationFrameId) cancelAnimationFrame(animationFrameId);
+
+            animationFrameId = requestAnimationFrame(() => {
+                const rect = card.getBoundingClientRect();
+                const mouseX = e.clientX - rect.left;
+                const mouseY = e.clientY - rect.top;
+
+                const percentX = mouseX / rect.width;
+                const percentY = mouseY / rect.height;
+
+                const normX = (percentX - 0.5) * 2; // -1 to 1
+                const normY = (percentY - 0.5) * 2; // -1 to 1
+
+                const maxTilt = card.dataset.tiltMax ? parseFloat(card.dataset.tiltMax) : 12;
+                const rotX = -normY * maxTilt;
+                const rotY = normX * maxTilt;
+
+                card.style.transform = `perspective(1000px) rotateX(${rotX.toFixed(2)}deg) rotateY(${rotY.toFixed(2)}deg) translateZ(10px) scale3d(1.02, 1.02, 1.02)`;
+                card.style.setProperty('--glare-x', `${(percentX * 100).toFixed(1)}%`);
+                card.style.setProperty('--glare-y', `${(percentY * 100).toFixed(1)}%`);
+            });
+        });
+
+        card.addEventListener('mouseleave', () => {
+            isHovered = false;
+            if (animationFrameId) cancelAnimationFrame(animationFrameId);
+            card.style.transition = 'transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.4s ease';
+            card.style.transform = 'perspective(1000px) rotateX(0deg) rotateY(0deg) translateZ(0px) scale3d(1, 1, 1)';
+        });
+    });
+}
+
+function toggle3DMode() {
+    const current = document.documentElement.getAttribute('data-3d-mode') || 'on';
+    const next = current === 'on' ? 'off' : 'on';
+    document.documentElement.setAttribute('data-3d-mode', next);
+    localStorage.setItem('nexafiles-3d-mode', next);
+    update3DModeButton(next);
+    showToast(`3D Dashboard Depth FX: ${next.toUpperCase()}`);
+}
+
+function update3DModeButton(mode) {
+    ['toggle3DModeBtn', 'toggle3DModeBtnGuest'].forEach(id => {
+        const btn = document.getElementById(id);
+        if (btn) {
+            if (mode === 'on') {
+                btn.className = 'btn btn-outline-info btn-sm rounded-pill px-3 d-flex align-items-center gap-1 active';
+                btn.innerHTML = '<i class="bi bi-badge-3d-fill"></i> <span class="d-none d-md-inline">3D Active</span>';
+                btn.title = '3D Tilt & Parallax is ON (Click to disable)';
+            } else {
+                btn.className = 'btn btn-outline-secondary btn-sm rounded-pill px-3 d-flex align-items-center gap-1';
+                btn.innerHTML = '<i class="bi bi-badge-3d"></i> <span class="d-none d-md-inline">3D Off</span>';
+                btn.title = '3D Tilt & Parallax is OFF (Click to enable)';
+            }
+        }
+    });
 }

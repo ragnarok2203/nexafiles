@@ -3,7 +3,7 @@
 {% block title %}Dashboard — NexaFiles{% endblock %}
 
 {% block content %}
-<div class="container-fluid py-3">
+<div class="container-fluid py-3 dashboard-3d-scene">
 
     <!-- Top Dashboard Header -->
     <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3 mb-4">
@@ -11,7 +11,7 @@
             <div class="d-flex align-items-center gap-2 mb-1">
                 <h3 class="fw-bold mb-0 text-dark">Cloud Storage Dashboard</h3>
                 <span class="badge bg-primary bg-opacity-10 text-primary border border-primary border-opacity-25 rounded-pill px-3 py-1 small">
-                    Enterprise Edition
+                    Enterprise 3D Edition
                 </span>
             </div>
             <p class="text-muted small mb-0">Decoupled cloud architecture &bull; Centralized metrics, in-browser previews, AI summarization & zero-trust sharing.</p>
@@ -29,89 +29,136 @@
         </div>
     </div>
 
-    <!-- Storage Quota Status Bar -->
-    <div class="card-glass p-3 mb-4">
-        <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-2 mb-2">
-            <div class="d-flex align-items-center gap-2">
-                <i class="bi bi-pie-chart-fill text-primary fs-5"></i>
-                <span class="fw-bold small">Cloud Storage Utilization:</span>
-                <span class="text-muted small"><strong>{{ metrics.formatted_size }}</strong> allocated across {{ metrics.total_files }} documents</span>
+    <!-- 3D Dynamic Mood Dock (Vibe Engine) -->
+    <div class="mood-dock-3d tilt-card-3d mb-4" data-tilt-max="5">
+        <div class="d-flex flex-column flex-lg-row justify-content-between align-items-lg-center gap-3">
+            <div class="tilt-layer-shallow">
+                <div class="d-flex align-items-center gap-2 mb-1">
+                    <span class="badge bg-warning bg-opacity-10 text-warning border border-warning border-opacity-25 rounded-pill px-2 py-0 small fw-bold" style="font-size: 0.72rem;">
+                        <i class="bi bi-magic me-1"></i> DYNAMIC MOOD ENGINE
+                    </span>
+                    <span class="text-muted small fw-semibold" id="moodVibeText">🌌 Deep space cyber aurora & locked-in focus</span>
+                </div>
+                <div class="small text-muted">
+                    Choose your current mood to dynamically transform themes, ambient glow & 3D specular lighting:
+                </div>
             </div>
-            <div class="small text-muted">
+            <div class="d-flex flex-wrap gap-2 align-items-center tilt-layer-mid">
+                <button type="button" class="mood-chip-btn active" data-mood-target="obsidian" onclick="setMoodTheme('obsidian')" title="Deep space, electric indigo & neon cyan">
+                    <span class="mood-swatch-dot" style="color: #6366f1; background-color: #6366f1;"></span>
+                    <span>🌌 Deep Focus</span>
+                </button>
+                <button type="button" class="mood-chip-btn" data-mood-target="cyberpunk" onclick="setMoodTheme('cyberpunk')" title="Hot synthwave fuchsia, violet & neon turquoise">
+                    <span class="mood-swatch-dot" style="color: #ec4899; background-color: #ec4899;"></span>
+                    <span>⚡ Neon Rush</span>
+                </button>
+                <button type="button" class="mood-chip-btn" data-mood-target="emerald" onclick="setMoodTheme('emerald')" title="Tranquil forest emerald, mint & deep sea teal">
+                    <span class="mood-swatch-dot" style="color: #10b981; background-color: #10b981;"></span>
+                    <span>🌿 Zen Flow</span>
+                </button>
+                <button type="button" class="mood-chip-btn" data-mood-target="sunset" onclick="setMoodTheme('sunset')" title="Radiant solar amber, rose coral & golden tangerine">
+                    <span class="mood-swatch-dot" style="color: #f59e0b; background-color: #f59e0b;"></span>
+                    <span>🔥 Creative Fire</span>
+                </button>
+                <button type="button" class="mood-chip-btn" data-mood-target="arctic" onclick="setMoodTheme('arctic')" title="Glacial cyan, frost blue & diamond ice sheen">
+                    <span class="mood-swatch-dot" style="color: #0284c7; background-color: #0284c7;"></span>
+                    <span>❄️ Frost Chill</span>
+                </button>
+                <button type="button" class="mood-chip-btn" data-mood-target="midnight" onclick="setMoodTheme('midnight')" title="Royal cobalt, deep oceanic navy & celestial ultraviolet">
+                    <span class="mood-swatch-dot" style="color: #3b82f6; background-color: #3b82f6;"></span>
+                    <span>💎 Royalty</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 3D Storage Quota Status Bar -->
+    <div class="quota-card-3d tilt-card-3d mb-4" data-tilt-max="6">
+        <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-2 mb-2 tilt-layer-shallow">
+            <div class="d-flex align-items-center gap-2">
+                <div class="tilt-layer-deep">
+                    <i class="bi bi-pie-chart-fill text-primary fs-4"></i>
+                </div>
+                <div>
+                    <span class="fw-bold small text-dark">Cloud Storage Utilization:</span>
+                    <span class="text-muted small ms-1"><strong>{{ metrics.formatted_size }}</strong> allocated across {{ metrics.total_files }} documents</span>
+                </div>
+            </div>
+            <div class="small text-muted tilt-layer-mid">
                 Engine: <span class="badge bg-light text-primary border border-primary border-opacity-25 fw-semibold">{% if storage_status.storage_mode == 's3' %}AWS S3 Standard (SSE-S3){% else %}Local Cloud Emulation Vault{% endif %}</span>
             </div>
         </div>
-        <div class="progress rounded-pill" style="height: 6px;">
-            <div class="progress-bar bg-primary" role="progressbar" style="width: {% if metrics.total_files > 0 %}18%{% else %}2%{% endif %};" aria-valuenow="18" aria-valuemin="0" aria-valuemax="100"></div>
+        <div class="progress-3d rounded-pill tilt-layer-mid">
+            <div class="progress-bar-3d" role="progressbar" style="width: {% if metrics.total_files > 0 %}24%{% else %}3%{% endif %};" aria-valuenow="24" aria-valuemin="0" aria-valuemax="100"></div>
         </div>
     </div>
 
-    <!-- Metric Summary Cards -->
+    <!-- Metric Summary Cards (3D Interactive Tilt) -->
     <div class="row g-3 mb-4">
         <div class="col-sm-6 col-xl-3">
-            <div class="metric-card h-100" style="--card-accent: #4f46e5;">
+            <div class="metric-card metric-card-3d tilt-card-3d h-100" style="--card-accent: #4f46e5;" data-tilt-max="14">
                 <div class="d-flex align-items-center gap-3">
-                    <div class="metric-icon-box bg-primary bg-opacity-10 text-primary">
+                    <div class="metric-icon-box bg-primary bg-opacity-10 text-primary tilt-layer-deep">
                         <i class="bi bi-files"></i>
                     </div>
                     <div>
-                        <div class="metric-label">Total Documents</div>
-                        <h3 class="metric-value">{{ metrics.total_files }}</h3>
-                        <div class="metric-subtext">Active in cloud vault</div>
+                        <div class="metric-label tilt-layer-shallow">Total Documents</div>
+                        <h3 class="metric-value tilt-layer-mid">{{ metrics.total_files }}</h3>
+                        <div class="metric-subtext tilt-layer-shallow">Active in cloud vault</div>
                     </div>
                 </div>
             </div>
         </div>
 
         <div class="col-sm-6 col-xl-3">
-            <div class="metric-card h-100" style="--card-accent: #10b981;">
+            <div class="metric-card metric-card-3d tilt-card-3d h-100" style="--card-accent: #10b981;" data-tilt-max="14">
                 <div class="d-flex align-items-center gap-3">
-                    <div class="metric-icon-box bg-success bg-opacity-10 text-success">
+                    <div class="metric-icon-box bg-success bg-opacity-10 text-success tilt-layer-deep">
                         <i class="bi bi-hdd-stack-fill"></i>
                     </div>
                     <div>
-                        <div class="metric-label">Storage Used</div>
-                        <h3 class="metric-value">{{ metrics.formatted_size }}</h3>
-                        <div class="metric-subtext">Max 50 MB / payload</div>
+                        <div class="metric-label tilt-layer-shallow">Storage Used</div>
+                        <h3 class="metric-value tilt-layer-mid">{{ metrics.formatted_size }}</h3>
+                        <div class="metric-subtext tilt-layer-shallow">Max 50 MB / payload</div>
                     </div>
                 </div>
             </div>
         </div>
 
         <div class="col-sm-6 col-xl-3">
-            <div class="metric-card h-100" style="--card-accent: #f59e0b;">
+            <div class="metric-card metric-card-3d tilt-card-3d h-100" style="--card-accent: #f59e0b;" data-tilt-max="14">
                 <div class="d-flex align-items-center gap-3">
-                    <div class="metric-icon-box bg-warning bg-opacity-10 text-warning">
+                    <div class="metric-icon-box bg-warning bg-opacity-10 text-warning tilt-layer-deep">
                         <i class="bi bi-star-fill"></i>
                     </div>
                     <div>
-                        <div class="metric-label">Starred Files</div>
-                        <h3 class="metric-value">{{ metrics.total_starred }}</h3>
-                        <div class="metric-subtext">Marked as important</div>
+                        <div class="metric-label tilt-layer-shallow">Starred Files</div>
+                        <h3 class="metric-value tilt-layer-mid">{{ metrics.total_starred }}</h3>
+                        <div class="metric-subtext tilt-layer-shallow">Marked as important</div>
                     </div>
                 </div>
             </div>
         </div>
 
         <div class="col-sm-6 col-xl-3">
-            <div class="metric-card h-100" style="--card-accent: #06b6d4;">
+            <div class="metric-card metric-card-3d tilt-card-3d h-100" style="--card-accent: #06b6d4;" data-tilt-max="14">
                 <div class="d-flex align-items-center gap-3">
-                    <div class="metric-icon-box bg-info bg-opacity-10 text-info">
+                    <div class="metric-icon-box bg-info bg-opacity-10 text-info tilt-layer-deep">
                         <i class="bi bi-shield-lock-fill"></i>
                     </div>
                     <div>
-                        <div class="metric-label">Cloud Security</div>
-                        <h5 class="fw-bold mb-0 text-dark mt-1">
+                        <div class="metric-label tilt-layer-shallow">Cloud Security</div>
+                        <h5 class="fw-bold mb-0 text-dark mt-1 tilt-layer-mid">
                             {% if storage_status.storage_mode == 's3' %}AWS SSE-S3{% else %}Emulated Vault{% endif %}
                         </h5>
-                        <div class="metric-subtext">SHA-256 + Signed URLs</div>
+                        <div class="metric-subtext tilt-layer-shallow">SHA-256 + Signed URLs</div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- Category Distribution Grid -->
+    <!-- Category Distribution Grid (3D Hologram Cubes) -->
     <div class="mb-4">
         <div class="d-flex justify-content-between align-items-center mb-3">
             <div>
@@ -127,18 +174,18 @@
             {% set cat_data = metrics.categories.get(cat, {'count': 0, 'bytes': 0}) %}
             <div class="col-6 col-md-4 col-xl-3">
                 <a href="{{ url_for('search_page', category=cat) }}" class="text-decoration-none">
-                    <div class="category-card h-100">
-                        <div class="d-flex justify-content-between align-items-center mb-2">
+                    <div class="category-card tilt-card-3d h-100" data-tilt-max="16">
+                        <div class="d-flex justify-content-between align-items-center mb-2 tilt-layer-mid">
                             <span class="category-badge-pill bg-{{ category_colors.get(cat, 'primary') }} bg-opacity-10 text-{{ category_colors.get(cat, 'primary') }} border border-{{ category_colors.get(cat, 'primary') }} border-opacity-25">
                                 {{ cat }}
                             </span>
                             <span class="fw-bold text-dark fs-5">{{ cat_data.count }}</span>
                         </div>
-                        <div class="text-muted small d-flex justify-content-between align-items-center mt-3">
+                        <div class="text-muted small d-flex justify-content-between align-items-center mt-3 tilt-layer-shallow">
                             <span>Storage used</span>
                             <span class="fw-semibold text-dark">{{ format_bytes(cat_data.bytes) }}</span>
                         </div>
-                        <div class="category-progress">
+                        <div class="category-progress tilt-layer-shallow">
                             <div class="bg-{{ category_colors.get(cat, 'primary') }}" style="height: 100%; width: {% if cat_data.count > 0 %}40%{% else %}0%{% endif %};"></div>
                         </div>
                     </div>
@@ -149,7 +196,7 @@
     </div>
 
     <!-- Recent Uploads Table -->
-    <div class="table-modern-card mb-4">
+    <div class="table-modern-card tilt-card-3d mb-4" data-tilt-max="5">
         <div class="card-header d-flex justify-content-between align-items-center">
             <div>
                 <h5 class="fw-bold mb-0 text-dark">Recent Cloud Uploads</h5>
