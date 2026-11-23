@@ -10,14 +10,17 @@
         <div>
             <div class="d-flex align-items-center gap-2 mb-1">
                 <h3 class="fw-bold mb-0">Security Audit Trail</h3>
-                <span class="badge bg-primary bg-opacity-10 text-primary border border-primary border-opacity-25 rounded-pill px-3 py-1 small">
+                <span
+                    class="badge bg-primary bg-opacity-10 text-primary border border-primary border-opacity-25 rounded-pill px-3 py-1 small">
                     Zero-Trust Telemetry
                 </span>
             </div>
-            <p class="text-muted small mb-0">Immutable system logs recording document access, uploads, signed downloads, and encryption events.</p>
+            <p class="text-muted small mb-0">Immutable system logs recording document access, uploads, signed downloads,
+                and encryption events.</p>
         </div>
         <div class="d-flex align-items-center gap-2">
-            <a href="{{ url_for('export_activity_csv') }}" class="btn btn-outline-success btn-sm px-3 rounded-pill fw-semibold">
+            <a href="{{ url_for('export_activity_csv') }}"
+                class="btn btn-outline-success btn-sm px-3 rounded-pill fw-semibold">
                 <i class="bi bi-file-earmark-spreadsheet me-1"></i> Export Audit CSV
             </a>
             <a href="{{ url_for('dashboard') }}" class="btn btn-outline-secondary btn-sm px-3 rounded-pill fw-medium">
@@ -30,25 +33,32 @@
     <div class="card-glass tilt-card-3d p-3 mb-4" data-tilt-max="5">
         <div class="d-flex flex-wrap align-items-center gap-2">
             <span class="text-muted small fw-bold me-2">FILTER BY ACTION:</span>
-            <a href="{{ url_for('activity_page') }}" class="btn btn-sm rounded-pill {% if not selected_action %}btn-primary{% else %}btn-outline-secondary{% endif %} px-3">
+            <a href="{{ url_for('activity_page') }}"
+                class="btn btn-sm rounded-pill {% if not selected_action %}btn-primary{% else %}btn-outline-secondary{% endif %} px-3">
                 All Events
             </a>
-            <a href="{{ url_for('activity_page', action='UPLOAD') }}" class="btn btn-sm rounded-pill {% if selected_action == 'UPLOAD' %}btn-primary{% else %}btn-outline-secondary{% endif %} px-3">
+            <a href="{{ url_for('activity_page', action='UPLOAD') }}"
+                class="btn btn-sm rounded-pill {% if selected_action == 'UPLOAD' %}btn-primary{% else %}btn-outline-secondary{% endif %} px-3">
                 Uploads
             </a>
-            <a href="{{ url_for('activity_page', action='DOWNLOAD') }}" class="btn btn-sm rounded-pill {% if selected_action == 'DOWNLOAD' %}btn-primary{% else %}btn-outline-secondary{% endif %} px-3">
+            <a href="{{ url_for('activity_page', action='DOWNLOAD') }}"
+                class="btn btn-sm rounded-pill {% if selected_action == 'DOWNLOAD' %}btn-primary{% else %}btn-outline-secondary{% endif %} px-3">
                 Downloads
             </a>
-            <a href="{{ url_for('activity_page', action='PREVIEW') }}" class="btn btn-sm rounded-pill {% if selected_action == 'PREVIEW' %}btn-primary{% else %}btn-outline-secondary{% endif %} px-3">
+            <a href="{{ url_for('activity_page', action='PREVIEW') }}"
+                class="btn btn-sm rounded-pill {% if selected_action == 'PREVIEW' %}btn-primary{% else %}btn-outline-secondary{% endif %} px-3">
                 Previews
             </a>
-            <a href="{{ url_for('activity_page', action='CREATE_SHARE') }}" class="btn btn-sm rounded-pill {% if selected_action == 'CREATE_SHARE' %}btn-primary{% else %}btn-outline-secondary{% endif %} px-3">
+            <a href="{{ url_for('activity_page', action='CREATE_SHARE') }}"
+                class="btn btn-sm rounded-pill {% if selected_action == 'CREATE_SHARE' %}btn-primary{% else %}btn-outline-secondary{% endif %} px-3">
                 Share Links
             </a>
-            <a href="{{ url_for('activity_page', action='VERSION_UPLOAD') }}" class="btn btn-sm rounded-pill {% if selected_action == 'VERSION_UPLOAD' %}btn-primary{% else %}btn-outline-secondary{% endif %} px-3">
+            <a href="{{ url_for('activity_page', action='VERSION_UPLOAD') }}"
+                class="btn btn-sm rounded-pill {% if selected_action == 'VERSION_UPLOAD' %}btn-primary{% else %}btn-outline-secondary{% endif %} px-3">
                 Revisions
             </a>
-            <a href="{{ url_for('activity_page', action='DELETE') }}" class="btn btn-sm rounded-pill {% if selected_action == 'DELETE' %}btn-primary{% else %}btn-outline-secondary{% endif %} px-3">
+            <a href="{{ url_for('activity_page', action='DELETE') }}"
+                class="btn btn-sm rounded-pill {% if selected_action == 'DELETE' %}btn-primary{% else %}btn-outline-secondary{% endif %} px-3">
                 Deletions
             </a>
         </div>
@@ -59,7 +69,8 @@
         <div class="card-header d-flex justify-content-between align-items-center">
             <h5 class="fw-bold mb-0 text-dark">
                 Activity History
-                <span class="badge bg-secondary bg-opacity-10 text-secondary ms-2 rounded-pill fs-6">{{ logs|length }} recorded</span>
+                <span class="badge bg-secondary bg-opacity-10 text-secondary ms-2 rounded-pill fs-6">{{ logs|length }}
+                    recorded</span>
             </h5>
             <span class="text-muted small">Real-time chronologically sorted logs</span>
         </div>
@@ -103,7 +114,8 @@
             <div class="text-center py-5">
                 <i class="bi bi-clock-history display-4 text-muted mb-3 d-block opacity-50"></i>
                 <h6 class="fw-bold text-dark">No activity recorded for this filter</h6>
-                <p class="text-muted small mb-0">System events will automatically populate as documents are accessed or uploaded.</p>
+                <p class="text-muted small mb-0">System events will automatically populate as documents are accessed or
+                    uploaded.</p>
             </div>
             {% endif %}
         </div>

@@ -73,7 +73,12 @@ class Config:
     # Session Cookie Security Flags
     SESSION_COOKIE_HTTPONLY = True
     SESSION_COOKIE_SAMESITE = 'Lax'
-    SESSION_COOKIE_SECURE = os.getenv('SESSION_COOKIE_SECURE', 'False').lower() in ('true', '1')
+    # Automatically enforce HTTPS Secure cookies in production or Vercel
+    SESSION_COOKIE_SECURE = (
+        IS_VERCEL or 
+        os.getenv('FLASK_ENV') == 'production' or 
+        os.getenv('SESSION_COOKIE_SECURE', 'False').lower() in ('true', '1')
+    )
     PERMANENT_SESSION_LIFETIME = 86400  # 24 hours
     
     # Allowed File Extensions
